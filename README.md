@@ -1,5 +1,3 @@
-prototype
+[客户侧边栏原型](prototype/customer-sidebar.html)
 
-prototype\customer-sidebar.html
-
-prototype\user-profile.html
+[用户画像原型](prototype/user-profile.html)
