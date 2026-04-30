@@ -1,0 +1,1839 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>侧边栏</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: #f5f5f5; color: #333; font-size: 13px; }
+    
+    .sidebar { width: 460px; background: #fff; border-left: 1px solid #e8e8e8; height: 100vh; overflow: hidden; position: fixed; right: 0; top: 0; display: flex; flex-direction: column; }
+    .sidebar-fixed { flex-shrink: 0; }
+    .sidebar-scroll { flex: 1; overflow-y: auto; overflow-x: hidden; }
+    
+    /* 顶部Tab */
+    /* .top-tabs { display: flex; align-items: center; padding: 12px 16px 0; border-bottom: 1px solid #e8e8e8; }
+    .top-tab { padding: 8px 12px; font-size: 13px; color: #666; cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; }
+    .top-tab:hover { color: #333; }
+    .top-tab.active { color: #1890ff; border-bottom-color: #1890ff; font-weight: 500; }
+    .top-tab-more { margin-left: auto; color: #999; cursor: pointer; font-size: 14px; padding: 8px 4px; } */
+    
+    /* 顶部单行横向滚动Tab */
+    .top-tabs { display: flex; align-items: center; padding: 10px 16px; gap: 16px; border-bottom: 1px solid #e8e8e8; overflow-x: auto; white-space: nowrap; }
+    .top-tabs::-webkit-scrollbar { height: 0; }
+    .top-tab { padding: 8px 0; font-size: 13px; color: #666; cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; flex-shrink: 0; }
+    .top-tab:hover { color: #333; }
+    .top-tab.active { color: #1890ff; border-bottom-color: #1890ff; font-weight: 500; }
+    .top-tab-more { margin-left: auto; color: #999; cursor: pointer; font-size: 14px; padding: 8px 4px; flex-shrink: 0; }
+    
+    /* 二级Tab组（已注释） */
+    /* .sub-tabs { display: flex; align-items: center; padding: 10px 16px; gap: 16px; border-bottom: 1px solid #f0f0f0; }
+    .sub-tab { font-size: 12px; color: #666; cursor: pointer; white-space: nowrap; }
+    .sub-tab:hover { color: #333; }
+    .sub-tab.active { color: #1890ff; } */
+    
+    /* 一级Tab组 */
+    /* .tab-group { display: flex; flex-wrap: wrap; align-items: center; padding: 10px 16px; gap: 16px; border-bottom: 1px solid #f0f0f0; }
+    .tab-item { font-size: 13px; color: #666; cursor: pointer; white-space: nowrap; padding-bottom: 8px; border-bottom: 2px solid transparent; }
+    .tab-item:hover { color: #333; }
+    .tab-item.active { color: #1890ff; border-bottom-color: #1890ff; }
+    .tab-row { display: flex; align-items: center; gap: 16px; width: 100%; }
+    .tab-row + .tab-row { margin-top: 8px; padding-top: 8px; border-top: 1px solid #f0f0f0; } */
+    
+    /* 单行横向滚动Tab */
+    .tab-group { display: flex; align-items: center; padding: 10px 16px; gap: 16px; border-bottom: 1px solid #f0f0f0; overflow-x: auto; white-space: nowrap; }
+    .tab-group::-webkit-scrollbar { height: 0; }
+    .tab-item { font-size: 13px; color: #666; cursor: pointer; white-space: nowrap; padding-bottom: 8px; border-bottom: 2px solid transparent; flex-shrink: 0; }
+    .tab-item:hover { color: #333; }
+    .tab-item.active { color: #1890ff; border-bottom-color: #1890ff; }
+    
+    /* 用户信息区 */
+    .user-section { padding: 16px; border-bottom: 1px solid #f0f0f0; }
+    .user-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+    .user-avatar { width: 48px; height: 48px; border-radius: 50%; background: #e8f4ff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .user-avatar img { width: 48px; height: 48px; border-radius: 50%; }
+    .user-avatar-placeholder { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #a8d8ff 0%, #6cb4ff 100%); display: flex; align-items: center; justify-content: center; font-size: 20px; color: #fff; }
+    .user-info { flex: 1; min-width: 0; }
+    .user-name { font-size: 14px; font-weight: 500; color: #333; margin-bottom: 2px; }
+    .user-nickname { font-size: 12px; color: #999; margin-bottom: 8px; }
+    .user-meta { display: flex; flex-direction: column; gap: 4px; }
+    .user-meta-item { font-size: 12px; color: #666; display: flex; align-items: center; }
+    .user-meta-label { color: #999; width: 56px; flex-shrink: 0; }
+    .user-meta-value { color: #333; }
+    .user-meta-value.unknown { color: #999; }
+    .user-add-time { font-size: 12px; color: #666; margin-top: 4px; }
+    .user-tags-row { display: flex; align-items: center; margin-top: 8px; }
+    .user-tags-label { font-size: 12px; color: #999; width: 56px; flex-shrink: 0; }
+    .user-tags { display: flex; align-items: center; gap: 4px; }
+    .user-tag { background: #f5f5f5; color: #999; padding: 2px 8px; border-radius: 2px; font-size: 12px; }
+    .user-tag-arrow { color: #999; font-size: 12px; }
+    
+    /* 用户画像内容区 */
+    .profile-content { padding: 0 16px 16px; }
+    .profile-update-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: #fafafa; border-bottom: 1px solid #f0f0f0; }
+    .profile-update-time { font-size: 12px; color: #888; }
+    .profile-refresh-btn { background: #f97316; color: #fff; border: none; padding: 6px 14px; border-radius: 4px; font-size: 12px; cursor: pointer; }
+    .profile-refresh-btn:hover { background: #ea580c; }
+    
+    /* 档案Tab */
+    .archive-tabs { display: flex; align-items: flex-end; padding: 12px 16px 0; background: #fff; }
+    .archive-tab { padding: 10px 28px 12px 20px; border: none; font-size: 13px; cursor: pointer; font-weight: 500; clip-path: polygon(0 0, 70% 0, 100% 100%, 0 100%); position: relative; }
+    .archive-tab.active { background: #2563eb; color: #fff; z-index: 2; margin-right: -10px; }
+    .archive-tab.disabled { background: #b8c4d4; color: #fff; z-index: 1; opacity: 0.6; cursor: not-allowed; }
+    .archive-tab-spacer { height: 4px; background: #fff; }
+    
+    /* 用户基本信息卡片 */
+    .profile-basic-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+    .profile-basic-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; color: #1e293b; }
+    .profile-basic-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .profile-basic-item-label { font-size: 12px; color: #64748b; margin-bottom: 4px; }
+    .profile-basic-item-value { font-size: 15px; font-weight: 600; color: #1e293b; }
+    .profile-basic-extra { margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 13px; color: #475569; }
+    .profile-basic-extra-label { color: #64748b; }
+    
+    /* 重点标签 */
+    .profile-tags-section { margin-bottom: 20px; }
+    .profile-tags-title { font-size: 16px; font-weight: 600; margin-bottom: 14px; color: #1f2937; }
+    .profile-tags-list { display: flex; flex-direction: column; gap: 10px; }
+    .profile-tag-category { background: #f9fafb; border-radius: 8px; padding: 12px 14px; border-left: 3px solid; }
+    .profile-tag-category-title { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+    .profile-tag-items { display: flex; flex-wrap: wrap; gap: 6px; }
+    .profile-tag-item { background: #fff; border: 1px solid #e5e7eb; border-radius: 20px; padding: 3px 10px; font-size: 12px; color: #4b5563; }
+    .profile-tag-empty { font-size: 12px; color: #9ca3af; }
+    
+    /* 话题区 */
+    .profile-topic-section { margin-bottom: 16px; }
+    .profile-topic-title { font-size: 14px; font-weight: 600; color: #1f2937; margin-bottom: 12px; }
+    .profile-topic-items { display: flex; flex-wrap: wrap; gap: 8px; }
+    .profile-topic-item { background: #fff; border: 1px solid #d1d5db; border-radius: 6px; padding: 6px 14px; font-size: 13px; color: #374151; }
+    
+    /* 对话自由标签内容区 */
+    .free-tags-content { display: none; padding: 0 16px 16px; }
+    .free-tags-content.active { display: block; }
+    .topic-tags-content { display: none; padding: 0 16px 16px; }
+    .topic-tags-content.active { display: block; }
+    .profile-content { display: block; }
+    .profile-content.hidden { display: none; }
+    
+    .tags-query-container { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+    .tags-query-form { display: flex; flex-direction: column; gap: 12px; }
+    .tags-query-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
+    .tags-query-field { display: flex; flex-direction: column; gap: 4px; }
+    .tags-query-field-full { flex: 0 0 100%; }
+    .tags-query-label { font-size: 12px; color: #64748b; font-weight: 500; }
+    .tags-query-input { padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; outline: none; width: 100%; transition: border-color 0.2s; }
+    .tags-query-input:focus { border-color: #2563eb; }
+    .tags-query-input-wide { width: 100%; }
+    .tags-query-actions { display: flex; gap: 8px; margin-left: auto; }
+    .tags-query-btn { background: #2563eb; color: #fff; border: none; padding: 6px 16px; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+    .tags-query-btn:hover { background: #1d4ed8; }
+    .tags-reset-btn { background: #fff; color: #64748b; border: 1px solid #cbd5e1; padding: 6px 16px; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+    .tags-reset-btn:hover { background: #f8fafc; color: #475569; }
+    
+    .tags-toolbar { display: flex; justify-content: flex-end; align-items: center; margin-bottom: 12px; gap: 8px; }
+    .tags-filter-btn { background: #fff; color: #64748b; border: 1px solid #e2e8f0; padding: 6px 16px; border-radius: 8px; font-size: 12px; cursor: pointer; transition: all 0.2s; }
+    .tags-filter-btn:hover { background: #f8fafc; color: #475569; }
+    .tags-add-btn { background: #fff; color: #2563eb; border: 1px solid #2563eb; padding: 6px 16px; border-radius: 8px; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+    .tags-add-btn:hover { background: #2563eb; color: #fff; }
+    .tags-export-btn { background: #2563eb; color: #fff; border: none; padding: 6px 16px; border-radius: 8px; font-size: 12px; cursor: pointer; transition: all 0.2s; }
+    .tags-export-btn:hover { background: #1d4ed8; }
+    
+    .tags-table-wrapper { overflow-x: auto; margin-bottom: 12px; max-height: 330px; overflow-y: auto; }
+    .tags-table { width: 100%; border-collapse: collapse; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; background: #fff; table-layout: fixed; min-width: 600px; }
+    .tags-table th { background: #f9fafb; color: #374151; font-size: 11px; font-weight: 600; padding: 10px 12px; text-align: left; border-bottom: 1px solid #e5e7eb; white-space: nowrap; }
+    .tags-table th:last-child, .tags-table td:last-child { width: 140px; white-space: normal; overflow: visible; }
+    .tags-table td { color: #6b7280; font-size: 11px; padding: 10px 12px; text-align: left; border-bottom: 1px solid #e5e7eb; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tags-table td:last-child { overflow: visible; }
+    .tags-table tr:last-child td { border-bottom: none; }
+    .tags-table tr:hover { background: #f9fafb; }
+    
+    .tags-op-wrapper { display: flex; flex-wrap: wrap; gap: 4px; width: 120px; }
+    .tags-status { display: inline-block; padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 500; }
+    .tags-status-normal { background: #d1fae5; color: #065f46; }
+    .tags-status-expired { background: #f3f4f6; color: #6b7280; }
+    .tags-status-deleted { background: #fee2e2; color: #b91c1c; }
+    .tags-status-overridden { background: #fef3c7; color: #92400e; }
+    
+    .tags-priority-high { background: #fce7f3; color: #be185d; padding: 2px 8px; border-radius: 10px; font-size: 11px; }
+    .tags-priority-medium { background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 10px; font-size: 11px; }
+    .tags-priority-low { background: #d1fae5; color: #065f46; padding: 2px 8px; border-radius: 10px; font-size: 11px; }
+    
+    .tags-op-btn { padding: 3px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; border: 1px solid; background: #fff; transition: all 0.2s; }
+    .tags-op-detail { margin-right: 6px; color: #64748b; border-color: #e2e8f0; }
+    .tags-op-detail:hover { background: #f1f5f9; color: #475569; }
+    .tags-op-edit { margin-right: 6px; color: #64748b; border-color: #e2e8f0; }
+    .tags-op-edit:hover { background: #f1f5f9; color: #475569; }
+    .tags-op-delete { color: #dc2626; border-color: #dc2626; }
+    .tags-op-delete:hover { background: #dc2626; color: #fff; }
+    .tags-op-restore { color: #2563eb; border-color: #2563eb; }
+    .tags-op-restore:hover { background: #2563eb; color: #fff; }
+    .tags-op-recover { color: #2563eb; border-color: #2563eb; }
+    .tags-op-recover:hover { background: #2563eb; color: #fff; }
+    
+    .tags-pagination { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; font-size: 11px; }
+    .tags-pagination-info { color: #6b7280; }
+    .tags-pagination-controls { display: flex; align-items: center; gap: 8px; }
+    .tags-page-btn { background: #fff; color: #64748b; border: 1px solid #e2e8f0; padding: 3px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; }
+    .tags-page-btn:hover { background: #f8fafc; color: #475569; }
+    .tags-page-num { color: #374151; padding: 0 6px; }
+    .tags-page-size { padding: 3px 6px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 11px; color: #374151; background: #fff; }
+    
+    .tags-filter-modal { display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+    .tags-filter-modal.show { display: flex; }
+    .tags-filter-modal-content { background: #fff; border-radius: 12px; width: 380px; max-width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2); margin: 20px; }
+    .tags-filter-modal-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid #e5e7eb; }
+    .tags-filter-modal-title { font-size: 15px; font-weight: 600; color: #111; }
+    .tags-filter-modal-close { font-size: 20px; color: #9ca3af; cursor: pointer; line-height: 1; }
+    .tags-filter-modal-close:hover { color: #374151; }
+    .tags-filter-modal-body { padding: 20px; }
+    .tags-filter-form { display: flex; flex-direction: column; gap: 14px; }
+    .tags-filter-field { display: flex; flex-direction: column; gap: 4px; }
+    .tags-filter-label { font-size: 12px; color: #374151; font-weight: 500; }
+    .tags-filter-input { padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 13px; outline: none; transition: border-color 0.2s; }
+    .tags-filter-input:focus { border-color: #2563eb; }
+    .tags-filter-row { display: flex; gap: 12px; align-items: flex-end; }
+    .tags-filter-row > .tags-filter-field { flex: 1; }
+    .tags-filter-separator { color: #64748b; font-size: 12px; padding-bottom: 8px; }
+    .tags-filter-modal-footer { display: flex; justify-content: flex-end; gap: 10px; padding: 14px 20px; border-top: 1px solid #e5e7eb; }
+    .tags-filter-btn { padding: 8px 18px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+    .tags-filter-btn-cancel { background: #fff; color: #6b7280; border: 1px solid #d1d5db; }
+    .tags-filter-btn-cancel:hover { background: #f9fafb; }
+    .tags-filter-btn-confirm { background: #2563eb; color: #fff; border: none; }
+    .tags-filter-btn-confirm:hover { background: #1d4ed8; }
+    .tags-filter-checkbox-group { display: flex; flex-wrap: wrap; gap: 8px 16px; }
+    .tags-filter-checkbox-item { display: flex; align-items: center; gap: 4px; cursor: pointer; }
+    .tags-filter-checkbox-item input { cursor: pointer; }
+    .tags-filter-checkbox-item label { font-size: 13px; color: #374151; cursor: pointer; }
+    
+    .modal { display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1001; align-items: center; justify-content: center; }
+    .modal.show { display: flex; }
+    .modal-content { background: #fff; border-radius: 12px; width: 420px; max-width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid #e5e7eb; }
+    .modal-title { font-size: 15px; font-weight: 600; color: #111; }
+    .modal-close { font-size: 20px; color: #9ca3af; cursor: pointer; line-height: 1; }
+    .modal-close:hover { color: #374151; }
+    .modal-body { padding: 20px; }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 10px; padding: 14px 20px; border-top: 1px solid #e5e7eb; }
+    .modal-btn { padding: 8px 18px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+    .modal-btn-cancel { background: #fff; color: #6b7280; border: 1px solid #d1d5db; }
+    .modal-btn-cancel:hover { background: #f9fafb; }
+    .modal-btn-confirm { background: #2563eb; color: #fff; border: none; }
+    .modal-btn-confirm:hover { background: #1d4ed8; }
+    .confirm-modal-content { width: 360px; }
+    .confirm-modal-body { padding: 24px 20px; text-align: center; font-size: 14px; color: #374151; }
+    .confirm-ok-btn { background: #ef4444; color: #fff; border: none; padding: 8px 18px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; }
+    .confirm-ok-btn:hover { background: #dc2626; }
+    .form-field { margin-bottom: 14px; }
+    .form-label { display: block; font-size: 12px; color: #374151; font-weight: 500; margin-bottom: 4px; }
+    .form-input, .form-select, .form-textarea { width: 100%; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 13px; outline: none; transition: border-color 0.2s; }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: #2563eb; }
+    .form-textarea { resize: vertical; min-height: 60px; }
+    .form-error { display: block; font-size: 11px; color: #ef4444; margin-top: 2px; }
+    .required { color: #ef4444; }
+    .detail-section { margin-bottom: 16px; }
+    .detail-section-title { font-size: 13px; font-weight: 600; color: #1f2937; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #e5e7eb; }
+    .detail-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .detail-info-item { display: flex; flex-direction: column; gap: 2px; }
+    .detail-info-label { font-size: 11px; color: #64748b; }
+    .detail-info-value { font-size: 13px; color: #374151; }
+    .detail-log-container { max-height: 200px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 6px; }
+    .detail-log-table { width: 100%; border-collapse: collapse; }
+    .detail-log-table th { background: #f9fafb; font-size: 11px; font-weight: 600; color: #374151; padding: 8px 10px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+    .detail-log-table td { font-size: 12px; color: #6b7280; padding: 8px 10px; border-bottom: 1px solid #f3f4f6; }
+    .detail-modal-content { width: 600px; }
+    .detail-cancel { cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="sidebar-fixed">
+      <!-- 顶部Tab -->
+      <div class="top-tabs">
+        <div class="top-tab active">客户画像</div>
+        <div class="top-tab">商机提醒</div>
+        <div class="top-tab">快捷回复</div>
+        <div class="top-tab">发起收款</div>
+        <div class="top-tab">客户转账</div>
+        <div class="top-tab">推荐客服</div>
+        <div class="top-tab">素材库</div>
+        <div class="top-tab">企业名片</div>
+        <div class="top-tab">自定义</div>
+        <!-- <div class="top-tab-more">^</div> -->
+      </div>
+      
+      <!-- 顶部Tab（原） -->
+      <!--
+      <div class="top-tabs">
+        <div class="top-tab active">客户画像</div>
+        <div class="top-tab">商机提醒</div>
+        <div class="top-tab">快捷回复</div>
+        <div class="top-tab">发起收款</div>
+        <div class="top-tab">客户转账</div>
+        <div class="top-tab-more">^</div>
+      </div>
+      
+      <div class="tab-group">
+        <div class="tab-item">推荐客服</div>
+        <div class="tab-item">素材库</div>
+        <div class="tab-item">企业名片</div>
+        <div class="tab-item">自定义</div>
+      </div>
+      -->
+      
+      <!-- 用户信息区 -->
+      <div class="user-section">
+        <div class="user-header">
+          <div class="user-avatar-placeholder">👤</div>
+          <div class="user-info">
+            <div class="user-name">张三 @微信</div>
+            <div class="user-nickname">张老三</div>
+          </div>
+        </div>
+        <div class="user-meta">
+          <div class="user-meta-item">
+            <span class="user-meta-label">性 别</span>
+            <span class="user-meta-value">女</span>
+          </div>
+          <div class="user-meta-item">
+            <span class="user-meta-label">年 龄</span>
+            <span class="user-meta-value">34</span>
+          </div>
+          <div class="user-meta-item">
+            <span class="user-meta-label">来 源</span>
+            <span class="user-meta-value unknown">未知来源</span>
+          </div>
+        </div>
+        <div class="user-add-time">添加时间 2023-12-08 16:02</div>
+      </div>
+      
+      <!-- 资料Tab -->
+      <div class="tab-group">
+        <div class="tab-item" data-tab="profile">客户资料</div>
+        <div class="tab-item active" data-tab="profile">用户画像</div>
+        <div class="tab-item" data-tab="free-tags">对话自由标签</div>
+        <div class="tab-item" data-tab="topic-tags">话题标签</div>
+        <div class="tab-item">注册信息</div>
+        <div class="tab-item">用户报告</div>
+        <div class="tab-item">商机</div>
+        <div class="tab-item">动态轨迹</div>
+        <div class="tab-item">异常跟进</div>
+        <div class="tab-item">AI消息记录</div>
+        <div class="tab-item">消息记录</div>
+        <div class="tab-item">待发消息</div>
+      </div>
+      
+      <!-- 资料Tab（原） -->
+      <!--
+      <div class="tab-group">
+        <div class="tab-row">
+          <div class="tab-item">客户资料</div>
+          <div class="tab-item active">用户画像</div>
+          <div class="tab-item">注册信息</div>
+          <div class="tab-item">用户报告</div>
+          <div class="tab-item">商机</div>
+          <div class="tab-item">动态轨迹</div>
+        </div>
+        <div class="tab-row">
+          <div class="tab-item">异常跟进</div>
+          <div class="tab-item">AI消息记录</div>
+          <div class="tab-item">消息记录</div>
+          <div class="tab-item">待发消息</div>
+        </div>
+      </div>
+      -->
+    </div>
+    
+    <div class="sidebar-scroll">
+      <!-- 用户画像内容 -->
+      <div class="profile-content">
+      <!-- 更新行 -->
+      <div class="profile-update-row">
+        <span class="profile-update-time">更新时间：2026-04-29 10:30:00</span>
+        <button class="profile-refresh-btn">更新画像</button>
+      </div>
+      
+      <!-- 档案Tab -->
+      <div class="archive-tabs">
+        <button class="archive-tab active">溯华悦己</button>
+        <button class="archive-tab disabled" disabled title="暂无设备版本">溯华悠护</button>
+      </div>
+      <div class="archive-tab-spacer"></div>
+      
+      <!-- 用户基本信息 -->
+      <div class="profile-basic-card">
+        <div class="profile-basic-title">用户基本信息</div>
+        <div class="profile-basic-grid">
+          <div>
+            <div class="profile-basic-item-label">性别</div>
+            <div class="profile-basic-item-value">女</div>
+          </div>
+          <div>
+            <div class="profile-basic-item-label">年龄</div>
+            <div class="profile-basic-item-value">32岁</div>
+          </div>
+          <div>
+            <div class="profile-basic-item-label">BMI指数</div>
+            <div class="profile-basic-item-value">21.5</div>
+          </div>
+          <div>
+            <div class="profile-basic-item-label">身体状态</div>
+            <div class="profile-basic-item-value">正常</div>
+          </div>
+        </div>
+        <div class="profile-basic-extra">
+          <div><span class="profile-basic-extra-label">身高体重：</span>165cm / 58.5kg</div>
+          <div><span class="profile-basic-extra-label">家庭情况：</span>已婚，已育</div>
+        </div>
+      </div>
+      
+      <!-- 重点标签 -->
+      <div class="profile-tags-section">
+        <div class="profile-tags-title">重点标签</div>
+        <div class="profile-tags-list">
+          <div class="profile-tag-category" style="border-left-color: #ef4444;">
+            <div class="profile-tag-category-title" style="color: #ef4444;">1. 医疗健康</div>
+            <div class="profile-tag-items">
+              <span class="profile-tag-item">体检异常</span>
+              <span class="profile-tag-item">用药记录</span>
+            </div>
+          </div>
+          <div class="profile-tag-category" style="border-left-color: #f97316;">
+            <div class="profile-tag-category-title" style="color: #f97316;">2. 体感</div>
+            <div class="profile-tag-items">
+              <span class="profile-tag-item">偶有头痛</span>
+              <span class="profile-tag-item">睡眠不佳</span>
+            </div>
+          </div>
+          <div class="profile-tag-category" style="border-left-color: #eab308;">
+            <div class="profile-tag-category-title" style="color: #eab308;">3. 行动计划</div>
+            <div class="profile-tag-items">
+              <span class="profile-tag-item">计划减重</span>
+              <span class="profile-tag-item">计划体检</span>
+            </div>
+          </div>
+          <div class="profile-tag-category" style="border-left-color: #22c55e;">
+            <div class="profile-tag-category-title" style="color: #22c55e;">4. 日常节律</div>
+            <div class="profile-tag-items">
+              <span class="profile-tag-item">经常熬夜</span>
+              <span class="profile-tag-item">饮食不规律</span>
+            </div>
+          </div>
+          <div class="profile-tag-category" style="border-left-color: #06b6d4;">
+            <div class="profile-tag-category-title" style="color: #06b6d4;">5. 情绪心理</div>
+            <div class="profile-tag-items">
+              <span class="profile-tag-item">工作压力大</span>
+              <span class="profile-tag-item">焦虑情绪</span>
+            </div>
+          </div>
+          <div class="profile-tag-category" style="border-left-color: #8b5cf6;">
+            <div class="profile-tag-category-title" style="color: #8b5cf6;">6. 运动活动</div>
+            <div class="profile-tag-items">
+              <span class="profile-tag-item">久坐不动</span>
+              <span class="profile-tag-item">偶尔运动</span>
+            </div>
+          </div>
+          <div class="profile-tag-category" style="border-left-color: #ec4899;">
+            <div class="profile-tag-category-title" style="color: #ec4899;">7. 生活事件</div>
+            <div class="profile-tag-items">
+              <span class="profile-tag-item">近期出差多</span>
+            </div>
+          </div>
+          <div class="profile-tag-category" style="border-left-color: #64748b;">
+            <div class="profile-tag-category-title" style="color: #64748b;">8. 人口属性</div>
+            <div class="profile-tag-items">
+              <span class="profile-tag-item">白领一族</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 近7天围绕话题 -->
+      <div class="profile-topic-section">
+        <div class="profile-topic-title">近7天围绕话题</div>
+        <div class="profile-topic-items">
+          <span class="profile-topic-item">健康咨询</span>
+          <span class="profile-topic-item">产品使用</span>
+          <span class="profile-topic-item">售后服务</span>
+        </div>
+      </div>
+      
+      <!-- 近30天围绕话题 -->
+      <div class="profile-topic-section">
+        <div class="profile-topic-title">近30天围绕话题</div>
+        <div class="profile-topic-items">
+          <span class="profile-topic-item">投诉处理</span>
+          <span class="profile-topic-item">退换货咨询</span>
+          <span class="profile-topic-item">活动咨询</span>
+          <span class="profile-topic-item">会员权益</span>
+          <span class="profile-topic-item">物流查询</span>
+          <span class="profile-topic-item">优惠券使用</span>
+          <span class="profile-topic-item">产品建议</span>
+          <span class="profile-topic-item">发票问题</span>
+          <span class="profile-topic-item">账单咨询</span>
+          <span class="profile-topic-item">预约服务</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 对话自由标签内容 -->
+    <div class="free-tags-content">
+      <!-- 工具栏 -->
+      <div class="tags-toolbar">
+        <button class="tags-filter-btn">筛选标签</button>
+        <button class="tags-add-btn">+ 新增标签</button>
+        <!-- <button class="tags-export-btn">导出标签</button> -->
+      </div>
+      
+      <!-- 标签列表 -->
+      <div class="tags-table-wrapper">
+        <table class="tags-table">
+          <thead>
+            <tr>
+              <th>标签名称</th>
+              <th>标签分类</th>
+              <th>关注度</th>
+              <th>状态</th>
+              <th>创建时间</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>经常锻炼</td>
+              <td>运动活动</td>
+              <td><span class="tags-priority-high">高</span></td>
+              <td><span class="tags-status tags-status-normal">正常</span></td>
+              <td>2026-04-20</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-edit">修改</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>睡眠质量差</td>
+              <td>体感</td>
+              <td><span class="tags-priority-medium">中</span></td>
+              <td><span class="tags-status tags-status-normal">正常</span></td>
+              <td>2026-04-19</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-edit">修改</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>饮食偏清淡</td>
+              <td>日常节律</td>
+              <td><span class="tags-priority-medium">中</span></td>
+              <td><span class="tags-status tags-status-expired">已失效</span></td>
+              <td>2026-04-10</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-edit">修改</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>压力较大</td>
+              <td>情绪心理</td>
+              <td><span class="tags-priority-high">高</span></td>
+              <td><span class="tags-status tags-status-deleted">已删除</span></td>
+              <td>2026-04-18</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-edit">修改</button>
+                <button class="tags-op-btn tags-op-restore">取消删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>久坐不动</td>
+              <td>运动活动</td>
+              <td><span class="tags-priority-low">低</span></td>
+              <td><span class="tags-status tags-status-overridden">已合并</span></td>
+              <td>2026-04-12</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-edit">修改</button>
+                <button class="tags-op-btn tags-op-recover">恢复</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>血压偏高</td>
+              <td>医疗健康</td>
+              <td><span class="tags-priority-high">高</span></td>
+              <td><span class="tags-status tags-status-normal">正常</span></td>
+              <td>2026-04-15</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-edit">修改</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>经常出差</td>
+              <td>生活事件</td>
+              <td><span class="tags-priority-medium">中</span></td>
+              <td><span class="tags-status tags-status-normal">正常</span></td>
+              <td>2026-04-08</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-edit">修改</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>计划减重</td>
+              <td>行动计划</td>
+              <td><span class="tags-priority-medium">中</span></td>
+              <td><span class="tags-status tags-status-normal">正常</span></td>
+              <td>2026-04-16</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-edit">修改</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>白领一族</td>
+              <td>人口属性</td>
+              <td><span class="tags-priority-low">低</span></td>
+              <td><span class="tags-status tags-status-normal">正常</span></td>
+              <td>2026-04-14</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-edit">修改</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>偶有头痛</td>
+              <td>体感</td>
+              <td><span class="tags-priority-medium">中</span></td>
+              <td><span class="tags-status tags-status-normal">正常</span></td>
+              <td>2026-04-17</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-edit">修改</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>工作压力大</td>
+              <td>情绪心理</td>
+              <td><span class="tags-priority-high">高</span></td>
+              <td><span class="tags-status tags-status-normal">正常</span></td>
+              <td>2026-04-11</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-edit">修改</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>体检异常</td>
+              <td>医疗健康</td>
+              <td><span class="tags-priority-high">高</span></td>
+              <td><span class="tags-status tags-status-normal">正常</span></td>
+              <td>2026-04-13</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-edit">修改</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>经常熬夜</td>
+              <td>日常节律</td>
+              <td><span class="tags-priority-medium">中</span></td>
+              <td><span class="tags-status tags-status-normal">正常</span></td>
+              <td>2026-04-09</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-edit">修改</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>饮食不规律</td>
+              <td>日常节律</td>
+              <td><span class="tags-priority-medium">中</span></td>
+              <td><span class="tags-status tags-status-expired">已失效</span></td>
+              <td>2026-04-07</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-edit">修改</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>偶尔运动</td>
+              <td>运动活动</td>
+              <td><span class="tags-priority-low">低</span></td>
+              <td><span class="tags-status tags-status-normal">正常</span></td>
+              <td>2026-04-06</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-edit">修改</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>焦虑情绪</td>
+              <td>情绪心理</td>
+              <td><span class="tags-priority-medium">中</span></td>
+              <td><span class="tags-status tags-status-normal">正常</span></td>
+              <td>2026-04-05</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-edit">修改</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>计划体检</td>
+              <td>行动计划</td>
+              <td><span class="tags-priority-medium">中</span></td>
+              <td><span class="tags-status tags-status-normal">正常</span></td>
+              <td>2026-04-04</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-edit">修改</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- 分页 -->
+      <div class="tags-pagination">
+        <span class="tags-pagination-info">共 <span id="free-tags-total-count">18</span> 个标签</span>
+        <div class="tags-pagination-controls">
+          <button class="tags-page-btn">上一页</button>
+          <span class="tags-page-num">1 / 1</span>
+          <button class="tags-page-btn">下一页</button>
+          <select class="tags-page-size">
+            <option value="10" selected>10条/页</option>
+            <option value="20">20条/页</option>
+            <option value="50">50条/页</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- 话题标签内容 -->
+    <div class="topic-tags-content">
+      <!-- 工具栏 -->
+      <div class="tags-toolbar">
+        <button class="tags-filter-btn topic-filter-btn">筛选标签</button>
+        <!-- <button class="tags-export-btn topic-export-btn">导出标签</button> -->
+      </div>
+      
+      <!-- 标签列表 -->
+      <div class="tags-table-wrapper">
+        <table class="tags-table topic-tags-table">
+          <thead>
+            <tr>
+              <th>标签名称</th>
+              <th>分类</th>
+              <th>状态</th>
+              <th>创建时间</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>健康咨询</td>
+              <td>报告解读</td>
+              <td><span class="tags-status tags-status-normal">正常</span></td>
+              <td>2026-04-20</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>产品使用</td>
+              <td>产品与功能反馈</td>
+              <td><span class="tags-status tags-status-normal">正常</span></td>
+              <td>2026-04-19</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>售后服务</td>
+              <td>知识获取</td>
+              <td><span class="tags-status tags-status-normal">正常</span></td>
+              <td>2026-04-18</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>投诉处理</td>
+              <td>当前健康与情绪状态</td>
+              <td><span class="tags-status tags-status-deleted">已删除</span></td>
+              <td>2026-04-15</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-restore">取消删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>退换货咨询</td>
+              <td>产品与功能反馈</td>
+              <td><span class="tags-status tags-status-normal">正常</span></td>
+              <td>2026-04-14</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>活动咨询</td>
+              <td>生活方式输入</td>
+              <td><span class="tags-status tags-status-normal">正常</span></td>
+              <td>2026-04-13</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>会员权益</td>
+              <td>健康管理诉求</td>
+              <td><span class="tags-status tags-status-normal">正常</span></td>
+              <td>2026-04-12</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>物流查询</td>
+              <td>生活方式输入</td>
+              <td><span class="tags-status tags-status-normal">正常</span></td>
+              <td>2026-04-11</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>优惠券使用</td>
+              <td>产品与功能反馈</td>
+              <td><span class="tags-status tags-status-normal">正常</span></td>
+              <td>2026-04-10</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>产品建议</td>
+              <td>产品与功能反馈</td>
+              <td><span class="tags-status tags-status-normal">正常</span></td>
+              <td>2026-04-09</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>发票问题</td>
+              <td>知识获取</td>
+              <td><span class="tags-status tags-status-normal">正常</span></td>
+              <td>2026-04-08</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>账单咨询</td>
+              <td>生活方式输入</td>
+              <td><span class="tags-status tags-status-normal">正常</span></td>
+              <td>2026-04-07</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>积分兑换</td>
+              <td>健康管理诉求</td>
+              <td><span class="tags-status tags-status-normal">正常</span></td>
+              <td>2026-04-06</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>预约服务</td>
+              <td>健康管理诉求</td>
+              <td><span class="tags-status tags-status-normal">正常</span></td>
+              <td>2026-04-05</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-delete">删除</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>投诉反馈</td>
+              <td>当前健康与情绪状态</td>
+              <td><span class="tags-status tags-status-deleted">已删除</span></td>
+              <td>2026-04-04</td>
+              <td>
+                <div class="tags-op-wrapper">
+                <button class="tags-op-btn tags-op-detail">详情</button>
+                <button class="tags-op-btn tags-op-restore">取消删除</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- 分页 -->
+      <div class="tags-pagination">
+        <span class="tags-pagination-info">共 <span id="topic-tags-total-count">15</span> 个标签</span>
+        <div class="tags-pagination-controls">
+          <button class="tags-page-btn topic-page-btn">上一页</button>
+          <span class="tags-page-num topic-page-num">1 / 1</span>
+          <button class="tags-page-btn topic-page-btn">下一页</button>
+          <select class="tags-page-size topic-page-size">
+            <option value="10" selected>10条/页</option>
+            <option value="20">20条/页</option>
+            <option value="50">50条/页</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 筛选弹窗 -->
+  <div class="tags-filter-modal">
+    <div class="tags-filter-modal-content">
+      <div class="tags-filter-modal-header">
+        <span class="tags-filter-modal-title">筛选</span>
+        <span class="tags-filter-modal-close">&times;</span>
+      </div>
+      <div class="tags-filter-modal-body">
+        <div class="tags-filter-form">
+          <div class="tags-filter-field">
+            <label class="tags-filter-label">关键词</label>
+            <input type="text" class="tags-filter-input" placeholder="输入标签关键词，支持模糊匹配，多个关键词用中文逗号隔开"/>
+          </div>
+          <div class="tags-filter-field">
+            <label class="tags-filter-label">标签分类</label>
+            <div class="tags-filter-checkbox-group">
+              <div class="tags-filter-checkbox-item"><input type="checkbox" id="cat1" value="日常节律"/><label for="cat1">日常节律</label></div>
+              <div class="tags-filter-checkbox-item"><input type="checkbox" id="cat2" value="情绪心理"/><label for="cat2">情绪心理</label></div>
+              <div class="tags-filter-checkbox-item"><input type="checkbox" id="cat3" value="运动活动"/><label for="cat3">运动活动</label></div>
+              <div class="tags-filter-checkbox-item"><input type="checkbox" id="cat4" value="体感"/><label for="cat4">体感</label></div>
+              <div class="tags-filter-checkbox-item"><input type="checkbox" id="cat5" value="医疗健康"/><label for="cat5">医疗健康</label></div>
+              <div class="tags-filter-checkbox-item"><input type="checkbox" id="cat6" value="生活事件"/><label for="cat6">生活事件</label></div>
+              <div class="tags-filter-checkbox-item"><input type="checkbox" id="cat7" value="行动计划"/><label for="cat7">行动计划</label></div>
+              <div class="tags-filter-checkbox-item"><input type="checkbox" id="cat8" value="人口属性"/><label for="cat8">人口属性</label></div>
+            </div>
+          </div>
+          <div class="tags-filter-field">
+            <label class="tags-filter-label">关注度</label>
+            <div class="tags-filter-checkbox-group">
+              <div class="tags-filter-checkbox-item"><input type="checkbox" id="pri1" value="高"/><label for="pri1">高</label></div>
+              <div class="tags-filter-checkbox-item"><input type="checkbox" id="pri2" value="中" checked/><label for="pri2">中</label></div>
+              <div class="tags-filter-checkbox-item"><input type="checkbox" id="pri3" value="低" checked/><label for="pri3">低</label></div>
+            </div>
+          </div>
+          <div class="tags-filter-field">
+            <label class="tags-filter-label">状态</label>
+            <div class="tags-filter-checkbox-group">
+              <div class="tags-filter-checkbox-item"><input type="checkbox" id="sta1" value="正常" checked/><label for="sta1">正常</label></div>
+              <div class="tags-filter-checkbox-item"><input type="checkbox" id="sta2" value="已删除"/><label for="sta2">已删除</label></div>
+              <div class="tags-filter-checkbox-item"><input type="checkbox" id="sta3" value="已失效"/><label for="sta3">已失效</label></div>
+              <div class="tags-filter-checkbox-item"><input type="checkbox" id="sta4" value="已合并"/><label for="sta4">已合并</label></div>
+            </div>
+          </div>
+          <div class="tags-filter-field">
+            <label class="tags-filter-label">创建时间</label>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <input type="date" class="tags-filter-input" style="width:100%;"/>
+              <span class="tags-filter-separator">至</span>
+              <input type="date" class="tags-filter-input" style="width:100%;"/>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tags-filter-modal-footer">
+        <button class="tags-filter-btn tags-filter-btn-cancel">取消</button>
+        <button class="tags-filter-btn tags-filter-btn-confirm">查询</button>
+      </div>
+    </div>
+  </div>
+
+<div id="detailModal" class="modal">
+  <div class="modal-content detail-modal-content">
+    <div class="modal-header">
+      <span class="modal-title">标签详情</span>
+      <span class="modal-close detail-cancel">&times;</span>
+    </div>
+    <div class="modal-body" style="max-height:500px;overflow-y:auto;">
+      <div class="detail-section">
+        <h4 class="detail-section-title">基本信息</h4>
+        <div class="detail-info-grid" id="detailInfoGrid"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn modal-btn-cancel detail-cancel">关闭</button>
+    </div>
+  </div>
+</div>
+
+<div id="addTagModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="modal-title">新增标签</span>
+      <span class="modal-close">&times;</span>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editRowIndex" />
+      <div class="form-field">
+        <label class="form-label">标签名称 <span class="required">*</span></label>
+        <input type="text" class="form-input" id="tagName" placeholder="请输入标签名称（8字以内）" maxlength="8" />
+        <span class="form-error" id="tagNameError"></span>
+      </div>
+      <div class="form-field">
+        <label class="form-label">打标逻辑 <span class="required">*</span></label>
+        <textarea class="form-textarea" id="tagLogic" placeholder="请输入打标逻辑（50字以内）" maxlength="50"></textarea>
+        <span class="form-error" id="tagLogicError"></span>
+      </div>
+      <div class="form-field">
+        <label class="form-label">标签分类 <span class="required">*</span></label>
+        <select class="form-select" id="tagCategory">
+          <option value="">请选择标签分类</option>
+          <option value="日常节律">日常节律</option>
+          <option value="情绪心理">情绪心理</option>
+          <option value="运动活动">运动活动</option>
+          <option value="体感">体感</option>
+          <option value="医疗健康">医疗健康</option>
+          <option value="生活事件">生活事件</option>
+          <option value="行动计划">行动计划</option>
+          <option value="人口属性">人口属性</option>
+        </select>
+        <span class="form-error" id="tagCategoryError"></span>
+      </div>
+      <div class="form-field">
+        <label class="form-label">标签关注度 <span class="required">*</span></label>
+        <select class="form-select" id="tagAttention">
+          <option value="">请选择标签关注度</option>
+          <option value="high">高</option>
+          <option value="medium">中</option>
+          <option value="low">低</option>
+        </select>
+        <span class="form-error" id="tagAttentionError"></span>
+      </div>
+      <div class="form-field">
+        <label class="form-label">聊天对象</label>
+        <select class="form-select" id="tagChatObject">
+          <option value="">请选择聊天对象</option>
+          <option value="AI溯华悦己">AI溯华悦己</option>
+          <option value="AI溯华悠护">AI溯华悠护</option>
+        </select>
+      </div>
+      <div class="form-field add-only">
+        <label class="form-label">有效期（天）</label>
+        <input type="number" class="form-input" id="tagValidityDays" placeholder="请输入有效期天数" min="1" />
+      </div>
+      <div class="form-field edit-only" style="display:none;">
+        <label class="form-label">失效时间</label>
+        <input type="date" class="form-input" id="tagExpireDate" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn modal-btn-cancel">取消</button>
+      <button class="modal-btn modal-btn-confirm">确认</button>
+    </div>
+  </div>
+</div>
+
+<div id="confirmModal" class="modal">
+  <div class="modal-content confirm-modal-content">
+    <div class="modal-header">
+      <span class="modal-title">操作确认</span>
+      <span class="modal-close confirm-cancel">&times;</span>
+    </div>
+    <div class="modal-body confirm-modal-body">
+      <p id="confirmMessage"></p>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn modal-btn-cancel confirm-cancel">取消</button>
+      <button class="confirm-ok-btn" id="confirmOk">确定</button>
+    </div>
+  </div>
+</div>
+
+<!-- 话题标签筛选弹窗 -->
+<div class="tags-filter-modal topic-filter-modal" id="topicFilterModal">
+  <div class="tags-filter-modal-content">
+    <div class="tags-filter-modal-header">
+      <span class="tags-filter-modal-title">筛选</span>
+      <span class="tags-filter-modal-close topic-filter-close">&times;</span>
+    </div>
+    <div class="tags-filter-modal-body">
+      <div class="tags-filter-form">
+        <div class="tags-filter-field">
+          <label class="tags-filter-label">关键词</label>
+          <input type="text" class="tags-filter-input" id="topicFilterKeyword" placeholder="输入关键词，多个关键词用中文逗号隔开"/>
+        </div>
+        <div class="tags-filter-field">
+          <label class="tags-filter-label">创建时间</label>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <input type="date" class="tags-filter-input" id="topicFilterStartDate" style="width:100%;"/>
+            <span class="tags-filter-separator">至</span>
+            <input type="date" class="tags-filter-input" id="topicFilterEndDate" style="width:100%;"/>
+          </div>
+        </div>
+        <div class="tags-filter-field">
+          <label class="tags-filter-label">分类</label>
+          <div class="tags-filter-checkbox-group">
+            <div class="tags-filter-checkbox-item"><input type="checkbox" id="topicCat1" value="报告解读"/><label for="topicCat1">报告解读</label></div>
+            <div class="tags-filter-checkbox-item"><input type="checkbox" id="topicCat2" value="生活方式输入"/><label for="topicCat2">生活方式输入</label></div>
+            <div class="tags-filter-checkbox-item"><input type="checkbox" id="topicCat3" value="健康管理诉求"/><label for="topicCat3">健康管理诉求</label></div>
+            <div class="tags-filter-checkbox-item"><input type="checkbox" id="topicCat4" value="产品与功能反馈"/><label for="topicCat4">产品与功能反馈</label></div>
+            <div class="tags-filter-checkbox-item"><input type="checkbox" id="topicCat5" value="知识获取"/><label for="topicCat5">知识获取</label></div>
+            <div class="tags-filter-checkbox-item"><input type="checkbox" id="topicCat6" value="当前健康与情绪状态"/><label for="topicCat6">当前健康与情绪状态</label></div>
+          </div>
+        </div>
+        <div class="tags-filter-field">
+          <label class="tags-filter-label">状态</label>
+          <div class="tags-filter-checkbox-group">
+            <div class="tags-filter-checkbox-item"><input type="checkbox" id="topicSta1" value="正常" checked/><label for="topicSta1">正常</label></div>
+            <div class="tags-filter-checkbox-item"><input type="checkbox" id="topicSta2" value="已删除"/><label for="topicSta2">已删除</label></div>
+          </div>
+        </div>
+        <div class="tags-filter-field">
+          <label class="tags-filter-label">来源</label>
+          <div class="tags-filter-checkbox-group">
+            <div class="tags-filter-checkbox-item"><input type="checkbox" id="topicSrc1" value="AI溯华悦己"/><label for="topicSrc1">AI溯华悦己</label></div>
+            <div class="tags-filter-checkbox-item"><input type="checkbox" id="topicSrc2" value="AI溯华悠护"/><label for="topicSrc2">AI溯华悠护</label></div>
+            <div class="tags-filter-checkbox-item"><input type="checkbox" id="topicSrc3" value="私聊"/><label for="topicSrc3">私聊</label></div>
+            <div class="tags-filter-checkbox-item"><input type="checkbox" id="topicSrc4" value="群聊"/><label for="topicSrc4">群聊</label></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tags-filter-modal-footer">
+      <button class="tags-filter-btn topic-filter-btn-cancel">取消</button>
+      <button class="tags-filter-btn topic-filter-btn-confirm">查询</button>
+    </div>
+  </div>
+</div>
+
+<!-- 话题标签详情弹窗 -->
+<div id="topicDetailModal" class="modal">
+  <div class="modal-content detail-modal-content">
+    <div class="modal-header">
+      <span class="modal-title">话题标签详情</span>
+      <span class="modal-close topic-detail-cancel">&times;</span>
+    </div>
+    <div class="modal-body" style="max-height:500px;overflow-y:auto;">
+      <div class="detail-section">
+        <h4 class="detail-section-title">基本信息</h4>
+        <div class="detail-info-grid" id="topicDetailInfoGrid"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn modal-btn-cancel topic-detail-cancel">关闭</button>
+    </div>
+  </div>
+</div>
+  
+  <script>
+    const archiveTabs = document.querySelectorAll('.archive-tab');
+    const profileContent = document.querySelector('.profile-content');
+    const freeTagsContent = document.querySelector('.free-tags-content');
+    const topicTagsContent = document.querySelector('.topic-tags-content');
+    const tabItems = document.querySelectorAll('.tab-item[data-tab]');
+    
+    function switchTabContent(tabName) {
+      if (tabName === 'free-tags') {
+        profileContent.classList.add('hidden');
+        freeTagsContent.classList.add('active');
+        topicTagsContent.classList.remove('active');
+      } else if (tabName === 'topic-tags') {
+        profileContent.classList.add('hidden');
+        freeTagsContent.classList.remove('active');
+        topicTagsContent.classList.add('active');
+      } else if (tabName === 'profile') {
+        profileContent.classList.remove('hidden');
+        freeTagsContent.classList.remove('active');
+        topicTagsContent.classList.remove('active');
+      }
+    }
+    
+    tabItems.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        const tabName = this.dataset.tab;
+        if (!tabName) return;
+        
+        tabItems.forEach(function(t) {
+          if (t.dataset.tab) t.classList.remove('active');
+        });
+        this.classList.add('active');
+        
+        switchTabContent(tabName);
+      });
+    });
+    
+    const profileDataYueji = {
+      gender: '女', age: 32, bmi: 21.5, bmi_status: '正常',
+      height_cm: 165, weight_kg: 58.5, marry: '已婚', fertility: '已育',
+      categories: {
+        '医疗健康': ['体检异常', '用药记录'],
+        '体感': ['偶有头痛', '睡眠不佳'],
+        '行动计划': ['计划减重', '计划体检'],
+        '日常节律': ['经常熬夜', '饮食不规律'],
+        '情绪心理': ['工作压力大', '焦虑情绪'],
+        '运动活动': ['久坐不动', '偶尔运动'],
+        '生活事件': ['近期出差多'],
+        '人口属性': ['白领一族']
+      },
+      recent7days: ['健康咨询', '产品使用', '售后服务'],
+      recent30days: ['投诉处理', '退换货咨询', '活动咨询', '会员权益', '物流查询', '优惠券使用', '产品建议', '发票问题', '账单咨询', '预约服务']
+    };
+    
+    const profileDataYouhu = {
+      gender: '女', age: 32, bmi: 21.5, bmi_status: '正常',
+      height_cm: 165, weight_kg: 58.5, marry: '已婚', fertility: '已育',
+      categories: {
+        '医疗健康': ['体检异常'],
+        '体感': ['偶有头痛'],
+        '行动计划': ['计划减重'],
+        '日常节律': ['经常熬夜'],
+        '情绪心理': ['工作压力大'],
+        '运动活动': ['久坐不动'],
+        '生活事件': [],
+        '人口属性': ['白领一族']
+      },
+      recent7days: ['健康咨询', '产品使用'],
+      recent30days: ['投诉处理', '退换货咨询', '活动咨询', '会员权益']
+    };
+    
+    function renderProfileContent(data) {
+      const categoryOrder = ['医疗健康', '体感', '行动计划', '日常节律', '情绪心理', '运动活动', '生活事件', '人口属性'];
+      const categoryColors = ['#ef4444','#f97316','#eab308','#22c55e','#06b6d4','#8b5cf6','#ec4899','#64748b'];
+      
+      let tagsHtml = '';
+      categoryOrder.forEach(function(category, index) {
+        const tags = data.categories[category] || [];
+        const color = categoryColors[index];
+        tagsHtml += '<div class="profile-tag-category" style="border-left-color: ' + color + ';">';
+        tagsHtml += '<div class="profile-tag-category-title" style="color: ' + color + ';">' + (index + 1) + '. ' + category + '</div>';
+        if (tags.length > 0) {
+          tagsHtml += '<div class="profile-tag-items">';
+          tags.forEach(function(tag) {
+            tagsHtml += '<span class="profile-tag-item">' + tag + '</span>';
+          });
+          tagsHtml += '</div>';
+        } else {
+          tagsHtml += '<div class="profile-tag-empty">暂无标签</div>';
+        }
+        tagsHtml += '</div>';
+      });
+      
+      let topic7Html = '';
+      data.recent7days.forEach(function(topic) {
+        topic7Html += '<span class="profile-topic-item">' + topic + '</span>';
+      });
+      
+      let topic30Html = '';
+      data.recent30days.forEach(function(topic) {
+        topic30Html += '<span class="profile-topic-item">' + topic + '</span>';
+      });
+      
+      profileContent.innerHTML = 
+        '<div class="profile-update-row">' +
+          '<span class="profile-update-time">更新时间：2026-04-29 10:30:00</span>' +
+          '<button class="profile-refresh-btn">更新画像</button>' +
+        '</div>' +
+        '<div class="archive-tabs">' +
+          '<button class="archive-tab' + (data === profileDataYueji ? ' active' : '') + '" data-tab="yueji">溯华悦己</button>' +
+          '<button class="archive-tab' + (data === profileDataYouhu ? ' active' : '') + (data === profileDataYueji ? ' disabled' : '') + '" data-tab="youhu"' + (data === profileDataYueji ? ' disabled title="暂无设备版本"' : '') + '>溯华悠护</button>' +
+        '</div>' +
+        '<div class="archive-tab-spacer"></div>' +
+        '<div class="profile-basic-card">' +
+          '<div class="profile-basic-title">用户基本信息</div>' +
+          '<div class="profile-basic-grid">' +
+            '<div><div class="profile-basic-item-label">性别</div><div class="profile-basic-item-value">' + data.gender + '</div></div>' +
+            '<div><div class="profile-basic-item-label">年龄</div><div class="profile-basic-item-value">' + data.age + '岁</div></div>' +
+            '<div><div class="profile-basic-item-label">BMI指数</div><div class="profile-basic-item-value">' + data.bmi + '</div></div>' +
+            '<div><div class="profile-basic-item-label">身体状态</div><div class="profile-basic-item-value">' + data.bmi_status + '</div></div>' +
+          '</div>' +
+          '<div class="profile-basic-extra">' +
+            '<div><span class="profile-basic-extra-label">身高体重：</span>' + data.height_cm + 'cm / ' + data.weight_kg + 'kg</div>' +
+            '<div><span class="profile-basic-extra-label">家庭情况：</span>' + data.marry + '，' + data.fertility + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="profile-tags-section">' +
+          '<div class="profile-tags-title">重点标签</div>' +
+          '<div class="profile-tags-list">' + tagsHtml + '</div>' +
+        '</div>' +
+        '<div class="profile-topic-section">' +
+          '<div class="profile-topic-title">近7天围绕话题</div>' +
+          '<div class="profile-topic-items">' + topic7Html + '</div>' +
+        '</div>' +
+        '<div class="profile-topic-section">' +
+          '<div class="profile-topic-title">近30天围绕话题</div>' +
+          '<div class="profile-topic-items">' + topic30Html + '</div>' +
+        '</div>';
+      
+      bindArchiveTabs();
+    }
+    
+    function bindArchiveTabs() {
+      document.querySelectorAll('.archive-tab').forEach(function(tab) {
+        tab.addEventListener('click', function() {
+          if (this.disabled) return;
+          if (this.dataset.tab === 'yueji') {
+            renderProfileContent(profileDataYueji);
+          } else if (this.dataset.tab === 'youhu') {
+            renderProfileContent(profileDataYouhu);
+          }
+        });
+      });
+    }
+    
+    bindArchiveTabs();
+    
+    const filterModal = document.querySelector('.tags-filter-modal');
+    const filterBtn = document.querySelector('.tags-toolbar .tags-filter-btn');
+    const filterModalClose = document.querySelector('.tags-filter-modal-close');
+    const filterCancelBtn = document.querySelector('.tags-filter-btn-cancel');
+    
+    filterBtn.addEventListener('click', function() {
+      filterModal.classList.add('show');
+    });
+    
+    filterModalClose.addEventListener('click', function() {
+      filterModal.classList.remove('show');
+    });
+    
+    filterCancelBtn.addEventListener('click', function() {
+      filterModal.classList.remove('show');
+    });
+    
+    filterModal.addEventListener('click', function(e) {
+      if (e.target === filterModal) {
+        filterModal.classList.remove('show');
+      }
+    });
+    
+    const addTagModal = document.getElementById('addTagModal');
+    const addTagBtn = document.querySelector('.tags-add-btn');
+    const addTagModalClose = addTagModal.querySelector('.modal-close');
+    const addTagCancelBtn = addTagModal.querySelector('.modal-btn-cancel');
+    const addTagConfirmBtn = addTagModal.querySelector('.modal-btn-confirm');
+    const editRowIndexInput = document.getElementById('editRowIndex');
+    
+    addTagBtn.addEventListener('click', function() {
+      document.querySelector('.modal-title').textContent = '新增标签';
+      editRowIndexInput.value = '';
+      document.getElementById('tagName').value = '';
+      document.getElementById('tagLogic').value = '';
+      document.getElementById('tagCategory').value = '';
+      document.getElementById('tagAttention').value = '';
+      document.getElementById('tagChatObject').value = '';
+      document.getElementById('tagValidityDays').value = '';
+      document.getElementById('tagExpireDate').value = '';
+      document.querySelectorAll('.add-only').forEach(function(el){ el.style.display = 'block'; });
+      document.querySelectorAll('.edit-only').forEach(function(el){ el.style.display = 'none'; });
+      addTagModal.classList.add('show');
+    });
+    
+    function closeAddTagModal() {
+      addTagModal.classList.remove('show');
+    }
+    
+    addTagModalClose.addEventListener('click', closeAddTagModal);
+    addTagCancelBtn.addEventListener('click', closeAddTagModal);
+    
+    addTagModal.addEventListener('click', function(e) {
+      if (e.target === addTagModal) {
+        closeAddTagModal();
+      }
+    });
+    
+    addTagConfirmBtn.addEventListener('click', function() {
+      const tagName = document.getElementById('tagName').value.trim();
+      const tagLogic = document.getElementById('tagLogic').value.trim();
+      const tagCategory = document.getElementById('tagCategory').value;
+      const tagAttention = document.getElementById('tagAttention').value;
+      let error = false;
+      
+      if (!tagName) {
+        document.getElementById('tagNameError').textContent = '请输入标签名称';
+        error = true;
+      } else {
+        document.getElementById('tagNameError').textContent = '';
+      }
+      
+      if (!tagLogic) {
+        document.getElementById('tagLogicError').textContent = '请输入打标逻辑';
+        error = true;
+      } else {
+        document.getElementById('tagLogicError').textContent = '';
+      }
+      
+      if (!tagCategory) {
+        document.getElementById('tagCategoryError').textContent = '请选择标签分类';
+        error = true;
+      } else {
+        document.getElementById('tagCategoryError').textContent = '';
+      }
+      
+      if (!tagAttention) {
+        document.getElementById('tagAttentionError').textContent = '请选择标签关注度';
+        error = true;
+      } else {
+        document.getElementById('tagAttentionError').textContent = '';
+      }
+      
+      if (error) return;
+      
+      const tagTableBody = document.querySelector('.tags-table tbody');
+      const editIndex = editRowIndexInput.value;
+      const attentionMap = {'high': '高', 'medium': '中', 'low': '低'};
+      const attentionText = attentionMap[tagAttention] || '';
+      
+      if (editIndex) {
+        const rows = tagTableBody.querySelectorAll('tr');
+        const row = rows[editIndex - 1];
+        row.querySelectorAll('td')[0].textContent = tagName;
+        row.querySelectorAll('td')[1].textContent = tagCategory;
+        row.querySelectorAll('td')[2].innerHTML = '<span class="tags-priority-' + tagAttention + '">' + attentionText + '</span>';
+      } else {
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = '<td>' + tagName + '</td>' +
+          '<td>' + tagCategory + '</td>' +
+          '<td><span class="tags-priority-' + tagAttention + '">' + attentionText + '</span></td>' +
+          '<td><span class="tags-status tags-status-normal">正常</span></td>' +
+          '<td>' + new Date().toISOString().slice(0, 10) + '</td>' +
+          '<td><div class="tags-op-wrapper"><button class="tags-op-btn tags-op-detail">详情</button><button class="tags-op-btn tags-op-edit">修改</button><button class="tags-op-btn tags-op-delete">删除</button></div></td>';
+        tagTableBody.appendChild(newRow);
+      }
+      
+      closeAddTagModal();
+    });
+    
+    const confirmModal = document.getElementById('confirmModal');
+    const confirmMessage = document.getElementById('confirmMessage');
+    const confirmOk = document.getElementById('confirmOk');
+    const confirmCancelBtns = document.querySelectorAll('.confirm-cancel');
+    
+    let pendingAction = null;
+    
+    confirmOk.addEventListener('click', function() {
+      if (pendingAction) {
+        pendingAction();
+        pendingAction = null;
+      }
+      confirmModal.classList.remove('show');
+    });
+    
+    confirmCancelBtns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        pendingAction = null;
+        confirmModal.classList.remove('show');
+      });
+    });
+    
+    confirmModal.addEventListener('click', function(e) {
+      if (e.target === confirmModal) {
+        pendingAction = null;
+        confirmModal.classList.remove('show');
+      }
+    });
+    
+    const detailModal = document.getElementById('detailModal');
+    const detailCancelBtns = document.querySelectorAll('.detail-cancel');
+    
+    detailCancelBtns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        detailModal.classList.remove('show');
+      });
+    });
+    
+    detailModal.addEventListener('click', function(e) {
+      if (e.target === detailModal) {
+        detailModal.classList.remove('show');
+      }
+    });
+    
+    let tagsPageSize = 10;
+    const tagsTableBody = document.querySelector('.tags-table tbody');
+    const tagsPageSizeSelect = document.querySelector('.tags-page-size');
+    const tagsPageNum = document.querySelector('.tags-page-num');
+    const tagsPrevBtn = document.querySelector('.tags-pagination-controls .tags-page-btn');
+    const tagsNextBtn = document.querySelector('.tags-pagination-controls .tags-page-btn:last-of-type');
+    
+    function tagsGoToPage(page) {
+      const rows = Array.from(tagsTableBody.querySelectorAll('tr'));
+      const total = rows.length;
+      const totalPages = Math.ceil(total / tagsPageSize) || 1;
+      
+      if (page < 1) page = 1;
+      if (page > totalPages) page = totalPages;
+      
+      const start = (page - 1) * tagsPageSize;
+      const end = start + tagsPageSize;
+      
+      rows.forEach(function(row, index) {
+        if (index >= start && index < end) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+      
+      tagsPageNum.textContent = page + ' / ' + totalPages;
+      tagsPrevBtn.disabled = page <= 1;
+      tagsNextBtn.disabled = page >= totalPages;
+    }
+    
+    tagsPrevBtn.addEventListener('click', function() {
+      const currentPage = parseInt(tagsPageNum.textContent.split(' / ')[0], 10);
+      tagsGoToPage(currentPage - 1);
+    });
+    
+    tagsNextBtn.addEventListener('click', function() {
+      const currentPage = parseInt(tagsPageNum.textContent.split(' / ')[0], 10);
+      tagsGoToPage(currentPage + 1);
+    });
+    
+    tagsPageSizeSelect.addEventListener('change', function() {
+      tagsPageSize = parseInt(this.value, 10);
+      tagsGoToPage(1);
+    });
+    
+    tagsGoToPage(1);
+    
+    tagsTableBody.addEventListener('click', function(e) {
+      const btn = e.target;
+      
+      if (btn.classList.contains('tags-op-detail') && btn.textContent === '详情') {
+        e.stopPropagation();
+        const row = btn.closest('tr');
+        const cells = row.querySelectorAll('td');
+        const tagName = cells[0].textContent;
+        const category = cells[1].textContent;
+        const attention = cells[2].querySelector('span') ? cells[2].querySelector('span').textContent : cells[2].textContent;
+        const status = cells[3].querySelector('.tags-status') ? cells[3].querySelector('.tags-status').textContent : cells[3].textContent;
+        const createTime = cells[4].textContent;
+
+        const detailInfoGrid = document.getElementById('detailInfoGrid');
+        detailInfoGrid.innerHTML = '';
+        const expireDate = new Date(createTime);
+        expireDate.setDate(expireDate.getDate() + 90);
+        const expireDateStr = expireDate.toISOString().slice(0, 10);
+        const fields = [
+          { label: '标签名称', value: tagName },
+          { label: '打标逻辑', value: '根据用户对话内容分析，自动识别相关标签语义特征进行打标' },
+          { label: '标签分类', value: category },
+          { label: '关注度', value: attention },
+          { label: '有效期', value: '90天' },
+          { label: '创建时间', value: createTime },
+          { label: '失效时间', value: expireDateStr },
+          { label: '状态', value: status },
+          { label: '聊天对象', value: 'AI溯华悦己' }
+        ];
+        fields.forEach(function(field) {
+          detailInfoGrid.innerHTML += '<div class="detail-info-item"><span class="detail-info-label">' + field.label + '</span><span class="detail-info-value">' + field.value + '</span></div>';
+        });
+
+        detailModal.classList.add('show');
+        return;
+      }
+      
+      if (btn.classList.contains('tags-op-delete') && btn.textContent === '删除') {
+        e.stopPropagation();
+        const row = btn.closest('tr');
+        const tagName = row.querySelectorAll('td')[0].textContent;
+        confirmMessage.textContent = '确定要删除标签 "' + tagName + '" 吗？';
+        pendingAction = function() {
+          const statusCell = row.querySelector('.tags-status');
+          statusCell.className = 'tags-status tags-status-deleted';
+          statusCell.textContent = '已删除';
+          const opCell = row.querySelectorAll('td')[5];
+          opCell.innerHTML = '<div class="tags-op-wrapper"><button class="tags-op-btn tags-op-detail">详情</button><button class="tags-op-btn tags-op-edit">修改</button><button class="tags-op-btn tags-op-restore">取消删除</button></div>';
+        };
+        confirmModal.classList.add('show');
+        return;
+      }
+      
+      if (btn.classList.contains('tags-op-restore') && btn.textContent === '取消删除') {
+        e.stopPropagation();
+        const row = btn.closest('tr');
+        const tagName = row.querySelectorAll('td')[0].textContent;
+        confirmMessage.textContent = '确定要取消删除标签 "' + tagName + '" 吗？';
+        pendingAction = function() {
+          const statusCell = row.querySelector('.tags-status');
+          statusCell.className = 'tags-status tags-status-normal';
+          statusCell.textContent = '正常';
+          const opCell = row.querySelectorAll('td')[5];
+          opCell.innerHTML = '<div class="tags-op-wrapper"><button class="tags-op-btn tags-op-detail">详情</button><button class="tags-op-btn tags-op-edit">修改</button><button class="tags-op-btn tags-op-delete">删除</button></div>';
+        };
+        confirmModal.classList.add('show');
+        return;
+      }
+      
+      if (btn.classList.contains('tags-op-edit') && btn.textContent === '修改') {
+        e.stopPropagation();
+        const row = btn.closest('tr');
+        const cells = row.querySelectorAll('td');
+        document.querySelector('.modal-title').textContent = '修改标签';
+        editRowIndexInput.value = row.rowIndex;
+        document.getElementById('tagName').value = cells[0].textContent;
+        document.getElementById('tagLogic').value = '根据用户对话内容分析，自动识别相关标签语义特征进行打标';
+        document.getElementById('tagCategory').value = cells[1].textContent;
+        const attentionText = cells[2].querySelector('span') ? cells[2].querySelector('span').textContent : cells[2].textContent;
+        const attentionMapReverse = {'高': 'high', '中': 'medium', '低': 'low'};
+        document.getElementById('tagAttention').value = attentionMapReverse[attentionText] || '';
+        document.getElementById('tagChatObject').value = '';
+        document.getElementById('tagExpireDate').value = '';
+        document.querySelectorAll('.add-only').forEach(function(el){ el.style.display = 'none'; });
+        document.querySelectorAll('.edit-only').forEach(function(el){ el.style.display = 'block'; });
+        addTagModal.classList.add('show');
+        return;
+      }
+    });
+    
+    // 话题标签筛选弹窗
+    const topicFilterModal = document.getElementById('topicFilterModal');
+    const topicFilterBtn = document.querySelector('.topic-filter-btn');
+    const topicFilterClose = document.querySelector('.topic-filter-close');
+    const topicFilterCancel = document.querySelector('.topic-filter-btn-cancel');
+    const topicFilterConfirm = document.querySelector('.topic-filter-btn-confirm');
+    
+    topicFilterBtn.addEventListener('click', function() {
+      topicFilterModal.classList.add('show');
+    });
+    
+    topicFilterClose.addEventListener('click', function() {
+      topicFilterModal.classList.remove('show');
+    });
+    
+    topicFilterCancel.addEventListener('click', function() {
+      topicFilterModal.classList.remove('show');
+    });
+    
+    topicFilterConfirm.addEventListener('click', function() {
+      topicFilterModal.classList.remove('show');
+    });
+    
+    topicFilterModal.addEventListener('click', function(e) {
+      if (e.target === topicFilterModal) {
+        topicFilterModal.classList.remove('show');
+      }
+    });
+    
+    // 话题标签详情弹窗
+    const topicDetailModal = document.getElementById('topicDetailModal');
+    const topicDetailCancelBtns = document.querySelectorAll('.topic-detail-cancel');
+    
+    topicDetailCancelBtns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        topicDetailModal.classList.remove('show');
+      });
+    });
+    
+    topicDetailModal.addEventListener('click', function(e) {
+      if (e.target === topicDetailModal) {
+        topicDetailModal.classList.remove('show');
+      }
+    });
+    
+    // 话题标签分页
+    let topicPageSize = 10;
+    const topicTableBody = document.querySelector('.topic-tags-table tbody');
+    const topicPageSizeSelect = document.querySelector('.topic-page-size');
+    const topicPageNum = document.querySelector('.topic-page-num');
+    const topicPrevBtn = document.querySelector('.topic-tags-content .tags-pagination-controls .tags-page-btn');
+    const topicNextBtn = document.querySelector('.topic-tags-content .tags-pagination-controls .tags-page-btn:last-of-type');
+    
+    function topicGoToPage(page) {
+      const rows = Array.from(topicTableBody.querySelectorAll('tr'));
+      const total = rows.length;
+      const totalPages = Math.ceil(total / topicPageSize) || 1;
+      
+      if (page < 1) page = 1;
+      if (page > totalPages) page = totalPages;
+      
+      const start = (page - 1) * topicPageSize;
+      const end = start + topicPageSize;
+      
+      rows.forEach(function(row, index) {
+        if (index >= start && index < end) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+      
+      topicPageNum.textContent = page + ' / ' + totalPages;
+      topicPrevBtn.disabled = page <= 1;
+      topicNextBtn.disabled = page >= totalPages;
+    }
+    
+    topicPrevBtn.addEventListener('click', function() {
+      const currentPage = parseInt(topicPageNum.textContent.split(' / ')[0], 10);
+      topicGoToPage(currentPage - 1);
+    });
+    
+    topicNextBtn.addEventListener('click', function() {
+      const currentPage = parseInt(topicPageNum.textContent.split(' / ')[0], 10);
+      topicGoToPage(currentPage + 1);
+    });
+    
+    topicPageSizeSelect.addEventListener('change', function() {
+      topicPageSize = parseInt(this.value, 10);
+      topicGoToPage(1);
+    });
+    
+    topicGoToPage(1);
+    
+    // 话题标签操作按钮事件
+    topicTableBody.addEventListener('click', function(e) {
+      const btn = e.target;
+      
+      if (btn.classList.contains('tags-op-detail') && btn.textContent === '详情') {
+        e.stopPropagation();
+        const row = btn.closest('tr');
+        const cells = row.querySelectorAll('td');
+        const tagName = cells[0].textContent;
+        const category = cells[1].textContent;
+        const status = cells[2].querySelector('.tags-status') ? cells[2].querySelector('.tags-status').textContent : cells[2].textContent;
+        const createTime = cells[3].textContent;
+        
+        const topicDetailInfoGrid = document.getElementById('topicDetailInfoGrid');
+        topicDetailInfoGrid.innerHTML = '';
+        const fields = [
+          { label: '标签名称', value: tagName },
+          { label: '打标逻辑', value: '根据用户对话内容分析，自动识别相关话题语义特征进行打标' },
+          { label: '打标规则', value: '当用户对话中提及相关话题关键词时自动打标' },
+          { label: '创建时间', value: createTime },
+          { label: '状态', value: status },
+          { label: '来源', value: 'AI溯华悦己' },
+          { label: '分类', value: category },
+          { label: '聊天对象', value: 'AI溯华悦己' }
+        ];
+        fields.forEach(function(field) {
+          topicDetailInfoGrid.innerHTML += '<div class="detail-info-item"><span class="detail-info-label">' + field.label + '</span><span class="detail-info-value">' + field.value + '</span></div>';
+        });
+        
+        topicDetailModal.classList.add('show');
+        return;
+      }
+      
+      if (btn.classList.contains('tags-op-delete') && btn.textContent === '删除') {
+        e.stopPropagation();
+        const row = btn.closest('tr');
+        const tagName = row.querySelectorAll('td')[0].textContent;
+        confirmMessage.textContent = '确定要删除标签 "' + tagName + '" 吗？';
+        pendingAction = function() {
+          const statusCell = row.querySelector('.tags-status');
+          statusCell.className = 'tags-status tags-status-deleted';
+          statusCell.textContent = '已删除';
+          const opCell = row.querySelectorAll('td')[4];
+          opCell.innerHTML = '<div class="tags-op-wrapper"><button class="tags-op-btn tags-op-detail">详情</button><button class="tags-op-btn tags-op-restore">取消删除</button></div>';
+        };
+        confirmModal.classList.add('show');
+        return;
+      }
+      
+      if (btn.classList.contains('tags-op-restore') && btn.textContent === '取消删除') {
+        e.stopPropagation();
+        const row = btn.closest('tr');
+        const tagName = row.querySelectorAll('td')[0].textContent;
+        confirmMessage.textContent = '确定要取消删除标签 "' + tagName + '" 吗？';
+        pendingAction = function() {
+          const statusCell = row.querySelector('.tags-status');
+          statusCell.className = 'tags-status tags-status-normal';
+          statusCell.textContent = '正常';
+          const opCell = row.querySelectorAll('td')[4];
+          opCell.innerHTML = '<div class="tags-op-wrapper"><button class="tags-op-btn tags-op-detail">详情</button><button class="tags-op-btn tags-op-delete">删除</button></div>';
+        };
+        confirmModal.classList.add('show');
+        return;
+      }
+    });
+  </script>
+</body>
+</html>
