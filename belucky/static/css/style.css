@@ -1,0 +1,864 @@
+/* ═══════════════════════════════════════════════════════
+   beLucky - 综合运势 App 样式
+   暗色神秘主题 · 紫蓝渐变 · 金色点缀
+   ═══════════════════════════════════════════════════════ */
+
+/* ── 全局重置 ────────────────────────────────────────── */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg-primary: #0a0618;
+    --bg-secondary: #150d2a;
+    --bg-card: rgba(30, 18, 60, 0.7);
+    --bg-card-hover: rgba(45, 28, 80, 0.8);
+    --text-primary: #f0e6ff;
+    --text-secondary: #b8a8d8;
+    --text-muted: #7a6a9a;
+    --accent-gold: #ffd700;
+    --accent-gold-soft: #f0c060;
+    --accent-purple: #8b5cf6;
+    --accent-blue: #3b82f6;
+    --accent-pink: #ec4899;
+    --border-color: rgba(139, 92, 246, 0.2);
+    --border-glow: rgba(139, 92, 246, 0.5);
+    --shadow-glow: 0 0 30px rgba(139, 92, 246, 0.15);
+    --radius: 12px;
+    --radius-lg: 20px;
+    --transition: 0.3s ease;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+                 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+/* ── 星空背景 ────────────────────────────────────────── */
+.stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    background:
+        radial-gradient(ellipse at top, #1a0d3a 0%, transparent 60%),
+        radial-gradient(ellipse at bottom, #0d1a3a 0%, transparent 60%);
+}
+
+.stars::before, .stars::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.stars::before {
+    background-image:
+        radial-gradient(1px 1px at 20% 30%, #fff, transparent),
+        radial-gradient(1px 1px at 40% 70%, #fff, transparent),
+        radial-gradient(1.5px 1.5px at 60% 20%, #ffd700, transparent),
+        radial-gradient(1px 1px at 80% 50%, #fff, transparent),
+        radial-gradient(1px 1px at 10% 80%, #fff, transparent),
+        radial-gradient(1.5px 1.5px at 70% 90%, #8b5cf6, transparent),
+        radial-gradient(1px 1px at 30% 50%, #fff, transparent),
+        radial-gradient(1px 1px at 90% 10%, #fff, transparent),
+        radial-gradient(1px 1px at 50% 40%, #fff, transparent),
+        radial-gradient(1.5px 1.5px at 25% 75%, #ffd700, transparent);
+    animation: twinkle 4s ease-in-out infinite alternate;
+}
+
+.stars::after {
+    background-image:
+        radial-gradient(1px 1px at 15% 45%, #fff, transparent),
+        radial-gradient(1px 1px at 35% 15%, #fff, transparent),
+        radial-gradient(1px 1px at 55% 65%, #fff, transparent),
+        radial-gradient(1.5px 1.5px at 75% 35%, #8b5cf6, transparent),
+        radial-gradient(1px 1px at 85% 85%, #fff, transparent),
+        radial-gradient(1px 1px at 5% 25%, #fff, transparent),
+        radial-gradient(1px 1px at 45% 85%, #fff, transparent),
+        radial-gradient(1.5px 1.5px at 65% 55%, #ffd700, transparent);
+    animation: twinkle 5s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes twinkle {
+    0% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+/* ── 顶部导航 ────────────────────────────────────────── */
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10, 6, 24, 0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--accent-gold);
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.logo-icon {
+    font-size: 1.6rem;
+    animation: rotate 8s linear infinite;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.nav-tabs {
+    display: flex;
+    gap: 0.25rem;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 0.25rem;
+    border-radius: var(--radius);
+}
+
+.nav-tab {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+}
+
+.nav-tab:hover {
+    color: var(--text-primary);
+    background: rgba(139, 92, 246, 0.1);
+}
+
+.nav-tab.active {
+    color: var(--accent-gold);
+    background: rgba(255, 215, 0, 0.1);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.1);
+}
+
+/* ── 主内容区 ────────────────────────────────────────── */
+.main {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.4s ease;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.section-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.section-header h2::before {
+    content: '';
+    width: 4px;
+    height: 1.2rem;
+    background: linear-gradient(180deg, var(--accent-gold), var(--accent-purple));
+    border-radius: 2px;
+}
+
+/* ── 日期导航 ────────────────────────────────────────── */
+.date-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.date-display {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    min-width: 120px;
+    text-align: center;
+}
+
+.btn-icon {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.8rem;
+}
+
+.btn-icon:hover {
+    border-color: var(--accent-purple);
+    color: var(--accent-gold);
+    background: var(--bg-card-hover);
+}
+
+/* ── 黄历卡片 ────────────────────────────────────────── */
+.almanac-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-glow);
+}
+
+.almanac-main {
+    text-align: center;
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.almanac-solar {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent-gold);
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+}
+
+.almanac-lunar {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.3rem;
+}
+
+.almanac-ganzhi {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.almanac-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.almanac-item {
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--radius);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    transition: var(--transition);
+}
+
+.almanac-item:hover {
+    background: rgba(139, 92, 246, 0.05);
+    border-color: var(--border-glow);
+}
+
+.almanac-label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.1em;
+}
+
+.almanac-value {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    word-break: break-all;
+}
+
+.almanac-value.yi {
+    color: #4ade80;
+}
+
+.almanac-value.ji {
+    color: #f87171;
+}
+
+.almanac-item.highlight {
+    background: rgba(255, 215, 0, 0.05);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.almanac-value.fortune {
+    color: var(--accent-gold);
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+/* ── 星座运势 ────────────────────────────────────────── */
+.no-user-hint {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text-muted);
+}
+
+.hint-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.3;
+}
+
+.sign-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.sign-symbol {
+    font-size: 3rem;
+    color: var(--accent-gold);
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.sign-info h3 {
+    font-size: 1.4rem;
+    color: var(--text-primary);
+}
+
+.sign-meta {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.fortune-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.fortune-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.fortune-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-purple), var(--accent-gold));
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.fortune-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-glow);
+    box-shadow: var(--shadow-glow);
+}
+
+.fortune-card:hover::before {
+    opacity: 1;
+}
+
+.fortune-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.fortune-card h4 {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.fortune-card p {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    line-height: 1.7;
+}
+
+.fortune-card.overall .fortune-icon { color: var(--accent-gold); }
+.fortune-card.love .fortune-icon { color: var(--accent-pink); }
+.fortune-card.career .fortune-icon { color: var(--accent-blue); }
+.fortune-card.wealth .fortune-icon { color: #4ade80; }
+.fortune-card.health .fortune-icon { color: #a78bfa; }
+
+.lucky-info {
+    display: flex;
+    gap: 2rem;
+    padding: 1rem 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    flex-wrap: wrap;
+}
+
+.lucky-info strong {
+    color: var(--accent-gold);
+    margin-left: 0.3rem;
+}
+
+/* ── 塔罗占卜 ────────────────────────────────────────── */
+.tarot-area {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+}
+
+.tarot-setup {
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.4rem;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    transition: var(--transition);
+    outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--accent-purple);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.form-group input::placeholder {
+    color: var(--text-muted);
+}
+
+.spread-select {
+    margin-bottom: 1.25rem;
+}
+
+.spread-options {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.spread-btn {
+    padding: 0.6rem 1.2rem;
+    border: 1px solid var(--border-color);
+    background: transparent;
+    color: var(--text-secondary);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.9rem;
+}
+
+.spread-btn:hover {
+    border-color: var(--accent-purple);
+    color: var(--text-primary);
+}
+
+.spread-btn.active {
+    border-color: var(--accent-gold);
+    background: rgba(255, 215, 0, 0.1);
+    color: var(--accent-gold);
+}
+
+.btn-primary {
+    padding: 0.8rem 2rem;
+    background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(139, 92, 246, 0.4);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-danger {
+    padding: 0.8rem 1.5rem;
+    background: rgba(239, 68, 68, 0.1);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-danger:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: #f87171;
+}
+
+.btn-draw {
+    display: block;
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+/* 塔罗牌区域 */
+.tarot-cards {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    min-height: 200px;
+    padding: 2rem 0;
+}
+
+.tarot-card {
+    width: 140px;
+    height: 220px;
+    perspective: 1000px;
+    cursor: pointer;
+    animation: cardAppear 0.5s ease backwards;
+}
+
+.tarot-card:nth-child(1) { animation-delay: 0.1s; }
+.tarot-card:nth-child(2) { animation-delay: 0.3s; }
+.tarot-card:nth-child(3) { animation-delay: 0.5s; }
+
+@keyframes cardAppear {
+    from {
+        opacity: 0;
+        transform: translateY(20px) rotateY(180deg);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) rotateY(0);
+    }
+}
+
+.tarot-card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s ease;
+}
+
+.tarot-card.flipped .tarot-card-inner {
+    transform: rotateY(180deg);
+}
+
+.tarot-card-front,
+.tarot-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    text-align: center;
+}
+
+.tarot-card-front {
+    background: linear-gradient(135deg, #1a0d3a, #2a1550);
+    border: 2px solid var(--accent-gold);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+}
+
+.tarot-card-front::before {
+    content: '✦';
+    font-size: 3rem;
+    color: var(--accent-gold);
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+}
+
+.tarot-card-back {
+    background: linear-gradient(135deg, #2a1550, #1a0d3a);
+    border: 2px solid var(--accent-purple);
+    transform: rotateY(180deg);
+}
+
+.tarot-card-back .card-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--accent-gold);
+    margin-bottom: 0.5rem;
+}
+
+.tarot-card-back .card-numeral {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.tarot-card-back .card-meaning {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.tarot-card-back .card-position {
+    position: absolute;
+    top: 0.5rem;
+    font-size: 0.7rem;
+    color: var(--accent-purple);
+}
+
+.tarot-card.reversed .tarot-card-back {
+    transform: rotateY(180deg) rotate(180deg);
+}
+
+/* 塔罗解读 */
+.tarot-reading {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background: rgba(139, 92, 246, 0.05);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+}
+
+.tarot-reading h4 {
+    color: var(--accent-gold);
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+}
+
+.tarot-reading p {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: 0.5rem;
+}
+
+.tarot-reading .card-interpretation {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.tarot-reading .card-interpretation:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.tarot-reading .card-interpretation strong {
+    color: var(--text-primary);
+}
+
+/* ── 个人信息 ────────────────────────────────────────── */
+.profile-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.profile-preview {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background: rgba(255, 215, 0, 0.03);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    border-radius: var(--radius);
+}
+
+.preview-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.preview-item:last-child {
+    border-bottom: none;
+}
+
+.preview-label {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.preview-value {
+    color: var(--accent-gold);
+    font-weight: 500;
+}
+
+.disclaimer {
+    text-align: center;
+    margin-top: 2rem;
+    padding: 1rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+/* ── 页脚 ────────────────────────────────────────────── */
+.footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--border-color);
+    margin-top: 2rem;
+}
+
+/* ── 响应式 ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .header-inner {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .nav-tabs {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .nav-tab {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.8rem;
+    }
+
+    .main {
+        padding: 1.5rem 1rem;
+    }
+
+    .almanac-card,
+    .tarot-area,
+    .profile-card {
+        padding: 1.5rem;
+    }
+
+    .almanac-solar {
+        font-size: 1.4rem;
+    }
+
+    .fortune-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tarot-card {
+        width: 110px;
+        height: 175px;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    .almanac-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tarot-cards {
+        gap: 0.75rem;
+    }
+
+    .tarot-card {
+        width: 90px;
+        height: 145px;
+    }
+
+    .tarot-card-back .card-name {
+        font-size: 0.9rem;
+    }
+
+    .tarot-card-back .card-meaning {
+        font-size: 0.65rem;
+    }
+}

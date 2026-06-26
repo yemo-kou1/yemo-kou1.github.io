@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>beLucky · 每日运势</title>
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+
+    <header class="header">
+        <div class="header-inner">
+            <div class="logo">
+                <span class="logo-icon">✦</span>
+                <span class="logo-text">beLucky</span>
+            </div>
+            <nav class="nav-tabs" id="navTabs">
+                <button class="nav-tab active" data-tab="almanac">黄历</button>
+                <button class="nav-tab" data-tab="horoscope">星座</button>
+                <button class="nav-tab" data-tab="tarot">塔罗</button>
+                <button class="nav-tab" data-tab="profile">我的</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+
+        <!-- ═══ 黄历 ═══ -->
+        <section class="tab-content active" id="tab-almanac">
+            <div class="section-header">
+                <h2>今日黄历</h2>
+                <div class="date-nav">
+                    <button class="btn-icon" onclick="changeAlmanacDate(-1)">◀</button>
+                    <span id="almanacDateDisplay" class="date-display"></span>
+                    <button class="btn-icon" onclick="changeAlmanacDate(1)">▶</button>
+                </div>
+            </div>
+            <div class="almanac-card">
+                <div class="almanac-main">
+                    <div class="almanac-solar" id="almanacSolar"></div>
+                    <div class="almanac-lunar" id="almanacLunar"></div>
+                    <div class="almanac-ganzhi" id="almanacGanzhi"></div>
+                </div>
+                <div class="almanac-grid">
+                    <div class="almanac-item highlight">
+                        <span class="almanac-label">吉凶</span>
+                        <span class="almanac-value fortune" id="almanacFortune"></span>
+                    </div>
+                    <div class="almanac-item">
+                        <span class="almanac-label">宜</span>
+                        <span class="almanac-value yi" id="almanacYi"></span>
+                    </div>
+                    <div class="almanac-item">
+                        <span class="almanac-label">忌</span>
+                        <span class="almanac-value ji" id="almanacJi"></span>
+                    </div>
+                    <div class="almanac-item">
+                        <span class="almanac-label">冲</span>
+                        <span class="almanac-value" id="almanacChong"></span>
+                    </div>
+                    <div class="almanac-item">
+                        <span class="almanac-label">财神</span>
+                        <span class="almanac-value" id="almanacCai"></span>
+                    </div>
+                    <div class="almanac-item">
+                        <span class="almanac-label">喜神</span>
+                        <span class="almanac-value" id="almanacXi"></span>
+                    </div>
+                    <div class="almanac-item">
+                        <span class="almanac-label">福神</span>
+                        <span class="almanac-value" id="almanacFu"></span>
+                    </div>
+                    <div class="almanac-item">
+                        <span class="almanac-label">值日</span>
+                        <span class="almanac-value" id="almanacOfficer"></span>
+                    </div>
+                    <div class="almanac-item">
+                        <span class="almanac-label">星宿</span>
+                        <span class="almanac-value" id="almanacStar"></span>
+                    </div>
+                    <div class="almanac-item">
+                        <span class="almanac-label">胎神</span>
+                        <span class="almanac-value" id="almanacFetal"></span>
+                    </div>
+                    <div class="almanac-item">
+                        <span class="almanac-label">节气</span>
+                        <span class="almanac-value" id="almanacJieqi"></span>
+                    </div>
+                    <div class="almanac-item">
+                        <span class="almanac-label">生肖</span>
+                        <span class="almanac-value" id="almanacShengxiao"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ 星座运势 ═══ -->
+        <section class="tab-content" id="tab-horoscope">
+            <div class="section-header">
+                <h2>星座运势</h2>
+            </div>
+            <div id="horoscopeNoUser" class="no-user-hint">
+                <div class="hint-icon">♈</div>
+                <p>请先设置你的出生日期，获取专属运势</p>
+                <button class="btn-primary" onclick="switchTab('profile')">去设置</button>
+            </div>
+            <div id="horoscopeContent" class="horoscope-content" style="display:none;">
+                <div class="sign-header">
+                    <span class="sign-symbol" id="signSymbol"></span>
+                    <div class="sign-info">
+                        <h3 id="signName"></h3>
+                        <p class="sign-meta" id="signMeta"></p>
+                    </div>
+                    <div class="date-nav">
+                        <button class="btn-icon" onclick="changeHoroscopeDate(-1)">◀</button>
+                        <span id="horoscopeDateDisplay" class="date-display"></span>
+                        <button class="btn-icon" onclick="changeHoroscopeDate(1)">▶</button>
+                    </div>
+                </div>
+                <div class="fortune-grid">
+                    <div class="fortune-card overall">
+                        <div class="fortune-icon">✦</div>
+                        <h4>综合运势</h4>
+                        <p id="fortuneOverall"></p>
+                    </div>
+                    <div class="fortune-card love">
+                        <div class="fortune-icon">♥</div>
+                        <h4>爱情运势</h4>
+                        <p id="fortuneLove"></p>
+                    </div>
+                    <div class="fortune-card career">
+                        <div class="fortune-icon">⚡</div>
+                        <h4>事业运势</h4>
+                        <p id="fortuneCareer"></p>
+                    </div>
+                    <div class="fortune-card wealth">
+                        <div class="fortune-icon">✧</div>
+                        <h4>财运</h4>
+                        <p id="fortuneWealth"></p>
+                    </div>
+                    <div class="fortune-card health">
+                        <div class="fortune-icon">❋</div>
+                        <h4>健康运势</h4>
+                        <p id="fortuneHealth"></p>
+                    </div>
+                </div>
+                <div class="lucky-info">
+                    <span>幸运数字：<strong id="luckyNumber"></strong></span>
+                    <span>幸运颜色：<strong id="luckyColor"></strong></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ 塔罗 ═══ -->
+        <section class="tab-content" id="tab-tarot">
+            <div class="section-header">
+                <h2>塔罗占卜</h2>
+            </div>
+            <div class="tarot-area">
+                <div class="tarot-setup">
+                    <div class="form-group">
+                        <label>占卜问题（可选）</label>
+                        <input type="text" id="tarotQuestion" placeholder="在心中默念你的问题...">
+                    </div>
+                    <div class="spread-select">
+                        <label>牌阵选择</label>
+                        <div class="spread-options">
+                            <button class="spread-btn active" data-spread="single">单牌占卜</button>
+                            <button class="spread-btn" data-spread="three">三牌阵</button>
+                        </div>
+                    </div>
+                    <button class="btn-primary btn-draw" onclick="drawTarot()">✦ 开始占卜</button>
+                </div>
+                <div class="tarot-cards" id="tarotCards"></div>
+                <div class="tarot-reading" id="tarotReading" style="display:none;"></div>
+            </div>
+        </section>
+
+        <!-- ═══ 我的 ═══ -->
+        <section class="tab-content" id="tab-profile">
+            <div class="section-header">
+                <h2>个人信息</h2>
+            </div>
+            <div class="profile-card">
+                <form id="profileForm" onsubmit="saveProfile(event)">
+                    <div class="form-group">
+                        <label for="userName">昵称</label>
+                        <input type="text" id="userName" placeholder="你的昵称" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="birthDate">出生日期</label>
+                        <input type="date" id="birthDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="birthTime">出生时间（可选）</label>
+                        <input type="time" id="birthTime">
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">性别</label>
+                        <select id="gender">
+                            <option value="">请选择</option>
+                            <option value="male">男</option>
+                            <option value="female">女</option>
+                            <option value="other">其他</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">保存</button>
+                        <button type="button" class="btn-danger" id="deleteBtn" onclick="deleteProfile()" style="display:none;">删除信息</button>
+                    </div>
+                </form>
+                <div id="profilePreview" class="profile-preview" style="display:none;">
+                    <div class="preview-item">
+                        <span class="preview-label">昵称</span>
+                        <span class="preview-value" id="previewName"></span>
+                    </div>
+                    <div class="preview-item">
+                        <span class="preview-label">出生日期</span>
+                        <span class="preview-value" id="previewBirth"></span>
+                    </div>
+                    <div class="preview-item">
+                        <span class="preview-label">星座</span>
+                        <span class="preview-value" id="previewSign"></span>
+                    </div>
+                    <div class="preview-item">
+                        <span class="preview-label">生肖</span>
+                        <span class="preview-value" id="previewZodiac"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="disclaimer">
+                <p>⚠️ 本应用仅供娱乐参考，请勿迷信。</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <p>beLucky · 每日运势 · 仅供娱乐</p>
+    </footer>
+
+    <script src="static/js/lunar.js"></script>
+    <script src="static/js/data.js"></script>
+    <script src="static/js/app.js"></script>
+</body>
+</html>
