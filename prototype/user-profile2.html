@@ -143,6 +143,7 @@
     .modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:200;align-items:center;justify-content:center}
     .modal.show{display:flex}
     .modal-content{background:#fff;border-radius:12px;width:480px;max-width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.2)}
+    .modal-content.profile-modal{width:760px;max-height:88vh}
     .modal-header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid #e5e7eb}
     .modal-title{font-size:16px;font-weight:600;color:#111}
     .modal-close{font-size:24px;color:#9ca3af;cursor:pointer;line-height:1}
@@ -170,6 +171,44 @@
     .log-btn:hover{background:#f8fafc;color:#475569}
     .export-btn{background:#2563eb;color:#fff;border:none;padding:8px 16px;border-radius:8px;font-size:12px;cursor:pointer;transition:all 0.2s}
     .export-btn:hover{background:#1d4ed8}
+    /* 用户画像弹窗 */
+    .profile-modal{width:760px;max-height:88vh;display:flex;flex-direction:column}
+    .profile-header-bar{padding:10px 24px;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+    .profile-time{font-size:12px;color:#94a3b8}
+    .profile-refresh-btn{background:#f97316;color:#fff;border:none;padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer}
+    .profile-refresh-btn:hover{background:#ea580c}
+    .profile-tabs-bar{padding:10px 24px 0;background:#fff;flex-shrink:0;border-bottom:1px solid #f0f0f0}
+    .profile-tab-btn{padding:10px 24px;border:none;font-size:13px;font-weight:500;cursor:pointer;background:transparent;color:#6b7280;border-bottom:2px solid transparent;margin-right:4px;transition:all 0.2s}
+    .profile-tab-btn:hover{color:#2563eb}
+    .profile-tab-btn.active{color:#2563eb;border-bottom-color:#2563eb}
+    .profile-content-wrap{overflow-y:auto;flex:1;padding:16px 24px 20px}
+    .profile-section{margin-bottom:14px}
+    .profile-section-title{font-size:14px;font-weight:600;color:#1e293b;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #f0f0f0}
+    .profile-core-tags{display:flex;flex-wrap:wrap;gap:8px}
+    .profile-core-tag{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;padding:5px 12px;border-radius:14px;font-size:12px;font-weight:500}
+    .profile-label-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px 14px;margin-bottom:8px;border-left:3px solid #2563eb}
+    .profile-label-cat{font-size:12px;font-weight:600;color:#2563eb;margin-bottom:4px}
+    .profile-label-desc{font-size:12px;color:#475569;line-height:1.6}
+    .profile-changed-box{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px 14px}
+    .profile-changed-list{list-style:none;padding:0;margin:0}
+    .profile-changed-list li{font-size:12px;color:#475569;line-height:1.7;padding-left:12px;position:relative}
+    .profile-changed-list li::before{content:'•';position:absolute;left:0;color:#f59e0b}
+    .profile-topic-box{background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px 14px}
+    .profile-topic-text{font-size:12px;color:#374151;line-height:1.6}
+    .profile-chat-item{display:flex;gap:10px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #f0f0f0}
+    .profile-chat-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+    .profile-chat-type{flex-shrink:0;background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;height:fit-content;margin-top:1px}
+    .profile-chat-content{font-size:12px;color:#374151;line-height:1.6}
+    .profile-product-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px 14px;margin-bottom:8px}
+    .profile-product-item:last-child{margin-bottom:0}
+    .profile-product-name{font-size:13px;font-weight:600;color:#1e293b;margin-bottom:4px}
+    .profile-product-cat{display:inline-block;background:#f3f4f6;color:#64748b;padding:1px 8px;border-radius:6px;font-size:11px;margin-bottom:6px}
+    .profile-product-reason{font-size:12px;color:#64748b;line-height:1.6}
+    .profile-purchase-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px 16px;margin-bottom:10px}
+    .profile-purchase-stat-label{font-size:11px;color:#94a3b8;margin-bottom:2px}
+    .profile-purchase-stat-value{font-size:14px;font-weight:600;color:#1e293b}
+    .profile-purchase-points{display:flex;flex-wrap:wrap;gap:6px}
+    .profile-purchase-point{background:#fff;border:1px solid #e2e8f0;border-radius:4px;padding:2px 8px;font-size:11px;color:#4b5563}
     .detail-section{margin-bottom:20px}
     .detail-section-title{font-size:14px;color:#374151;font-weight:600;margin:0 0 12px 0;padding-bottom:8px;border-bottom:1px solid #e5e7eb}
     .detail-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -311,19 +350,68 @@
       </div>
 
       <div id="customer-profile" class="tab-content active">
+        <div class="info-section-title">基本信息</div>
         <div class="info-table-section">
-          <div class="info-section-title">| 基本信息</div>
+          <div class="info-section-title">| MIRROVA</div>
           <table class="info-table">
+            <tr><th>手机号码</th><td>13632206221</td><th>性别</th><td>女</td><th>年龄</th><td>32</td></tr>
+            <tr><th>身高</th><td>165cm</td><th>体重</th><td>58.5kg</td><th>BMI</th><td>正常（18.5 ≤ BMI < 24）</td></tr>
             <tr>
-              <th>手机号码</th><td>13632206221</td>
-              <th>性别</th><td>女</td>
-              <th>年龄</th><td>34</td>
+              <th>职业</th><td>
+                <span class="customer-career-display" data-product="mirrova">公司白领</span>
+                <button class="edit-career-btn" data-product="mirrova" style="margin-left:6px;background:#2563eb;color:#fff;border:none;padding:2px 8px;border-radius:4px;font-size:12px;cursor:pointer;">修改</button>
+                <span class="career-edit-actions" data-product="mirrova" style="display:none;">
+                  <input class="career-edit-input" type="text" value="公司白领" style="font-size:14px;padding:2px 6px;border:1px solid #2563eb;border-radius:4px;width:120px;box-sizing:border-box;margin-right:6px;">
+                  <button class="career-save-btn" data-product="mirrova" style="background:#16a34a;color:#fff;border:none;padding:2px 8px;border-radius:4px;font-size:12px;cursor:pointer;margin-right:4px;">保存</button>
+                  <button class="career-cancel-btn" data-product="mirrova" style="background:#e5e7eb;color:#4b5563;border:none;padding:2px 8px;border-radius:4px;font-size:12px;cursor:pointer;">取消</button>
+                </span>
+              </td>
+              <th>生命阶段</th><td>常规</td><th>健康需求</th><td>减重管理，改善睡眠，缓解压力</td>
             </tr>
+            <tr><th>所在地</th><td>北京市</td><th>婚姻</th><td>已婚</td><th>生育</th><td>已育</td></tr>
+            <tr><th>基础疾病</th><td colspan="3">无慢性病，偶发偏头痛</td></tr>
+          </table>
+        </div>
+        <div class="info-table-section" style="margin-top:16px;">
+          <div class="info-section-title">| 我的悦己</div>
+          <table class="info-table">
+            <tr><th>手机号码</th><td>13632206221</td><th>性别</th><td>女</td><th>年龄</th><td>26</td></tr>
+            <tr><th>身高</th><td>158cm</td><th>体重</th><td>48.5kg</td><th>BMI</th><td>正常（18.5 ≤ BMI < 24）</td></tr>
             <tr>
-              <th>身高</th><td>162cm</td>
-              <th>体重</th><td>51kg</td>
-              <th>BMI</th><td>19.43kg/m²</td>
+              <th>职业</th><td>
+                <span class="customer-career-display" data-product="yueji">互联网运营</span>
+                <button class="edit-career-btn" data-product="yueji" style="margin-left:6px;background:#2563eb;color:#fff;border:none;padding:2px 8px;border-radius:4px;font-size:12px;cursor:pointer;">修改</button>
+                <span class="career-edit-actions" data-product="yueji" style="display:none;">
+                  <input class="career-edit-input" type="text" value="互联网运营" style="font-size:14px;padding:2px 6px;border:1px solid #2563eb;border-radius:4px;width:120px;box-sizing:border-box;margin-right:6px;">
+                  <button class="career-save-btn" data-product="yueji" style="background:#16a34a;color:#fff;border:none;padding:2px 8px;border-radius:4px;font-size:12px;cursor:pointer;margin-right:4px;">保存</button>
+                  <button class="career-cancel-btn" data-product="yueji" style="background:#e5e7eb;color:#4b5563;border:none;padding:2px 8px;border-radius:4px;font-size:12px;cursor:pointer;">取消</button>
+                </span>
+              </td>
+              <th>健康需求</th><td>皮肤管理，经期调理</td>
             </tr>
+            <tr><th>所在地</th><td>上海市</td><th>婚姻</th><td>未婚</td><th>生育</th><td>未育</td></tr>
+            <tr><th>基础疾病</th><td colspan="3">无慢性病</td></tr>
+          </table>
+        </div>
+        <div class="info-table-section" style="margin-top:16px;">
+          <div class="info-section-title">| 我的悠护</div>
+          <table class="info-table">
+            <tr><th>手机号码</th><td>13632206221</td><th>性别</th><td>男</td><th>年龄</th><td>58</td></tr>
+            <tr><th>身高</th><td>170cm</td><th>体重</th><td>68kg</td><th>BMI</th><td>正常（18.5 ≤ BMI < 24）</td></tr>
+            <tr>
+              <th>职业</th><td>
+                <span class="customer-career-display" data-product="youhu">退休</span>
+                <button class="edit-career-btn" data-product="youhu" style="margin-left:6px;background:#2563eb;color:#fff;border:none;padding:2px 8px;border-radius:4px;font-size:12px;cursor:pointer;">修改</button>
+                <span class="career-edit-actions" data-product="youhu" style="display:none;">
+                  <input class="career-edit-input" type="text" value="退休" style="font-size:14px;padding:2px 6px;border:1px solid #2563eb;border-radius:4px;width:120px;box-sizing:border-box;margin-right:6px;">
+                  <button class="career-save-btn" data-product="youhu" style="background:#16a34a;color:#fff;border:none;padding:2px 8px;border-radius:4px;font-size:12px;cursor:pointer;margin-right:4px;">保存</button>
+                  <button class="career-cancel-btn" data-product="youhu" style="background:#e5e7eb;color:#4b5563;border:none;padding:2px 8px;border-radius:4px;font-size:12px;cursor:pointer;">取消</button>
+                </span>
+              </td>
+              <th>健康需求</th><td>血压管理，关节养护</td>
+            </tr>
+            <tr><th>所在地</th><td>广东省-广州市</td><th>婚姻</th><td>已婚</td></tr>
+            <tr><th>基础疾病</th><td colspan="3">轻度高血压</td></tr>
           </table>
         </div>
       </div>
@@ -1301,245 +1389,504 @@
       const userAnalysisBtn = document.querySelector('.user-analysis-btn');
       const userProfileModal = document.getElementById('userProfileModal');
       const userProfileContent = document.getElementById('userProfileContent');
+      const salesProfileContent = document.getElementById('salesProfileContent');
       const userProfileUpdateTime = document.getElementById('userProfileUpdateTime');
 
       let currentProfileTab = 'health';
-      const profileDataYueji = {
-        gender: '女',
-        age: 32,
-        bmi: 21.5,
-        bmi_status: '正常',
-        height_cm: 165,
-        weight_kg: 58.5,
-        marry: '已婚',
-        fertility: '已育',
-        categories: {
-          '医疗健康': ['体检异常', '用药记录'],
-          '体感': ['偶有头痛', '睡眠不佳'],
-          '行动计划': ['计划减重', '计划体检'],
-          '日常节律': ['经常熬夜', '饮食不规律'],
-          '情绪心理': ['工作压力大', '焦虑情绪'],
-          '运动活动': ['久坐不动', '偶尔运动'],
-          '生活事件': ['近期出差多'],
-          '人口属性': ['白领一族']
-        },
-        recent7days: ['健康咨询', '产品使用', '售后服务'],
-        recent30days: ['投诉处理', '退换货咨询', '活动咨询', '会员权益', '物流查询', '优惠券使用', '产品建议', '发票问题', '账单咨询', '预约服务']
-      };
-      const profileDataYouhu = {
-        gender: '女',
-        age: 32,
-        bmi: 21.5,
-        bmi_status: '正常',
-        height_cm: 165,
-        weight_kg: 58.5,
-        marry: '已婚',
-        fertility: '已育',
-        categories: {
-          '医疗健康': ['体检异常'],
-          '体感': ['偶有头痛'],
-          '行动计划': ['计划减重'],
-          '日常节律': ['经常熬夜'],
-          '情绪心理': ['工作压力大'],
-          '运动活动': ['久坐不动'],
-          '生活事件': [],
-          '人口属性': ['白领一族']
-        },
-        recent7days: ['健康咨询', '产品使用'],
-        recent30days: ['投诉处理', '退换货咨询', '活动咨询', '会员权益']
-      };
+      let currentProductVersion = 'mirrova';
 
-      function renderProfileContent(profileData) {
-        let html = '<div style="color:#374151;">';
-
-        html += '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:20px;margin-bottom:20px;color:#374151;">';
-        html += '<div style="font-size:16px;font-weight:600;margin-bottom:16px;color:#1e293b;">用户基本信息</div>';
-        html += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;">';
-        html += '<div><div style="font-size:12px;color:#64748b;margin-bottom:4px;">性别</div><div style="font-size:15px;font-weight:600;color:#1e293b;">' + profileData.gender + '</div></div>';
-        html += '<div><div style="font-size:12px;color:#64748b;margin-bottom:4px;">年龄</div><div style="font-size:15px;font-weight:600;color:#1e293b;">' + profileData.age + '岁</div></div>';
-        html += '<div><div style="font-size:12px;color:#64748b;margin-bottom:4px;">BMI指数</div><div style="font-size:15px;font-weight:600;color:#1e293b;">' + profileData.bmi + '</div></div>';
-        html += '<div><div style="font-size:12px;color:#64748b;margin-bottom:4px;">身体状态</div><div style="font-size:15px;font-weight:600;color:#1e293b;">' + profileData.bmi_status + '</div></div>';
-        html += '</div>';
-        html += '<div style="margin-top:16px;padding-top:16px;border-top:1px solid #e2e8f0;display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;color:#475569;">';
-        html += '<div><span style="color:#64748b;">身高体重：</span>' + profileData.height_cm + 'cm / ' + profileData.weight_kg + 'kg</div>';
-        html += '<div><span style="color:#64748b;">家庭情况：</span>' + profileData.marry + '，' + profileData.fertility + '</div>';
-        html += '</div></div>';
-
-        html += '<div style="margin-bottom:20px;flex:1;display:flex;flex-direction:column;"><div style="font-size:16px;font-weight:600;margin-bottom:14px;color:#1f2937;">重点标签</div>';
-        html += '<div style="display:flex;flex-direction:column;gap:10px;">';
-        const categoryOrder = ['医疗健康', '体感', '行动计划', '日常节律', '情绪心理', '运动活动', '生活事件', '人口属性'];
-        const categoryColors = ['#ef4444','#f97316','#eab308','#22c55e','#06b6d4','#8b5cf6','#ec4899','#64748b'];
-        categoryOrder.forEach(function(category, index) {
-          const tags = profileData.categories[category] || [];
-          const color = categoryColors[index];
-          html += '<div style="background:#f9fafb;border-radius:8px;padding:12px 14px;border-left:3px solid ' + color + ';">';
-          html += '<div style="font-size:13px;font-weight:600;color:' + color + ';margin-bottom:8px;">' + (index + 1) + '. ' + category + '</div>';
-          if (tags.length > 0) {
-            html += '<div style="display:flex;flex-wrap:wrap;gap:6px;">';
-            tags.forEach(function(tag) {
-              html += '<span style="background:#fff;border:1px solid #e5e7eb;border-radius:20px;padding:3px 10px;font-size:12px;color:#4b5563;">' + tag + '</span>';
-            });
-            html += '</div>';
-          } else {
-            html += '<div style="font-size:12px;color:#9ca3af;">暂无标签</div>';
+      // ====== 接口数据（模拟 profile2-output.json / profile-buy-output.json）======
+      const profileDataByProduct = {
+        mirrova: {
+          health: {
+            updateTime: '2026-07-30 10:30:15',
+            base: {
+              age: '32', sex: '女', city: '北京市', height: '165cm', weight: '58.5kg',
+              BMI: '正常（18.5 ≤ BMI < 24），身高165cm，体重58.5kg',
+              marriage: '已婚', childbirth: '已育', life_stage: '职场黄金期',
+              career: '公司白领', disease: '无慢性病，偶发偏头痛',
+              improve_need: '减重管理，改善睡眠，缓解压力'
+            },
+            label_summary: [
+              { category: '情绪与压力', title: '工作压力大，伴有焦虑情绪，常在晚间向AI倾诉。情绪波动集中在周三至周五，需注意阶段性压力疏导。' },
+              { category: '运动情况', title: '久坐为主，偶尔运动，运动习惯尚未养成。偏好轻运动如瑜伽、散步，可尝试从短时低强度活动逐步建立习惯。' },
+              { category: '睡眠', title: '偶有偏头痛和入睡困难，体感反馈集中在疲劳与睡眠问题。建议记录偏头痛发作频率，排查是否与作息关联。' },
+              { category: '疾病', title: '无慢性病史但关注体检指标，有主动健康管理意愿。可结合体检周期进行阶段性评估和预防性管理。' },
+              { category: '家庭', title: '近期出差频繁，影响作息和饮食规律。出差期间健康管理依从性下降，可提前规划出差时的饮食和作息安排。' }
+            ],
+            core_focus: ['压力管理', '睡眠改善', '体重管理', '偏头痛缓解', '作息规律'],
+            expired_summary: [
+              '急性胃肠炎历史、生酮饮食尝试、频繁出差的作息紊乱状态近期均已有改善或消失'
+            ],
+            topic_summary: [
+              { title: '用户当下核心关注睡眠改善与压力管理，同时兼顾减重目标和体检指标监测，期待碎片化、可落地的健康管理方案' }
+            ]
+          },
+          sales: {
+            updateTime: '2026-07-30 10:30:15',
+            base: {
+              age: '32', sex: '女', city: '北京市', height: '165cm', weight: '58.5kg',
+              BMI: '正常（18.5 ≤ BMI < 24），身高165cm，体重58.5kg',
+              marriage: '已婚', childbirth: '已育', life_stage: '职场黄金期',
+              career: '公司白领', disease: '无慢性病，偶发偏头痛',
+              improve_need: '减重管理，改善睡眠，缓解压力'
+            },
+            core_focus: ['压力管理', '睡眠改善', '体重管理', '偏头痛缓解', '作息规律'],
+            topic_summary: [
+              { title: '用户当下核心关注睡眠改善与压力管理，同时兼顾减重目标和体检指标监测' }
+            ],
+            chat_guidance: [
+              { type: '语气', content: '专业温和，保持简洁直接，避免说教感，用"小调整大改变"的轻松感沟通' },
+              { type: '切入点', content: '从用户近期熬夜、偏头痛和体重管理话题切入，强调可落地的碎片化健康方案' },
+              { type: '禁忌', content: '避免直接提"肥胖"或"减肥"等敏感词，改用"体型管理"和"健康状态"；不要推荐过度复杂的方案' },
+              { type: '推荐时机', content: '工作日晚间 20:00-21:00，用户此时段活跃度高，情绪倾诉需求强' }
+            ],
+            product_interest: [
+              { category: '口服产品类', product: '助眠类营养补充剂（如褪黑素、GABA）', reason: '用户长期睡眠不佳，近期话题频繁提及入睡困难，与睡眠改善核心关注高度匹配' },
+              { category: '口服产品类', product: '体重管理类营养补充剂（如膳食纤维、左旋肉碱）', reason: '用户有减重管理需求，BMI正常但仍有体型管理意愿，配合碎片化运动习惯推荐' },
+              { category: '口服产品类', product: '缓解偏头痛类营养补充剂（如镁剂、B族维生素）', reason: '用户偶发偏头痛，与压力管理核心关注关联，且近期加班频繁' }
+            ],
+            purchase_summary_info: {
+              has_purchase: true,
+              order_count: 12,
+              total_spend_amount: 8580.00,
+              average_order_value: 715.00,
+              purchase_points: ['每季度购买1-2次', '复购周期约45天', '单笔消费集中在500-1500元', '偏好高端健康产品', '对促销活动敏感度中等']
+            }
           }
-          html += '</div>';
-        });
-        html += '</div></div>';
-
-        html += '<div style="margin-bottom:16px;"><div style="font-size:14px;font-weight:600;color:#1f2937;margin-bottom:12px;">近7天围绕话题</div>';
-        html += '<div style="display:flex;flex-wrap:wrap;gap:8px;">';
-        profileData.recent7days.forEach(function(topic) {
-          html += '<span style="background:#fff;border:1px solid #d1d5db;border-radius:6px;padding:6px 14px;font-size:13px;color:#374151;">' + topic + '</span>';
-        });
-        html += '</div></div>';
-
-        html += '<div><div style="font-size:14px;font-weight:600;color:#1f2937;margin-bottom:12px;">近30天围绕话题</div>';
-        html += '<div style="display:flex;flex-wrap:wrap;gap:8px;">';
-        profileData.recent30days.forEach(function(topic) {
-          html += '<span style="background:#fff;border:1px solid #d1d5db;border-radius:6px;padding:6px 14px;font-size:13px;color:#374151;">' + topic + '</span>';
-        });
-        html += '</div></div>';
-
-        html += '</div>';
-        userProfileContent.innerHTML = html;
-      }
-
-      const profileTabHealth = document.getElementById('profileTabHealth');
-      const profileTabSales = document.getElementById('profileTabSales');
-
-      const salesProfileData = {
-        updateTime: '2026-04-29 10:30:00',
-        sections: [
-          {
-            title: '1. 消费概况',
-            items: [
-              { label: '首次购买时间', value: '2025-08-15' },
-              { label: '最近购买时间', value: '2026-04-20' },
-              { label: '累计购买次数', value: '12次' },
-              { label: '累计消费金额', value: '8,580元' }
+        },
+        yueji: {
+          health: {
+            updateTime: '2026-07-30 10:30:15',
+            base: {
+              age: '26', sex: '女', city: '上海市', height: '158cm', weight: '48.5kg',
+              BMI: '正常（18.5 ≤ BMI < 24），身高158cm，体重48.5kg',
+              marriage: '未婚', childbirth: '未育', life_stage: '职场黄金期',
+              career: '互联网运营', disease: '无慢性病',
+              improve_need: '皮肤管理，经期调理'
+            },
+            label_summary: [
+              { category: '日常节律', title: '作息较规律，偶尔加班到深夜。周末有睡懒觉习惯，整体作息尚可，但夜间工作时段需额外注意作息恢复。' },
+              { category: '情绪与压力', title: '工作压力大但自我调节能力较强，偶尔向AI倾诉职场情绪。情绪整体平稳，无需特殊干预。' },
+              { category: '运动活动', title: '每周健身2-3次，偏好普拉提和瑜伽。运动习惯较稳定，是用户亮点，可作为健康管理切入点。' },
+              { category: '体感', title: '偶有经期不适，皮肤状态随作息波动。整体体感反馈较少，需关注作息与皮肤状态的关联。' },
+              { category: '医疗健康', title: '无慢性病史，近期关注皮肤保养和抗衰老话题。有主动健康管理意识，适合预防性健康管理方案。' },
+              { category: '生活事件', title: '近期因工作换岗，作息略有调整。生活节奏变化不大，但需关注换岗初期的适应状态。' },
+              { category: '行动计划', title: '有皮肤管理计划，关注抗糖和防晒。目标明确，执行较好，可在此基础上拓展其他健康管理维度。' },
+              { category: '人口属性', title: '都市年轻女性，互联网行业，消费能力较强，注重生活品质。适合高品质、有设计感的健康管理产品推荐。' }
+            ],
+            core_focus: ['皮肤保养', '抗糖抗衰', '经期调理', '体态管理', '运动习惯维护'],
+            expired_summary: [
+              '工作压力大在近期换岗后已趋于平稳，压力水平明显下降'
+            ],
+            topic_summary: [
+              { title: '用户当下核心关注皮肤管理与抗糖抗衰，同时兼顾经期调理和运动习惯维护，期待贴合年轻女性的生活方式健康方案' }
             ]
           },
-          {
-            title: '2. 产品偏好',
-            items: [
-              { label: '已购买产品类别', value: '健康管理类、营养补充类' },
-              { label: '偏好产品方向', value: '高端健康管理产品' },
-              { label: '复购产品', value: '悦己胶囊、胶原蛋白粉' }
-            ]
-          },
-          {
-            title: '3. 消费特征',
-            items: [
-              { label: '消费频次特征', value: '每季度1-2次，复购周期约45天' },
-              { label: '消费金额特征', value: '单笔消费500-1500元为主' },
-              { label: '购买驱动因素', value: '产品功效、品牌口碑、促销活动' }
-            ]
-          },
-          {
-            title: '4. 标签关联分析',
-            items: [
-              { label: '健康关注点', value: '体检异常、血压偏高（来源：医疗健康类标签）' },
-              { label: '生活方式特征', value: '经常熬夜、久坐不动（来源：日常节律、运动活动类标签）' },
-              { label: '潜在需求', value: '肝脏保健、骨骼健康、压力管理' }
-            ]
-          },
-          {
-            title: '5. 营销建议',
-            items: [
-              { label: '推荐产品方向', value: '护肝片、氨糖软骨素、舒缓解压套餐' },
-              { label: '最佳触达时机', value: '工作日晚间20:00-21:00' },
-              { label: '沟通策略建议', value: '强调产品科学研发背景，提供个性化健康方案' }
-            ]
+          sales: {
+            updateTime: '2026-07-30 10:30:15',
+            base: {
+              age: '26', sex: '女', city: '上海市', height: '158cm', weight: '48.5kg',
+              BMI: '正常（18.5 ≤ BMI < 24），身高158cm，体重48.5kg',
+              marriage: '未婚', childbirth: '未育', life_stage: '职场黄金期',
+              career: '互联网运营', disease: '无慢性病',
+              improve_need: '皮肤管理，经期调理'
+            },
+            core_focus: ['皮肤保养', '抗糖抗衰', '经期调理', '体态管理', '运动习惯维护'],
+            topic_summary: [
+              { title: '用户当下核心关注皮肤管理与抗糖抗衰，同时兼顾经期调理和运动习惯维护' }
+            ],
+            chat_guidance: [
+              { type: '语气', content: '轻松活泼，贴近年轻人语境，可适当使用网络用语，强调"边美边健康"的共鸣感' },
+              { type: '切入点', content: '从用户运动打卡和皮肤管理话题切入，结合抗糖和抗衰需求建立信任' },
+              { type: '禁忌', content: '避免提"衰老焦虑"等负面暗示，用"更好状态"替代"抗衰老"；不要过度推销' },
+              { type: '推荐时机', content: '午休时段 12:00-13:00 及晚间 21:00 后，用户此时段活跃度高' }
+            ],
+            product_interest: [
+              { category: '口服产品类', product: '抗糖美容饮（如胶原蛋白饮、VC饮）', reason: '用户关注抗糖和皮肤状态，有明确的护肤意识，与皮肤保养核心关注匹配' },
+              { category: '口服产品类', product: '女性经期调理类营养补充剂（如铁剂、益母草）', reason: '用户偶有经期不适，有经期调理需求，与核心关注一致' },
+              { category: '口服产品类', product: '运动恢复类营养补充剂（如蛋白粉、电解质）', reason: '用户每周健身2-3次，运动恢复有持续需求，与运动习惯维护关联' }
+            ],
+            purchase_summary_info: {
+              has_purchase: true,
+              order_count: 8,
+              total_spend_amount: 3260.00,
+              average_order_value: 408.00,
+              purchase_points: ['每月购买1次为主', '复购周期约30天', '单笔消费200-600元', '偏好新品和联名款', '对社交媒体种草敏感度高']
+            }
           }
-        ]
+        },
+        youhu: {
+          health: {
+            updateTime: '2026-07-30 10:30:15',
+            base: {
+              age: '58', sex: '男', city: '广东省-广州市', height: '170cm', weight: '68kg',
+              BMI: '正常（18.5 ≤ BMI < 24），身高170cm，体重68kg',
+              marriage: '已婚', childbirth: '已育', life_stage: '退休',
+              career: '退休', disease: '轻度高血压',
+              improve_need: '血压管理，关节养护'
+            },
+            label_summary: [
+              { category: '日常节律', title: '作息规律，早睡早起。饮食偏清淡，有控制盐和油的习惯。整体生活方式健康，是长期健康管理的优势基础。' },
+              { category: '情绪与压力', title: '情绪稳定，偶有对子女工作的担忧。整体心态平和，较少向AI倾诉情绪，心理健康状态良好。' },
+              { category: '运动活动', title: '每日散步30分钟以上，偶尔打太极拳。运动习惯稳定，有氧运动量充足，适合在当前基础上适度增加抗阻力运动。' },
+              { category: '体感', title: '偶有关节酸胀，尤其天气变化时明显。睡眠整体较好，偶有夜醒。关节问题需持续关注。' },
+              { category: '医疗健康', title: '有轻度高血压病史，按时服药。近期关注血压监测和关节养护。慢性病管理规范，整体依从性良好。' },
+              { category: '生活事件', title: '近期退休，生活节奏放缓，有更多时间关注健康。退休过渡期的健康管理习惯重建是关键。' },
+              { category: '行动计划', title: '有血压监测和关节养护计划，执行力强，定期复查。适合结合退休后的时间优势建立系统化健康管理体系。' },
+              { category: '人口属性', title: '退休人士，独居或与家人同住，健康意识较强，注重长期养生。适合高性价比、长期使用型健康管理产品。' }
+            ],
+            core_focus: ['血压管理', '关节养护', '用药依从', '体检指标监测', '饮食控制'],
+            expired_summary: [
+              '退休适应期后的情绪波动近期已趋于平稳，整体心态平和'
+            ],
+            topic_summary: [
+              { title: '用户当下核心关注血压控制与关节保养，期待贴合退休生活的饮食搭配和日常养护方案' }
+            ]
+          },
+          sales: {
+            updateTime: '2026-07-30 10:30:15',
+            base: {
+              age: '58', sex: '男', city: '广东省-广州市', height: '170cm', weight: '68kg',
+              BMI: '正常（18.5 ≤ BMI < 24），身高170cm，体重68kg',
+              marriage: '已婚', childbirth: '已育', life_stage: '退休',
+              career: '退休', disease: '轻度高血压',
+              improve_need: '血压管理，关节养护'
+            },
+            core_focus: ['血压管理', '关节养护', '用药依从', '体检指标监测', '饮食控制'],
+            topic_summary: [
+              { title: '用户当下核心关注血压控制与关节保养，期待贴合退休生活的饮食搭配和日常养护方案' }
+            ],
+            chat_guidance: [
+              { type: '语气', content: '沉稳可靠，语气尊重，避免年轻化表达，强调专业性和安心感' },
+              { type: '切入点', content: '从血压监测和关节养护话题切入，结合退休生活节奏引入日常养护方案' },
+              { type: '禁忌', content: '避免提"衰老"或"慢性病"等敏感表述，用"健康管理"和"日常养护"；不要过度推销' },
+              { type: '推荐时机', content: '上午 9:00-10:00 及下午 15:00-16:00，用户此时段活跃度高' }
+            ],
+            product_interest: [
+              { category: '口服产品类', product: '关节养护类营养补充剂（如氨糖软骨素、钙片）', reason: '用户偶有关节酸胀，每日散步，关节养护需求明确，与核心关注高度匹配' },
+              { category: '口服产品类', product: '血压管理类营养补充剂（如辅酶Q10、深海鱼油）', reason: '用户有轻度高血压病史，关注血压监测，与血压管理核心关注一致' },
+              { category: '口服产品类', product: '中老年综合营养补充（如复合维生素、益生菌）', reason: '退休生活节奏放缓，注重长期养生，与饮食控制和体检指标监测关联' }
+            ],
+            purchase_summary_info: {
+              has_purchase: true,
+              order_count: 24,
+              total_spend_amount: 6800.00,
+              average_order_value: 283.00,
+              purchase_points: ['每月购买2-3次', '复购周期约20天', '单笔消费150-400元', '偏好知名品牌和老字号', '对价格敏感，关注促销活动']
+            }
+          }
+        }
       };
 
-      function renderSalesProfileContent(data) {
-        let html = '<div style="color:#374151;">';
-        data.sections.forEach(function(section) {
-          html += '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin-bottom:16px;">';
-          html += '<div style="font-size:14px;font-weight:600;color:#1e293b;margin-bottom:12px;">' + section.title + '</div>';
-          section.items.forEach(function(item) {
-            html += '<div style="display:flex;margin-bottom:8px;font-size:13px;">';
-            html += '<div style="width:120px;color:#64748b;flex-shrink:0;">' + item.label + '：</div>';
-            html += '<div style="color:#374151;">' + item.value + '</div>';
+      function renderHealthProfileContent(data) {
+        const b = data.base || {};
+        let html = '<div>';
+
+        // 基础信息
+        // html += '<div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:14px 16px;margin-bottom:14px;">';
+        // html += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px 16px;">';
+        // html += baseField('年龄', b.age);
+        // html += baseField('性别', b.sex);
+        // html += baseField('城市', b.city);
+        // html += baseField('职业', b.career);
+        // html += baseField('身高', b.height);
+        // html += baseField('体重', b.weight);
+        // html += baseField('婚姻', b.marriage);
+        // html += baseField('生育', b.childbirth);
+        // html += '</div>';
+        // html += '<div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">';
+        // html += '<span style="background:#fef3c7;color:#92400e;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:500;">' + (b.BMI || '') + '</span>';
+        // if (b.disease) html += '<span style="background:#fee2e2;color:#b91c1c;padding:3px 10px;border-radius:12px;font-size:12px;">' + b.disease + '</span>';
+        // html += '</div>';
+        // html += '<div style="margin-top:8px;font-size:12px;color:#64748b;">健康需求：' + (b.improve_need || '') + '</div>';
+        html += '<div></div>';
+
+        // 核心健康关注
+        if (data.core_focus && data.core_focus.length > 0) {
+          html += '<div class="profile-section">';
+          html += '<div class="profile-section-title">健康关注</div>';
+          html += '<div class="profile-core-tags">';
+          data.core_focus.forEach(function(focus) {
+            html += '<span class="profile-core-tag">' + focus + '</span>';
+          });
+          html += '</div></div>';
+        }
+
+        // 健康摘要
+        if (data.label_summary && data.label_summary.length > 0) {
+          html += '<div class="profile-section">';
+          html += '<div class="profile-section-title">分类汇总</div>';
+          data.label_summary.forEach(function(item) {
+            html += '<div class="profile-label-item">';
+            html += '<div class="profile-label-cat">' + item.category + '</div>';
+            html += '<div class="profile-label-desc">' + item.title + '</div>';
             html += '</div>';
           });
           html += '</div>';
-        });
+        }
+
+        // 近期变化
+        if (data.expired_summary && data.expired_summary.length > 0) {
+          html += '<div class="profile-section">';
+          html += '<div class="profile-section-title">近期变化</div>';
+          html += '<div class="profile-changed-box">';
+          html += '<ul class="profile-changed-list">';
+          data.expired_summary.forEach(function(item) {
+            html += '<li>' + item + '</li>';
+          });
+          html += '</ul></div></div>';
+        }
+
+        // 关注话题
+        if (data.topic_summary && data.topic_summary.length > 0) {
+          html += '<div class="profile-section">';
+          html += '<div class="profile-section-title">话题关注</div>';
+          html += '<div class="profile-topic-box">';
+          html += '<div class="profile-topic-text">' + data.topic_summary[0].title + '</div>';
+          html += '</div></div>';
+        }
+
         html += '</div>';
         return html;
       }
 
-      document.querySelectorAll('.profile-tab-btn').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          const profileType = this.dataset.profile;
-          document.querySelectorAll('.profile-tab-btn').forEach(function(b) {
-            b.style.background = '#d1d5db';
-            b.style.color = '#fff';
-            b.classList.remove('active');
-          });
-          this.style.background = '#2563eb';
-          this.style.color = '#fff';
-          this.classList.add('active');
+      function renderSalesProfileContent(data) {
+        const b = data.base || {};
+        let html = '<div>';
 
-          if (profileType === 'health') {
-            document.getElementById('userProfileContent').style.display = 'block';
-            document.getElementById('salesProfileContent').style.display = 'none';
-          } else if (profileType === 'sales') {
-            document.getElementById('userProfileContent').style.display = 'none';
-            document.getElementById('salesProfileContent').style.display = 'block';
-            document.getElementById('salesProfileContent').innerHTML = renderSalesProfileContent(salesProfileData);
+        // 基础信息（与健康管理画像一致）
+        // html += '<div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:14px 16px;margin-bottom:14px;">';
+        // html += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px 16px;">';
+        // html += baseField('年龄', b.age);
+        // html += baseField('性别', b.sex);
+        // html += baseField('城市', b.city);
+        // html += baseField('职业', b.career);
+        // html += baseField('身高', b.height);
+        // html += baseField('体重', b.weight);
+        // html += baseField('婚姻', b.marriage);
+        // html += baseField('生育', b.childbirth);
+        // html += '</div>';
+        // html += '<div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">';
+        // html += '<span style="background:#fef3c7;color:#92400e;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:500;">' + (b.BMI || '') + '</span>';
+        // if (b.disease) html += '<span style="background:#fee2e2;color:#b91c1c;padding:3px 10px;border-radius:12px;font-size:12px;">' + b.disease + '</span>';
+        // html += '</div>';
+        // html += '<div style="margin-top:8px;font-size:12px;color:#64748b;">健康需求：' + (b.improve_need || '') + '</div>';
+        // html += '</div>';
+
+        // 核心关注
+        if (data.core_focus && data.core_focus.length > 0) {
+          html += '<div class="profile-section">';
+          html += '<div class="profile-section-title">健康关注</div>';
+          html += '<div class="profile-core-tags">';
+          data.core_focus.forEach(function(focus) {
+            html += '<span class="profile-core-tag">' + focus + '</span>';
+          });
+          html += '</div></div>';
+        }
+
+        // 核心关注点总结
+        if (data.topic_summary && data.topic_summary.length > 0) {
+          html += '<div class="profile-section">';
+          html += '<div class="profile-section-title">话题关注</div>';
+          html += '<div class="profile-topic-box">';
+          html += '<div class="profile-topic-text">' + data.topic_summary[0].title + '</div>';
+          html += '</div></div>';
+        }
+
+        // 聊天指导
+        if (data.chat_guidance && data.chat_guidance.length > 0) {
+          html += '<div class="profile-section">';
+          html += '<div class="profile-section-title">聊天指导</div>';
+          data.chat_guidance.forEach(function(item, idx) {
+            html += '<div class="profile-chat-item">';
+            html += '<span class="profile-chat-type">' + item.type + '</span>';
+            html += '<div class="profile-chat-content">' + item.content + '</div>';
+            html += '</div>';
+          });
+          html += '</div>';
+        }
+
+        // 产品兴趣
+        if (data.product_interest && data.product_interest.length > 0) {
+          html += '<div class="profile-section">';
+          html += '<div class="profile-section-title">可能感兴趣的产品</div>';
+          data.product_interest.forEach(function(item, idx) {
+            html += '<div class="profile-product-item">';
+            html += '<div class="profile-product-name">' + (idx + 1) + '. ' + item.product + '</div>';
+            html += '<span class="profile-product-cat">' + item.category + '</span>';
+            html += '<div class="profile-product-reason">推荐理由：' + item.reason + '</div>';
+            html += '</div>';
+          });
+          html += '</div>';
+        }
+
+        // 购买汇总
+        const ps = data.purchase_summary_info;
+        if (ps) {
+          html += '<div class="profile-section">';
+          html += '<div class="profile-section-title">购买行为汇总</div>';
+          html += '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px 16px;">';
+          html += '<div class="profile-purchase-grid">';
+          html += purchaseStat('是否购买', ps.has_purchase ? '是' : '否');
+          html += purchaseStat('订单数', ps.order_count + ' 单');
+          html += purchaseStat('累计消费', '¥' + ps.total_spend_amount.toFixed(2));
+          html += purchaseStat('客单价', '¥' + ps.average_order_value.toFixed(2));
+          html += '</div>';
+          if (ps.purchase_points && ps.purchase_points.length > 0) {
+            html += '<div style="font-size:12px;color:#64748b;margin-bottom:6px;">消费特点：</div>';
+            html += '<div class="profile-purchase-points">';
+            ps.purchase_points.forEach(function(p) {
+              html += '<span class="profile-purchase-point">' + p + '</span>';
+            });
+            html += '</div>';
           }
+          html += '</div></div>';
+        }
+
+        html += '</div>';
+        return html;
+      }
+
+      function baseField(label, value) {
+        return '<div style="font-size:12px;color:#64748b;">' + label + '<span style="font-size:13px;color:#1e293b;margin-left:4px;">' + (value || '-') + '</span></div>';
+      }
+
+      function purchaseStat(label, value) {
+        return '<div><div class="profile-purchase-stat-label">' + label + '</div><div class="profile-purchase-stat-value">' + value + '</div></div>';
+      }
+
+      function openProfileModal(product) {
+        currentProductVersion = product || currentProductVersion;
+        currentProfileTab = 'health';
+        // 产品按钮
+        document.querySelectorAll('.segment-btn').forEach(function(b) {
+          b.classList.toggle('active', b.dataset.product === currentProductVersion);
         });
-      });
+        // Tab 状态
+        document.getElementById('profileTabHealth').classList.add('active');
+        document.getElementById('profileTabSales').classList.remove('active');
+        // 渲染内容
+        userProfileContent.innerHTML = renderHealthProfileContent(profileDataByProduct[currentProductVersion].health);
+        userProfileContent.style.display = 'block';
+        salesProfileContent.style.display = 'none';
+        // 更新时间
+        userProfileUpdateTime.textContent = '更新时间：' + profileDataByProduct[currentProductVersion].health.updateTime;
+        userProfileModal.classList.add('show');
+      }
 
       userAnalysisBtn.addEventListener('click', function() {
-        profileTabHealth.style.background = '#2563eb';
-        profileTabHealth.style.color = '#fff';
-        profileTabSales.style.background = '#d1d5db';
-        profileTabSales.style.color = '#fff';
-        currentProfileTab = 'health';
-        renderProfileContent(profileDataYueji);
-        document.getElementById('userProfileContent').style.display = 'block';
-        document.getElementById('salesProfileContent').style.display = 'none';
-        userProfileUpdateTime.textContent = '更新时间：2026-04-29 10:30:00';
-        userProfileModal.classList.add('show');
+        openProfileModal('mirrova');
       });
 
       profileTabHealth.addEventListener('click', function() {
-        profileTabHealth.style.background = '#2563eb';
-        profileTabHealth.style.color = '#fff';
-        profileTabSales.style.background = '#d1d5db';
-        profileTabSales.style.color = '#fff';
+        document.getElementById('profileTabHealth').classList.add('active');
+        document.getElementById('profileTabSales').classList.remove('active');
         currentProfileTab = 'health';
-        renderProfileContent(profileDataYueji);
-        document.getElementById('userProfileContent').style.display = 'block';
-        document.getElementById('salesProfileContent').style.display = 'none';
+        userProfileContent.innerHTML = renderHealthProfileContent(profileDataByProduct[currentProductVersion].health);
+        userProfileContent.style.display = 'block';
+        salesProfileContent.style.display = 'none';
+        userProfileUpdateTime.textContent = '更新时间：' + profileDataByProduct[currentProductVersion].health.updateTime;
       });
 
       profileTabSales.addEventListener('click', function() {
-        profileTabSales.style.background = '#2563eb';
-        profileTabSales.style.color = '#fff';
-        profileTabHealth.style.background = '#d1d5db';
-        profileTabHealth.style.color = '#fff';
+        document.getElementById('profileTabSales').classList.add('active');
+        document.getElementById('profileTabHealth').classList.remove('active');
         currentProfileTab = 'sales';
-        document.getElementById('userProfileContent').style.display = 'none';
-        document.getElementById('salesProfileContent').style.display = 'block';
-        document.getElementById('salesProfileContent').innerHTML = renderSalesProfileContent(salesProfileData);
+        salesProfileContent.innerHTML = renderSalesProfileContent(profileDataByProduct[currentProductVersion].sales);
+        salesProfileContent.style.display = 'block';
+        userProfileContent.style.display = 'none';
+        userProfileUpdateTime.textContent = '更新时间：' + profileDataByProduct[currentProductVersion].sales.updateTime;
+      });
+
+      document.querySelectorAll('.segment-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          const product = this.dataset.product;
+          document.querySelectorAll('.segment-btn').forEach(function(b) {
+            b.classList.remove('active');
+          });
+          this.classList.add('active');
+          currentProductVersion = product;
+          if (currentProfileTab === 'health') {
+            userProfileContent.innerHTML = renderHealthProfileContent(profileDataByProduct[currentProductVersion].health);
+            userProfileContent.style.display = 'block';
+            salesProfileContent.style.display = 'none';
+          } else {
+            salesProfileContent.innerHTML = renderSalesProfileContent(profileDataByProduct[currentProductVersion].sales);
+            salesProfileContent.style.display = 'block';
+            userProfileContent.style.display = 'none';
+          }
+          userProfileUpdateTime.textContent = '更新时间：' + profileDataByProduct[currentProductVersion][currentProfileTab].updateTime;
+        });
       });
 
       const refreshProfileBtn = document.getElementById('refreshProfileBtn');
       refreshProfileBtn.addEventListener('click', function() {
         const now = new Date();
-        const timeStr = now.getFullYear() + '-' + 
-          String(now.getMonth() + 1).padStart(2, '0') + '-' + 
-          String(now.getDate()).padStart(2, '0') + ' ' + 
-          String(now.getHours()).padStart(2, '0') + ':' + 
-          String(now.getMinutes()).padStart(2, '0') + ':' + 
+        const timeStr = now.getFullYear() + '-' +
+          String(now.getMonth() + 1).padStart(2, '0') + '-' +
+          String(now.getDate()).padStart(2, '0') + ' ' +
+          String(now.getHours()).padStart(2, '0') + ':' +
+          String(now.getMinutes()).padStart(2, '0') + ':' +
           String(now.getSeconds()).padStart(2, '0');
+        Object.keys(profileDataByProduct).forEach(function(product) {
+          ['health', 'sales'].forEach(function(tab) {
+            if (profileDataByProduct[product][tab]) {
+              profileDataByProduct[product][tab].updateTime = timeStr;
+            }
+          });
+        });
         userProfileUpdateTime.textContent = '更新时间：' + timeStr;
+      });
+
+      // 修改职业 — 客户资料页（三产品版本各一套）
+      document.getElementById('customer-profile').addEventListener('click', function(e) {
+        var btn = e.target.closest('.edit-career-btn, .career-save-btn, .career-cancel-btn');
+        if (!btn) return;
+        e.stopPropagation();
+        var product = btn.dataset.product;
+        var actions = btn.closest('.career-edit-actions');
+        var input = btn.closest('.career-edit-actions').querySelector('.career-edit-input');
+        var display = document.querySelector('.customer-career-display[data-product="' + product + '"]');
+
+        if (btn.classList.contains('edit-career-btn')) {
+          var currentCareer = profileDataByProduct[product].health.base.career;
+          input.value = currentCareer;
+          display.style.display = 'none';
+          btn.style.display = 'none';
+          actions.style.display = 'inline-flex';
+          input.focus();
+          input.select();
+        } else if (btn.classList.contains('career-save-btn')) {
+          var newCareer = input.value.trim();
+          if (newCareer) {
+            profileDataByProduct[product].health.base.career = newCareer;
+            profileDataByProduct[product].sales.base.career = newCareer;
+            display.textContent = newCareer;
+          }
+          display.style.display = 'inline';
+          btn.closest('.career-edit-actions').previousElementSibling.style.display = 'inline-block';
+          actions.style.display = 'none';
+        } else if (btn.classList.contains('career-cancel-btn')) {
+          var prevBtn = btn.closest('.career-edit-actions').previousElementSibling;
+          display.style.display = 'inline';
+          prevBtn.style.display = 'inline-block';
+          actions.style.display = 'none';
+        }
+      });
+
+      // 输入框快捷键：Enter=保存，Escape=取消
+      document.getElementById('customer-profile').addEventListener('keydown', function(e) {
+        var input = e.target.closest('.career-edit-input');
+        if (!input) return;
+        var product = input.closest('.career-edit-actions').dataset.product;
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          document.querySelector('.career-save-btn[data-product="' + product + '"]').click();
+        } else if (e.key === 'Escape') {
+          e.preventDefault();
+          document.querySelector('.career-cancel-btn[data-product="' + product + '"]').click();
+        }
       });
 
       const topicTableBody = document.querySelector('#topic-tags .tag-table tbody');
@@ -2581,28 +2928,33 @@
   </div>
 
   <div class="modal" id="userProfileModal">
-    <div class="modal-content" style="width:700px;max-height:85vh;display:flex;flex-direction:column;">
+    <div class="modal-content profile-modal">
       <div class="modal-header">
-        <h3>用户画像</h3>
+        <h3 style="margin:0;font-size:16px;font-weight:600;">用户画像</h3>
         <button class="modal-close" onclick="document.getElementById('userProfileModal').classList.remove('show')">&times;</button>
       </div>
-      <div style="display:flex;flex-direction:column;overflow:hidden;">
-        <div style="padding:16px 20px 12px 20px;border-bottom:1px solid #f0f0f0;display:flex;justify-content:space-between;align-items:center;background:#fafafa;flex-shrink:0;">
-          <span id="userProfileUpdateTime" style="font-size:12px;color:#888;"></span>
-          <button class="action-btn" style="background:#f97316;color:#fff;border:none;padding:6px 14px;font-size:12px;" id="refreshProfileBtn">更新画像</button>
-        </div>
-        <div style="padding:16px 20px 0 20px;background:#fff;flex-shrink:0;">
-          <div style="display:flex;align-items:flex-end;position:relative;">
-            <button class="profile-tab-btn active" id="profileTabHealth" data-profile="health" style="padding:10px 28px 12px 20px;border:none;font-size:13px;cursor:pointer;background:#2563eb;color:#fff;font-weight:500;clip-path:polygon(0 0, 70% 0, 100% 100%, 0 100%);position:relative;z-index:2;margin-right:-10px;">健康管理画像</button>
-            <button class="profile-tab-btn" id="profileTabSales" data-profile="sales" style="padding:10px 28px 12px 20px;border:none;font-size:13px;cursor:pointer;background:#d1d5db;color:#fff;font-weight:500;clip-path:polygon(0 0, 70% 0, 100% 100%, 0 100%);position:relative;z-index:1;margin-right:-10px;">销售画像</button>
-            <button class="archive-tab" id="profileTabYueji" style="padding:10px 28px 12px 20px;border:none;font-size:13px;cursor:pointer;background:#d1d5db;color:#fff;font-weight:500;clip-path:polygon(0 0, 70% 0, 100% 100%, 0 100%);position:relative;z-index:1;opacity:0.6;" disabled title="暂无设备版本">溯华悠护</button>
+      <!-- 工具栏 -->
+      <div class="profile-header-bar">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:12px;color:#64748b;">产品版本</span>
+          <div class="segment-control" style="margin-bottom:0;">
+            <button class="segment-btn active" data-product="mirrova">Mirrova</button>
+            <button class="segment-btn" data-product="yueji">溯华悦己</button>
+            <button class="segment-btn" data-product="youhu">溯华悠护</button>
           </div>
-          <div style="height:4px;background:#fff;"></div>
         </div>
-        <div style="overflow-y:auto;padding:0 20px 20px 20px;">
-          <div id="userProfileContent"></div>
-          <div id="salesProfileContent" style="display:none;"></div>
-        </div>
+        <span id="userProfileUpdateTime" class="profile-time"></span>
+        <button class="profile-refresh-btn" id="refreshProfileBtn">更新画像</button>
+      </div>
+      <!-- Tabs -->
+      <div class="profile-tabs-bar">
+        <button class="profile-tab-btn active" id="profileTabHealth" data-profile="health">健康管理画像</button>
+        <button class="profile-tab-btn" id="profileTabSales" data-profile="sales">销售画像</button>
+      </div>
+      <!-- 内容区域 -->
+      <div class="profile-content-wrap">
+        <div id="userProfileContent"></div>
+        <div id="salesProfileContent" style="display:none;"></div>
       </div>
     </div>
   </div>
