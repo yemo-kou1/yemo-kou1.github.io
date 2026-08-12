@@ -1299,7 +1299,7 @@
         });
       });
 
-      const segmentBtns = document.querySelectorAll('.segment-btn');
+      const segmentBtns = document.querySelectorAll('#customer-tags .segment-btn');
       const tagSections = document.querySelectorAll('.tag-section');
 
       segmentBtns.forEach(btn => {
@@ -1760,7 +1760,7 @@
         currentProductVersion = product || currentProductVersion;
         currentProfileTab = 'health';
         // 产品按钮
-        document.querySelectorAll('.segment-btn').forEach(function(b) {
+        document.querySelectorAll('#userProfileModal .segment-btn').forEach(function(b) {
           b.classList.toggle('active', b.dataset.product === currentProductVersion);
         });
         // Tab 状态
@@ -1799,10 +1799,10 @@
         userProfileUpdateTime.textContent = '更新时间：' + profileDataByProduct[currentProductVersion].sales.updateTime;
       });
 
-      document.querySelectorAll('.segment-btn').forEach(function(btn) {
+      document.querySelectorAll('#userProfileModal .segment-btn').forEach(function(btn) {
         btn.addEventListener('click', function() {
           const product = this.dataset.product;
-          document.querySelectorAll('.segment-btn').forEach(function(b) {
+          document.querySelectorAll('#userProfileModal .segment-btn').forEach(function(b) {
             b.classList.remove('active');
           });
           this.classList.add('active');
@@ -1840,24 +1840,29 @@
       });
 
       // 修改职业 — 客户资料页（三产品版本各一套）
-      document.getElementById('customer-profile').addEventListener('click', function(e) {
-        var btn = e.target.closest('.edit-career-btn, .career-save-btn, .career-cancel-btn');
-        if (!btn) return;
-        e.stopPropagation();
-        var product = btn.dataset.product;
-        var actions = btn.closest('.career-edit-actions');
-        var input = btn.closest('.career-edit-actions').querySelector('.career-edit-input');
-        var display = document.querySelector('.customer-career-display[data-product="' + product + '"]');
-
-        if (btn.classList.contains('edit-career-btn')) {
+      document.querySelectorAll('.edit-career-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var product = this.dataset.product;
+          var actions = this.nextElementSibling;
+          var input = actions.querySelector('.career-edit-input');
+          var display = document.querySelector('.customer-career-display[data-product="' + product + '"]');
           var currentCareer = profileDataByProduct[product].health.base.career;
           input.value = currentCareer;
           display.style.display = 'none';
-          btn.style.display = 'none';
+          this.style.display = 'none';
           actions.style.display = 'inline-flex';
           input.focus();
           input.select();
-        } else if (btn.classList.contains('career-save-btn')) {
+        });
+      });
+
+      document.querySelectorAll('.career-save-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var product = this.dataset.product;
+          var actions = this.closest('.career-edit-actions');
+          var input = actions.querySelector('.career-edit-input');
+          var display = document.querySelector('.customer-career-display[data-product="' + product + '"]');
+          var prevBtn = actions.previousElementSibling;
           var newCareer = input.value.trim();
           if (newCareer) {
             profileDataByProduct[product].health.base.career = newCareer;
@@ -1865,28 +1870,21 @@
             display.textContent = newCareer;
           }
           display.style.display = 'inline';
-          btn.closest('.career-edit-actions').previousElementSibling.style.display = 'inline-block';
+          prevBtn.style.display = 'inline-block';
           actions.style.display = 'none';
-        } else if (btn.classList.contains('career-cancel-btn')) {
-          var prevBtn = btn.closest('.career-edit-actions').previousElementSibling;
+        });
+      });
+
+      document.querySelectorAll('.career-cancel-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var product = this.dataset.product;
+          var actions = this.closest('.career-edit-actions');
+          var display = document.querySelector('.customer-career-display[data-product="' + product + '"]');
+          var prevBtn = actions.previousElementSibling;
           display.style.display = 'inline';
           prevBtn.style.display = 'inline-block';
           actions.style.display = 'none';
-        }
-      });
-
-      // 输入框快捷键：Enter=保存，Escape=取消
-      document.getElementById('customer-profile').addEventListener('keydown', function(e) {
-        var input = e.target.closest('.career-edit-input');
-        if (!input) return;
-        var product = input.closest('.career-edit-actions').dataset.product;
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          document.querySelector('.career-save-btn[data-product="' + product + '"]').click();
-        } else if (e.key === 'Escape') {
-          e.preventDefault();
-          document.querySelector('.career-cancel-btn[data-product="' + product + '"]').click();
-        }
+        });
       });
 
       const topicTableBody = document.querySelector('#topic-tags .tag-table tbody');
