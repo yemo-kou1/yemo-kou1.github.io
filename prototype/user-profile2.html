@@ -177,24 +177,43 @@
     .profile-time{font-size:12px;color:#94a3b8}
     .profile-refresh-btn{background:#f97316;color:#fff;border:none;padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer}
     .profile-refresh-btn:hover{background:#ea580c}
+    .profile-refresh-btn.updating{background:#94a3b8;color:#fff;cursor:not-allowed}
+    .profile-refresh-loading{display:none;background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:#92400e;align-items:center;gap:8px;position:sticky;top:0;z-index:10}
+    .profile-refresh-loading.show{display:flex}
+    .profile-refresh-loading-icon{font-size:15px;animation:spin 1s linear infinite;flex-shrink:0}
+    @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+    .profile-content-updating .profile-section-title{opacity:.5;pointer-events:none}
+    .profile-content-updating #career-edit-btn{pointer-events:none;opacity:.5}
+    .profile-content-updating .profile-supplement-area{pointer-events:none;opacity:.5}
     .profile-tabs-bar{padding:10px 24px 0;background:#fff;flex-shrink:0;border-bottom:1px solid #f0f0f0}
     .profile-tab-btn{padding:10px 24px;border:none;font-size:13px;font-weight:500;cursor:pointer;background:transparent;color:#6b7280;border-bottom:2px solid transparent;margin-right:4px;transition:all 0.2s}
     .profile-tab-btn:hover{color:#2563eb}
     .profile-tab-btn.active{color:#2563eb;border-bottom-color:#2563eb}
     .profile-content-wrap{overflow-y:auto;flex:1;padding:16px 24px 20px}
+    .profile-edit-tip{display:none;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:#1e40af;line-height:1.6;align-items:flex-start;gap:8px;position:sticky;top:0;z-index:10}
+    .profile-edit-tip.show{display:flex}
+    .profile-edit-tip-icon{font-size:15px;flex-shrink:0;margin-top:1px}
+    .profile-edit-tip-close{margin-left:auto;cursor:pointer;color:#64748b;font-size:14px;flex-shrink:0;background:none;border:none;padding:0 2px}
+    .profile-edit-tip-close:hover{color:#1e293b}
+    .profile-gen-guide{margin-top:16px;border-top:1px dashed #e2e8f0;padding-top:12px}
+    .profile-gen-guide-label{font-size:12px;color:#64748b;margin-bottom:6px}
+    .profile-gen-guide textarea{width:100%;min-height:72px;resize:vertical;border:1px solid #e2e8f0;border-radius:6px;padding:8px 10px;font-size:13px;color:#334155;outline:none;transition:border-color 0.2s}
+    .profile-gen-guide textarea:focus{border-color:#3b82f6}
     .profile-section{margin-bottom:14px}
-    .profile-section-title{font-size:14px;font-weight:600;color:#1e293b;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #f0f0f0}
+    .profile-section-title{font-size:14px;font-weight:600;color:#1e293b;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;gap:8px}
+    .profile-section-edit-btn{font-size:13px;color:#94a3b8;cursor:pointer;padding:2px 6px;border-radius:4px;transition:all 0.2s;border:none;background:none;line-height:1}
+    .profile-section-edit-btn:hover{color:#2563eb;background:#eff6ff}
+    .profile-section-editing{outline:2px solid #3b82f6;outline-offset:-2px;border-radius:8px}
     .profile-core-tags{display:flex;flex-wrap:wrap;gap:8px}
     .profile-core-tag{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;padding:5px 12px;border-radius:14px;font-size:12px;font-weight:500}
     .profile-label-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px 14px;margin-bottom:8px;border-left:3px solid #2563eb}
     .profile-label-cat{font-size:12px;font-weight:600;color:#2563eb;margin-bottom:4px}
     .profile-label-desc{font-size:12px;color:#475569;line-height:1.6}
-    .profile-changed-box{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px 14px}
-    .profile-changed-list{list-style:none;padding:0;margin:0}
+    .profile-changed-list{list-style:none;padding:0;margin:0;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:12px 14px}
     .profile-changed-list li{font-size:12px;color:#475569;line-height:1.7;padding-left:12px;position:relative}
-    .profile-changed-list li::before{content:'•';position:absolute;left:0;color:#f59e0b}
-    .profile-topic-box{background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px 14px}
-    .profile-topic-text{font-size:12px;color:#374151;line-height:1.6}
+    .profile-changed-list li::before{content:'•';position:absolute;left:0;color:#3b82f6}
+    .profile-label-list{display:flex;flex-direction:column;gap:8px}
+    .profile-label-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px}
     .profile-chat-item{display:flex;gap:10px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #f0f0f0}
     .profile-chat-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
     .profile-chat-type{flex-shrink:0;background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;height:fit-content;margin-top:1px}
@@ -207,8 +226,8 @@
     .profile-purchase-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px 16px;margin-bottom:10px}
     .profile-purchase-stat-label{font-size:11px;color:#94a3b8;margin-bottom:2px}
     .profile-purchase-stat-value{font-size:14px;font-weight:600;color:#1e293b}
-    .profile-purchase-points{display:flex;flex-wrap:wrap;gap:6px}
-    .profile-purchase-point{background:#fff;border:1px solid #e2e8f0;border-radius:4px;padding:2px 8px;font-size:11px;color:#4b5563}
+    .profile-purchase-points{display:flex;flex-direction:column;gap:6px}
+    .profile-purchase-point{background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;font-size:12px;color:#4b5563;line-height:1.6}
     .detail-section{margin-bottom:20px}
     .detail-section-title{font-size:14px;color:#374151;font-weight:600;margin:0 0 12px 0;padding-bottom:8px;border-bottom:1px solid #e5e7eb}
     .detail-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -264,6 +283,31 @@
     .topic-page-input{width:48px;padding:4px 8px;border:1px solid #d1d5db;border-radius:6px;font-size:12px;text-align:center}
     .topic-page-total{font-size:12px;color:#64748b}
     .confirm-modal-content .modal-header{border-bottom:none}
+
+    .profile-supplement-area{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px 16px;margin-bottom:14px}
+    .profile-supplement-textarea{width:100%;min-height:60px;padding:8px 10px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;resize:vertical;line-height:1.6;box-sizing:border-box;}
+    .profile-supplement-textarea:focus{border-color:#3b82f6;outline:none}
+    .profile-supplement-btns{display:flex;justify-content:flex-end;gap:6px;margin-top:8px}
+    .profile-supplement-save-btn{font-size:12px;cursor:pointer;padding:4px 14px;border-radius:4px;border:none;background:#2563eb;color:#fff;transition:all 0.2s}
+    .profile-supplement-save-btn:hover{background:#1d4ed8}
+    .profile-supplement-history-btn{font-size:12px;cursor:pointer;padding:4px 14px;border-radius:4px;border:1px solid #e2e8f0;background:#fff;color:#64748b;transition:all 0.2s}
+    .profile-supplement-history-btn:hover{background:#f9fafb;color:#2563eb;border-color:#bfdbfe}
+    .profile-supplement-history{margin-top:10px;display:none}
+    .profile-supplement-history.show{display:block}
+    .profile-supplement-history-title{font-size:12px;color:#94a3b8;margin-bottom:6px}
+    .profile-supplement-history-item{background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:10px 12px;margin-bottom:6px;font-size:12px;color:#374151;line-height:1.6;white-space:pre-wrap;word-break:break-all}
+    .profile-supplement-history-meta{font-size:11px;color:#94a3b8;margin-bottom:4px}
+
+        /* 客服补充历史弹窗 */
+    .supplement-history-modal .modal-content{width:600px;max-height:70vh}
+    .supplement-history-role-badge{display:inline-block;font-size:11px;padding:1px 8px;border-radius:3px;background:#e2e8f0;color:#475569;margin-right:6px;vertical-align:middle}
+    .supplement-history-checkbox{width:16px;height:16px;cursor:pointer;accent-color:#2563eb;margin-right:10px;flex-shrink:0}
+    .supplement-history-item-row{display:flex;align-items:flex-start;padding:12px 14px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:8px}
+    .supplement-history-item-body{flex:1;min-width:0}
+    .supplement-history-footer{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#f0f5ff;border:1px solid #bfdbfe;border-radius:8px;margin-top:10px;font-size:12px;color:#1e40af}
+    .supplement-history-footer-btn{font-size:11px;cursor:pointer;padding:3px 10px;border-radius:4px;border:1px solid #bfdbfe;background:#fff;color:#2563eb;transition:all 0.2s}
+    .supplement-history-footer-btn:hover{background:#eff6ff}
+    .supplement-selection-hint{font-size:11px;color:#94a3b8;margin-top:8px;text-align:right}
     </style>
 </head>
 <body>
@@ -350,71 +394,20 @@
       </div>
 
       <div id="customer-profile" class="tab-content active">
-        <div class="info-section-title">基本信息</div>
-        <div class="info-table-section">
-          <div class="info-section-title">| MIRROVA</div>
-          <table class="info-table">
-            <tr><th>手机号码</th><td>13632206221</td><th>性别</th><td>女</td><th>年龄</th><td>32</td></tr>
-            <tr><th>身高</th><td>165cm</td><th>体重</th><td>58.5kg</td><th>BMI</th><td>正常（18.5 ≤ BMI < 24）</td></tr>
-            <tr>
-              <th>职业</th><td>
-                <span class="customer-career-display" data-product="mirrova">公司白领</span>
-                <button class="edit-career-btn" data-product="mirrova" style="margin-left:6px;background:#2563eb;color:#fff;border:none;padding:2px 8px;border-radius:4px;font-size:12px;cursor:pointer;">修改</button>
-                <span class="career-edit-actions" data-product="mirrova" style="display:none;">
-                  <input class="career-edit-input" type="text" value="公司白领" style="font-size:14px;padding:2px 6px;border:1px solid #2563eb;border-radius:4px;width:120px;box-sizing:border-box;margin-right:6px;">
-                  <button class="career-save-btn" data-product="mirrova" style="background:#16a34a;color:#fff;border:none;padding:2px 8px;border-radius:4px;font-size:12px;cursor:pointer;margin-right:4px;">保存</button>
-                  <button class="career-cancel-btn" data-product="mirrova" style="background:#e5e7eb;color:#4b5563;border:none;padding:2px 8px;border-radius:4px;font-size:12px;cursor:pointer;">取消</button>
-                </span>
-              </td>
-              <th>生命阶段</th><td>常规</td><th>健康需求</th><td>减重管理，改善睡眠，缓解压力</td>
-            </tr>
-            <tr><th>所在地</th><td>北京市</td><th>婚姻</th><td>已婚</td><th>生育</th><td>已育</td></tr>
-            <tr><th>基础疾病</th><td colspan="3">无慢性病，偶发偏头痛</td></tr>
-          </table>
-        </div>
-        <div class="info-table-section" style="margin-top:16px;">
-          <div class="info-section-title">| 我的悦己</div>
-          <table class="info-table">
-            <tr><th>手机号码</th><td>13632206221</td><th>性别</th><td>女</td><th>年龄</th><td>26</td></tr>
-            <tr><th>身高</th><td>158cm</td><th>体重</th><td>48.5kg</td><th>BMI</th><td>正常（18.5 ≤ BMI < 24）</td></tr>
-            <tr>
-              <th>职业</th><td>
-                <span class="customer-career-display" data-product="yueji">互联网运营</span>
-                <button class="edit-career-btn" data-product="yueji" style="margin-left:6px;background:#2563eb;color:#fff;border:none;padding:2px 8px;border-radius:4px;font-size:12px;cursor:pointer;">修改</button>
-                <span class="career-edit-actions" data-product="yueji" style="display:none;">
-                  <input class="career-edit-input" type="text" value="互联网运营" style="font-size:14px;padding:2px 6px;border:1px solid #2563eb;border-radius:4px;width:120px;box-sizing:border-box;margin-right:6px;">
-                  <button class="career-save-btn" data-product="yueji" style="background:#16a34a;color:#fff;border:none;padding:2px 8px;border-radius:4px;font-size:12px;cursor:pointer;margin-right:4px;">保存</button>
-                  <button class="career-cancel-btn" data-product="yueji" style="background:#e5e7eb;color:#4b5563;border:none;padding:2px 8px;border-radius:4px;font-size:12px;cursor:pointer;">取消</button>
-                </span>
-              </td>
-              <th>健康需求</th><td>皮肤管理，经期调理</td>
-            </tr>
-            <tr><th>所在地</th><td>上海市</td><th>婚姻</th><td>未婚</td><th>生育</th><td>未育</td></tr>
-            <tr><th>基础疾病</th><td colspan="3">无慢性病</td></tr>
-          </table>
-        </div>
-        <div class="info-table-section" style="margin-top:16px;">
-          <div class="info-section-title">| 我的悠护</div>
-          <table class="info-table">
-            <tr><th>手机号码</th><td>13632206221</td><th>性别</th><td>男</td><th>年龄</th><td>58</td></tr>
-            <tr><th>身高</th><td>170cm</td><th>体重</th><td>68kg</td><th>BMI</th><td>正常（18.5 ≤ BMI < 24）</td></tr>
-            <tr>
-              <th>职业</th><td>
-                <span class="customer-career-display" data-product="youhu">退休</span>
-                <button class="edit-career-btn" data-product="youhu" style="margin-left:6px;background:#2563eb;color:#fff;border:none;padding:2px 8px;border-radius:4px;font-size:12px;cursor:pointer;">修改</button>
-                <span class="career-edit-actions" data-product="youhu" style="display:none;">
-                  <input class="career-edit-input" type="text" value="退休" style="font-size:14px;padding:2px 6px;border:1px solid #2563eb;border-radius:4px;width:120px;box-sizing:border-box;margin-right:6px;">
-                  <button class="career-save-btn" data-product="youhu" style="background:#16a34a;color:#fff;border:none;padding:2px 8px;border-radius:4px;font-size:12px;cursor:pointer;margin-right:4px;">保存</button>
-                  <button class="career-cancel-btn" data-product="youhu" style="background:#e5e7eb;color:#4b5563;border:none;padding:2px 8px;border-radius:4px;font-size:12px;cursor:pointer;">取消</button>
-                </span>
-              </td>
-              <th>健康需求</th><td>血压管理，关节养护</td>
-            </tr>
-            <tr><th>所在地</th><td>广东省-广州市</td><th>婚姻</th><td>已婚</td></tr>
-            <tr><th>基础疾病</th><td colspan="3">轻度高血压</td></tr>
-          </table>
-        </div>
-      </div>
+        <div class="info-section-title">| 基本信息</div>
+        <table class="info-table">
+          <tr>
+            <th>手机号码</th><td>13632206221</td>
+            <th>性别</th><td>女</td>
+            <th>年龄</th><td>34</td>
+          </tr>
+          <tr>
+            <th>身高</th><td>162cm</td>
+            <th>体重</th><td>51kg</td>
+            <th>BMI</th><td>19.43kg/m²</td>
+          </tr>
+        </table>
+      </div>      </div>
 
       <div id="customer-tags" class="tab-content">
         <div class="segment-control">
@@ -1394,6 +1387,9 @@
 
       let currentProfileTab = 'health';
       let currentProductVersion = 'mirrova';
+      let lastRefreshTimes = {};  // key: 'product_tab', value: timestamp
+      let refreshCountdownId = null;
+      let isRefreshing = false;   // true 时当前有产品正在 30s 更新中
 
       // ====== 接口数据（模拟 profile2-output.json / profile-buy-output.json）======
       const profileDataByProduct = {
@@ -1401,11 +1397,11 @@
           health: {
             updateTime: '2026-07-30 10:30:15',
             base: {
-              age: '32', sex: '女', city: '北京市', height: '165cm', weight: '58.5kg',
-              BMI: '正常（18.5 ≤ BMI < 24），身高165cm，体重58.5kg',
-              marriage: '已婚', childbirth: '已育', life_stage: '职场黄金期',
-              career: '公司白领', disease: '无慢性病，偶发偏头痛',
-              improve_need: '减重管理，改善睡眠，缓解压力'
+              age: '32', sex: '女', city: '北京市', height: '175cm', weight: '78kg',
+              BMI: '超重（24 ≤ BMI < 28），身高175cm，体重78kg',
+              marriage: '已婚', childbirth: '未育', life_stage: '备孕期 (已备孕约1周)',
+              career: '职场高管', disease: '高血压倾向，轻度脂肪肝',
+              improve_need: '管理血压，减脂，改善长期偏头痛和严重职场焦虑情绪'
             },
             label_summary: [
               { category: '情绪与压力', title: '工作压力大，伴有焦虑情绪，常在晚间向AI倾诉。情绪波动集中在周三至周五，需注意阶段性压力疏导。' },
@@ -1414,26 +1410,34 @@
               { category: '疾病', title: '无慢性病史但关注体检指标，有主动健康管理意愿。可结合体检周期进行阶段性评估和预防性管理。' },
               { category: '家庭', title: '近期出差频繁，影响作息和饮食规律。出差期间健康管理依从性下降，可提前规划出差时的饮食和作息安排。' }
             ],
-            core_focus: ['压力管理', '睡眠改善', '体重管理', '偏头痛缓解', '作息规律'],
+            core_focus: ['管控临界高血压与轻度脂肪肝', '缓解职场焦虑情绪与压力', '改善长期偏头痛与入睡困难', '科学减脂调整体型', '建立规律作息与碎片化运动习惯'],
             expired_summary: [
               '急性胃肠炎历史、生酮饮食尝试、频繁出差的作息紊乱状态近期均已有改善或消失'
             ],
             topic_summary: [
-              { title: '用户当下核心关注睡眠改善与压力管理，同时兼顾减重目标和体检指标监测，期待碎片化、可落地的健康管理方案' }
-            ]
+              { title: '用户当下核心关注睡眠改善与压力管理，同时兼顾减重目标和体检指标监测，期待碎片化、可落地的健康管理方案' }, 
+              { title: '用户常提及控制饮食、询问食物营养成分，关注饮食健康。' }, 
+
+            ], 
+            supplement: '',
+            supplement_history: [
+              { content: '用户近期反馈睡眠质量差，入睡困难，建议在画像中强化睡眠改善相关标签', time: '2026-08-15 14:30', role: '客服', selected: true },
+              { content: 'VIP用户，需重点关注减重进度，每周跟进一次体重变化', time: '2026-08-10 09:15', role: '管理员', selected: true },
+              { content: '用户表示对饮食方案执行力较弱，建议推荐简单易操作的食谱', time: '2026-08-05 16:00', role: '客服', selected: false },
+            ],
           },
           sales: {
             updateTime: '2026-07-30 10:30:15',
             base: {
-              age: '32', sex: '女', city: '北京市', height: '165cm', weight: '58.5kg',
-              BMI: '正常（18.5 ≤ BMI < 24），身高165cm，体重58.5kg',
-              marriage: '已婚', childbirth: '已育', life_stage: '职场黄金期',
-              career: '公司白领', disease: '无慢性病，偶发偏头痛',
-              improve_need: '减重管理，改善睡眠，缓解压力'
+              age: '32', sex: '女', city: '北京市', height: '175cm', weight: '78kg',
+              BMI: '超重（24 ≤ BMI < 28），身高175cm，体重78kg',
+              marriage: '已婚', childbirth: '未育', life_stage: '备孕期 (已备孕约1周)',
+              career: '职场高管', disease: '高血压倾向，轻度脂肪肝',
+              improve_need: '管理血压，减脂，改善长期偏头痛和严重职场焦虑情绪'
             },
-            core_focus: ['压力管理', '睡眠改善', '体重管理', '偏头痛缓解', '作息规律'],
+            core_focus: ['管控临界高血压与轻度脂肪肝', '缓解职场焦虑情绪与压力', '改善长期偏头痛与入睡困难', '科学减脂调整体型', '建立规律作息与碎片化运动习惯'],
             topic_summary: [
-              { title: '用户当下核心关注睡眠改善与压力管理，同时兼顾减重目标和体检指标监测' }
+              { title: '用户当下核心关注睡眠改善与压力管理，同时兼顾减重目标和体检指标监测，期待碎片化、可落地的健康管理方案' }
             ],
             chat_guidance: [
               { type: '语气', content: '专业温和，保持简洁直接，避免说教感，用"小调整大改变"的轻松感沟通' },
@@ -1461,9 +1465,8 @@
             base: {
               age: '26', sex: '女', city: '上海市', height: '158cm', weight: '48.5kg',
               BMI: '正常（18.5 ≤ BMI < 24），身高158cm，体重48.5kg',
-              marriage: '未婚', childbirth: '未育', life_stage: '职场黄金期',
-              career: '互联网运营', disease: '无慢性病',
-              improve_need: '皮肤管理，经期调理'
+              marriage: '未婚', childbirth: '未育',
+              career: '互联网运营',
             },
             label_summary: [
               { category: '日常节律', title: '作息较规律，偶尔加班到深夜。周末有睡懒觉习惯，整体作息尚可，但夜间工作时段需额外注意作息恢复。' },
@@ -1475,7 +1478,7 @@
               { category: '行动计划', title: '有皮肤管理计划，关注抗糖和防晒。目标明确，执行较好，可在此基础上拓展其他健康管理维度。' },
               { category: '人口属性', title: '都市年轻女性，互联网行业，消费能力较强，注重生活品质。适合高品质、有设计感的健康管理产品推荐。' }
             ],
-            core_focus: ['皮肤保养', '抗糖抗衰', '经期调理', '体态管理', '运动习惯维护'],
+            core_focus: ['皮肤保养与抗糖抗衰', '经期调理改善不适', '体态管理保持健康体型', '维护稳定运动习惯', '职场节奏下的作息平衡'],
             expired_summary: [
               '工作压力大在近期换岗后已趋于平稳，压力水平明显下降'
             ],
@@ -1485,16 +1488,17 @@
           },
           sales: {
             updateTime: '2026-07-30 10:30:15',
+            supplement: '',
+            supplement_history: [],
             base: {
               age: '26', sex: '女', city: '上海市', height: '158cm', weight: '48.5kg',
               BMI: '正常（18.5 ≤ BMI < 24），身高158cm，体重48.5kg',
-              marriage: '未婚', childbirth: '未育', life_stage: '职场黄金期',
-              career: '互联网运营', disease: '无慢性病',
-              improve_need: '皮肤管理，经期调理'
+              marriage: '未婚', childbirth: '未育',
+              career: '互联网运营',
             },
-            core_focus: ['皮肤保养', '抗糖抗衰', '经期调理', '体态管理', '运动习惯维护'],
+            core_focus: ['皮肤保养与抗糖抗衰', '经期调理改善不适', '体态管理保持健康体型', '维护稳定运动习惯', '职场节奏下的作息平衡'],
             topic_summary: [
-              { title: '用户当下核心关注皮肤管理与抗糖抗衰，同时兼顾经期调理和运动习惯维护' }
+              { title: '用户当下核心关注皮肤管理与抗糖抗衰，同时兼顾经期调理和运动习惯维护，期待贴合年轻女性的生活方式健康方案' }
             ],
             chat_guidance: [
               { type: '语气', content: '轻松活泼，贴近年轻人语境，可适当使用网络用语，强调"边美边健康"的共鸣感' },
@@ -1516,15 +1520,18 @@
             }
           }
         },
+            supplement: '',
+            supplement_history: [],
         youhu: {
           health: {
+            supplement: '',
+            supplement_history: [],
             updateTime: '2026-07-30 10:30:15',
             base: {
               age: '58', sex: '男', city: '广东省-广州市', height: '170cm', weight: '68kg',
               BMI: '正常（18.5 ≤ BMI < 24），身高170cm，体重68kg',
-              marriage: '已婚', childbirth: '已育', life_stage: '退休',
-              career: '退休', disease: '轻度高血压',
-              improve_need: '血压管理，关节养护'
+              marriage: '已婚',
+              career: '退休', disease: '轻度高血压'
             },
             label_summary: [
               { category: '日常节律', title: '作息规律，早睡早起。饮食偏清淡，有控制盐和油的习惯。整体生活方式健康，是长期健康管理的优势基础。' },
@@ -1536,7 +1543,7 @@
               { category: '行动计划', title: '有血压监测和关节养护计划，执行力强，定期复查。适合结合退休后的时间优势建立系统化健康管理体系。' },
               { category: '人口属性', title: '退休人士，独居或与家人同住，健康意识较强，注重长期养生。适合高性价比、长期使用型健康管理产品。' }
             ],
-            core_focus: ['血压管理', '关节养护', '用药依从', '体检指标监测', '饮食控制'],
+            core_focus: ['血压管理控制轻度高血压', '关节养护缓解酸胀不适', '维持用药依从性按时服药', '定期体检指标监测', '退休后饮食控制与日常养护'],
             expired_summary: [
               '退休适应期后的情绪波动近期已趋于平稳，整体心态平和'
             ],
@@ -1547,13 +1554,14 @@
           sales: {
             updateTime: '2026-07-30 10:30:15',
             base: {
+            supplement: '',
+            supplement_history: [],
               age: '58', sex: '男', city: '广东省-广州市', height: '170cm', weight: '68kg',
               BMI: '正常（18.5 ≤ BMI < 24），身高170cm，体重68kg',
-              marriage: '已婚', childbirth: '已育', life_stage: '退休',
-              career: '退休', disease: '轻度高血压',
-              improve_need: '血压管理，关节养护'
+              marriage: '已婚',
+              career: '退休', disease: '轻度高血压'
             },
-            core_focus: ['血压管理', '关节养护', '用药依从', '体检指标监测', '饮食控制'],
+            core_focus: ['血压管理控制轻度高血压', '关节养护缓解酸胀不适', '维持用药依从性按时服药', '定期体检指标监测', '退休后饮食控制与日常养护'],
             topic_summary: [
               { title: '用户当下核心关注血压控制与关节保养，期待贴合退休生活的饮食搭配和日常养护方案' }
             ],
@@ -1583,32 +1591,71 @@
         const b = data.base || {};
         let html = '<div>';
 
+            supplement: '';
+            supplement_history: [],
         // 基础信息
-        // html += '<div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:14px 16px;margin-bottom:14px;">';
-        // html += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px 16px;">';
-        // html += baseField('年龄', b.age);
-        // html += baseField('性别', b.sex);
-        // html += baseField('城市', b.city);
-        // html += baseField('职业', b.career);
-        // html += baseField('身高', b.height);
-        // html += baseField('体重', b.weight);
-        // html += baseField('婚姻', b.marriage);
-        // html += baseField('生育', b.childbirth);
-        // html += '</div>';
-        // html += '<div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">';
-        // html += '<span style="background:#fef3c7;color:#92400e;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:500;">' + (b.BMI || '') + '</span>';
-        // if (b.disease) html += '<span style="background:#fee2e2;color:#b91c1c;padding:3px 10px;border-radius:12px;font-size:12px;">' + b.disease + '</span>';
-        // html += '</div>';
-        // html += '<div style="margin-top:8px;font-size:12px;color:#64748b;">健康需求：' + (b.improve_need || '') + '</div>';
-        html += '<div></div>';
+        html += '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px 16px;margin-bottom:14px;">';
+        html += '<div style="font-size:14px;font-weight:600;color:#1e293b;margin-bottom:12px;">基本信息</div>';
+        html += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px 16px;">';
+        html += baseField('年龄', b.age);
+        html += baseField('性别', b.sex);
+        html += baseField('城市', b.city);
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#64748b;"><span>职业<span style="font-size:13px;color:#1e293b;margin-left:4px;" id="career-value-display">' + (b.career || '-') + '</span></span><span id="career-edit-btn" style="font-size:13px;cursor:pointer;padding:2px 6px;border-radius:4px;border:none;background:none;line-height:1;transition:all 0.2s;" title="编辑">✏️</span></div>';
+        html += '</div>';
+        html += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px 16px;margin-top:10px;">';
+        html += baseField('身高', b.height);
+        html += baseField('体重', b.weight);
+        html += baseField('婚姻', b.marriage);
+        html += baseField('生育', b.childbirth);
+        html += '</div>';
+        html += '<div style="margin-top:10px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px 16px;">';
+        html += baseField('BMI', b.BMI, true);
+        html += '</div>';
+        if (b.life_stage) {
+          html += '<div style="margin-top:10px;font-size:12px;color:#64748b;">生命阶段：<span style="color:#1e293b;">' + b.life_stage + '</span></div>';
+        }
+        if (b.disease) {
+          html += '<div style="margin-top:8px;font-size:12px;color:#64748b;"><span style="margin-right:8px;white-space:nowrap;">基础疾病：</span>';
+          b.disease.split(/，|,/).forEach(function(d) {
+            var dTrim = d.trim();
+            if (dTrim) {
+              html += '<span style="display:inline-block;background:#fee2e2;color:#b91c1c;padding:2px 8px;border-radius:10px;font-size:12px;margin-right:6px;">' + dTrim + '</span>';
+            }
+          });
+          html += '</div>';
+        }
+        if (b.improve_need) {
+          html += '<div style="margin-top:8px;font-size:12px;color:#64748b;"><span style="margin-right:8px;white-space:nowrap;">健康需求：</span>';
+          (b.improve_need || '').split(/[,，、]/).forEach(function(item) {
+            var t = item.trim();
+            if (t) {
+              html += '<span style="display:inline-block;background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:10px;font-size:12px;margin-right:6px;">' + t + '</span>';
+            }
+          });
+          html += '</div>';
+        }
+        html += '</div>';
 
-        // 核心健康关注
+        // 核心关注
         if (data.core_focus && data.core_focus.length > 0) {
           html += '<div class="profile-section">';
-          html += '<div class="profile-section-title">健康关注</div>';
+          html += '<div class="profile-section-title">核心关注<button class="profile-section-edit-btn" data-section="core_focus" data-tab="health" title="编辑">✏️</button></div>';
           html += '<div class="profile-core-tags">';
           data.core_focus.forEach(function(focus) {
             html += '<span class="profile-core-tag">' + focus + '</span>';
+          });
+          html += '</div></div>';
+        }
+
+        // 话题关注
+        if (data.topic_summary && data.topic_summary.length > 0) {
+          html += '<div class="profile-section">';
+          html += '<div class="profile-section-title">话题关注<button class="profile-section-edit-btn" data-section="topic_summary" data-tab="health" title="编辑">✏️</button></div>';
+          html += '<div class="profile-label-list">';
+          data.topic_summary.forEach(function(item) {
+            html += '<div class="profile-label-item">';
+            html += '<div class="profile-label-desc">' + item.title + '</div>';
+            html += '</div>';
           });
           html += '</div></div>';
         }
@@ -1616,113 +1663,112 @@
         // 健康摘要
         if (data.label_summary && data.label_summary.length > 0) {
           html += '<div class="profile-section">';
-          html += '<div class="profile-section-title">分类汇总</div>';
+          html += '<div class="profile-section-title">分类汇总<button class="profile-section-edit-btn" data-section="label_summary" data-tab="health" title="编辑">✏️</button></div>';
+          html += '<div class="profile-label-list">';
           data.label_summary.forEach(function(item) {
             html += '<div class="profile-label-item">';
             html += '<div class="profile-label-cat">' + item.category + '</div>';
             html += '<div class="profile-label-desc">' + item.title + '</div>';
             html += '</div>';
           });
-          html += '</div>';
+          html += '</div></div>';
         }
 
         // 近期变化
         if (data.expired_summary && data.expired_summary.length > 0) {
           html += '<div class="profile-section">';
-          html += '<div class="profile-section-title">近期变化</div>';
-          html += '<div class="profile-changed-box">';
+          html += '<div class="profile-section-title">近期变化<button class="profile-section-edit-btn" data-section="expired_summary" data-tab="health" title="编辑">✏️</button></div>';
+          html += '<div class="profile-changed-list">';
           html += '<ul class="profile-changed-list">';
           data.expired_summary.forEach(function(item) {
             html += '<li>' + item + '</li>';
           });
-          html += '</ul></div></div>';
-        }
-
-        // 关注话题
-        if (data.topic_summary && data.topic_summary.length > 0) {
-          html += '<div class="profile-section">';
-          html += '<div class="profile-section-title">话题关注</div>';
-          html += '<div class="profile-topic-box">';
-          html += '<div class="profile-topic-text">' + data.topic_summary[0].title + '</div>';
           html += '</div></div>';
         }
 
+        html += renderSupplementSection('health', data);
         html += '</div>';
         return html;
       }
 
-      function renderSalesProfileContent(data) {
-        const b = data.base || {};
+      function renderSalesProfileContent(salesData, healthData) {
+        const b = salesData.base || {};
         let html = '<div>';
 
-        // 基础信息（与健康管理画像一致）
-        // html += '<div style="background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:14px 16px;margin-bottom:14px;">';
-        // html += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px 16px;">';
-        // html += baseField('年龄', b.age);
-        // html += baseField('性别', b.sex);
-        // html += baseField('城市', b.city);
-        // html += baseField('职业', b.career);
-        // html += baseField('身高', b.height);
-        // html += baseField('体重', b.weight);
-        // html += baseField('婚姻', b.marriage);
-        // html += baseField('生育', b.childbirth);
-        // html += '</div>';
-        // html += '<div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;">';
-        // html += '<span style="background:#fef3c7;color:#92400e;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:500;">' + (b.BMI || '') + '</span>';
-        // if (b.disease) html += '<span style="background:#fee2e2;color:#b91c1c;padding:3px 10px;border-radius:12px;font-size:12px;">' + b.disease + '</span>';
-        // html += '</div>';
-        // html += '<div style="margin-top:8px;font-size:12px;color:#64748b;">健康需求：' + (b.improve_need || '') + '</div>';
-        // html += '</div>';
-
-        // 核心关注
-        if (data.core_focus && data.core_focus.length > 0) {
-          html += '<div class="profile-section">';
-          html += '<div class="profile-section-title">健康关注</div>';
-          html += '<div class="profile-core-tags">';
-          data.core_focus.forEach(function(focus) {
-            html += '<span class="profile-core-tag">' + focus + '</span>';
+        // 基础信息
+        html += '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px 16px;margin-bottom:14px;">';
+        html += '<div style="font-size:14px;font-weight:600;color:#1e293b;margin-bottom:12px;">基本信息</div>';
+        html += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px 16px;">';
+        html += baseField('年龄', b.age);
+        html += baseField('性别', b.sex);
+        html += baseField('城市', b.city);
+        html += '<div style="font-size:12px;color:#64748b;">职业<span style="font-size:13px;color:#1e293b;margin-left:4px;">' + (b.career || '-') + '</span></div>';
+        html += '</div>';
+        html += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px 16px;margin-top:10px;">';
+        html += baseField('身高', b.height);
+        html += baseField('体重', b.weight);
+        html += baseField('婚姻', b.marriage);
+        html += baseField('生育', b.childbirth);
+        html += '</div>';
+        html += '<div style="margin-top:10px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px 16px;">';
+        html += baseField('BMI', b.BMI, true);
+        html += '</div>';
+        if (b.life_stage) {
+          html += '<div style="margin-top:10px;font-size:12px;color:#64748b;">生命阶段：<span style="color:#1e293b;">' + b.life_stage + '</span></div>';
+        }
+        if (b.disease) {
+          html += '<div style="margin-top:8px;font-size:12px;color:#64748b;"><span style="margin-right:8px;white-space:nowrap;">基础疾病：</span>';
+          b.disease.split(/，|,/).forEach(function(d) {
+            var dTrim = d.trim();
+            if (dTrim) {
+              html += '<span style="display:inline-block;background:#fee2e2;color:#b91c1c;padding:2px 8px;border-radius:10px;font-size:12px;margin-right:6px;">' + dTrim + '</span>';
+            }
           });
-          html += '</div></div>';
+          html += '</div>';
         }
-
-        // 核心关注点总结
-        if (data.topic_summary && data.topic_summary.length > 0) {
-          html += '<div class="profile-section">';
-          html += '<div class="profile-section-title">话题关注</div>';
-          html += '<div class="profile-topic-box">';
-          html += '<div class="profile-topic-text">' + data.topic_summary[0].title + '</div>';
-          html += '</div></div>';
+        if (b.improve_need) {
+          html += '<div style="margin-top:8px;font-size:12px;color:#64748b;"><span style="margin-right:8px;white-space:nowrap;">健康需求：</span>';
+          (b.improve_need || '').split(/[,，、]/).forEach(function(item) {
+            var t = item.trim();
+            if (t) {
+              html += '<span style="display:inline-block;background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:10px;font-size:12px;margin-right:6px;">' + t + '</span>';
+            }
+          });
+          html += '</div>';
         }
+        html += '</div>';
 
         // 聊天指导
-        if (data.chat_guidance && data.chat_guidance.length > 0) {
+        if (salesData.chat_guidance && salesData.chat_guidance.length > 0) {
           html += '<div class="profile-section">';
-          html += '<div class="profile-section-title">聊天指导</div>';
-          data.chat_guidance.forEach(function(item, idx) {
+          html += '<div class="profile-section-title">聊天指导<button class="profile-section-edit-btn" data-section="chat_guidance" data-tab="sales" title="编辑">✏️</button></div>';
+          html += '<div class="profile-chat-items">';
+          salesData.chat_guidance.forEach(function(item, idx) {
             html += '<div class="profile-chat-item">';
             html += '<span class="profile-chat-type">' + item.type + '</span>';
             html += '<div class="profile-chat-content">' + item.content + '</div>';
             html += '</div>';
           });
-          html += '</div>';
+          html += "</div></div>";
         }
 
-        // 产品兴趣
-        if (data.product_interest && data.product_interest.length > 0) {
+        // 可能感兴趣的产品
+        if (salesData.product_interest && salesData.product_interest.length > 0) {
           html += '<div class="profile-section">';
-          html += '<div class="profile-section-title">可能感兴趣的产品</div>';
-          data.product_interest.forEach(function(item, idx) {
+          html += '<div class="profile-section-title">可能感兴趣的产品<button class="profile-section-edit-btn" data-section="product_interest" data-tab="sales" title="编辑">✏️</button></div>';
+          html += '<div class="profile-product-items">';
+          salesData.product_interest.forEach(function(item, idx) {
             html += '<div class="profile-product-item">';
             html += '<div class="profile-product-name">' + (idx + 1) + '. ' + item.product + '</div>';
             html += '<span class="profile-product-cat">' + item.category + '</span>';
             html += '<div class="profile-product-reason">推荐理由：' + item.reason + '</div>';
             html += '</div>';
           });
-          html += '</div>';
+          html += "</div></div>";
         }
 
         // 购买汇总
-        const ps = data.purchase_summary_info;
+        const ps = salesData.purchase_summary_info;
         if (ps) {
           html += '<div class="profile-section">';
           html += '<div class="profile-section-title">购买行为汇总</div>';
@@ -1734,26 +1780,741 @@
           html += purchaseStat('客单价', '¥' + ps.average_order_value.toFixed(2));
           html += '</div>';
           if (ps.purchase_points && ps.purchase_points.length > 0) {
-            html += '<div style="font-size:12px;color:#64748b;margin-bottom:6px;">消费特点：</div>';
+            html += '<div style="font-size:12px;color:#64748b;margin-bottom:6px;">购买记录：</div>';
             html += '<div class="profile-purchase-points">';
             ps.purchase_points.forEach(function(p) {
-              html += '<span class="profile-purchase-point">' + p + '</span>';
+              html += '<div class="profile-purchase-point">' + p + '</div>';
             });
             html += '</div>';
           }
           html += '</div></div>';
         }
 
+        // 核心关注（同步健康画像）
+        const hf = healthData || {};
+        if (hf.core_focus && hf.core_focus.length > 0) {
+          html += '<div class="profile-section">';
+          html += '<div class="profile-section-title">核心关注</div>';
+          html += '<div class="profile-core-tags">';
+          hf.core_focus.forEach(function(focus) {
+            html += '<span class="profile-core-tag">' + focus + '</span>';
+          });
+          html += "</div></div>";
+        }
+
+        // 话题关注（同步健康画像）
+        if (hf.topic_summary && hf.topic_summary.length > 0) {
+          html += '<div class="profile-section">';
+          html += '<div class="profile-section-title">话题关注</div>';
+          html += '<div class="profile-label-list">';
+          hf.topic_summary.forEach(function(item) {
+            html += '<div class="profile-label-item">';
+            html += '<div class="profile-label-desc">' + item.title + '</div>';
+            html += "</div>";
+          });
+          html += "</div></div>";
+        }
+
+        html += renderSupplementSection('sales', salesData);
         html += '</div>';
         return html;
       }
 
-      function baseField(label, value) {
+      // 编辑功能
+      let editingSection = null;
+
+      function openEdit(sectionName, tabType) {
+        // 关闭已有的编辑
+        if (editingSection) closeEdit();
+        editingSection = { name: sectionName, tab: tabType };
+        document.getElementById('profileEditTip').classList.add('show');
+
+        const container = tabType === 'health' ? userProfileContent : salesProfileContent;
+        const sections = container.querySelectorAll('.profile-section');
+        sections.forEach(function(section) {
+          const titleEl = section.querySelector('.profile-section-title');
+          if (!titleEl) return;
+          const btn = titleEl.querySelector('[data-section="' + sectionName + '"]');
+          if (!btn) return;
+
+          // 标记当前编辑区块
+          section.classList.add('profile-section-editing');
+          // 保存原始 data-section 和 data-tab，用于恢复
+          const origSection = btn.getAttribute('data-section');
+          const origTab = btn.getAttribute('data-tab');
+          btn.setAttribute('data-edit-section', origSection);
+          btn.setAttribute('data-edit-tab', origTab);
+          // 移除 data-section 属性，防止 document 监听器再次触发
+          btn.removeAttribute('data-section');
+          btn.removeAttribute('data-tab');
+          btn.textContent = '💾';
+          btn.title = '保存';
+          btn.onclick = function(e) { e.stopPropagation(); saveEdit(origSection, origTab, section); };
+
+          // 创建取消按钮
+          const cancelBtn = document.createElement('button');
+          cancelBtn.className = 'profile-section-edit-btn';
+          cancelBtn.textContent = '✖';
+          cancelBtn.title = '取消';
+          cancelBtn.onclick = function(e) { e.stopPropagation(); closeEdit(); };
+          titleEl.appendChild(cancelBtn);
+
+          // 转换为编辑模式
+          convertToEdit(section, sectionName, tabType);
+        });
+      }
+
+      function closeEdit() {
+        if (!editingSection) return;
+        const container = editingSection.tab === 'health' ? userProfileContent : salesProfileContent;
+        const sections = container.querySelectorAll('.profile-section');
+        sections.forEach(function(section) {
+          section.classList.remove('profile-section-editing');
+          const titleEl = section.querySelector('.profile-section-title');
+          if (!titleEl) return;
+          const btn = titleEl.querySelector('[data-section]') || titleEl.querySelector('[data-edit-section]');
+          if (btn) {
+            btn.textContent = '✏️';
+            btn.title = '编辑';
+            btn.onclick = null;
+            // 恢复 data-section 和 data-tab
+            const editSection = btn.getAttribute('data-edit-section');
+            const editTab = btn.getAttribute('data-edit-tab');
+            if (editSection) {
+              btn.setAttribute('data-section', editSection);
+              btn.setAttribute('data-tab', editTab);
+              btn.removeAttribute('data-edit-section');
+              btn.removeAttribute('data-edit-tab');
+            }
+          }
+          // 移除取消按钮（文本为 ✖ 的）
+          const cancels = titleEl.querySelectorAll('.profile-section-edit-btn');
+          cancels.forEach(function(c) {
+            if (c.textContent.trim() === '✖') c.remove();
+          });
+          // 移除提示文字
+          const hint = section.querySelector('.profile-edit-hint');
+          if (hint) hint.remove();
+          // 恢复原始内容
+          if (section.dataset.originalContent) {
+            const editArea = section.querySelector('.profile-edit-area');
+            if (editArea) {
+              editArea.outerHTML = section.dataset.originalContent;
+            }
+            delete section.dataset.originalContent;
+          }
+        });
+        editingSection = null;
+        document.getElementById('profileEditTip').classList.remove('show');
+      }
+
+      function convertToEdit(section, sectionName, tabType) {
+        const contentEl = section.querySelector('.profile-core-tags, .profile-label-list, .profile-changed-list, .profile-chat-items, .profile-product-items, .profile-purchase-grid');
+        if (!contentEl) return;
+
+        const data = profileDataByProduct[currentProductVersion][tabType];
+        const value = data[sectionName];
+        if (!value) return;
+
+        // 保存原内容
+        section.dataset.originalContent = contentEl.outerHTML;
+
+        // 根据类型生成编辑表单
+        let editHtml = '';
+        if (sectionName === 'core_focus') {
+          // 每个关注点一个输入框
+          editHtml = '<div style="display:flex;flex-direction:column;gap:8px;">';
+          value.forEach(function(item, idx) {
+            editHtml += '<div style="display:flex;gap:8px;align-items:center;"><input type="text" class="core-focus-input" data-index="' + idx + '" value="' + item.replace(/"/g, '&quot;') + '" style="flex:1;padding:6px 10px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;" placeholder="请输入关注点">' + '<button class="core-focus-del-btn" data-index="' + idx + '" style="padding:4px 8px;background:#fee2e2;color:#b91c1c;border:none;border-radius:4px;cursor:pointer;font-size:12px;">删除</button></div>';
+          });
+          editHtml += '<button id="add-core-focus-btn" style="padding:6px 12px;background:#f0f9ff;color:#0369a1;border:1px dashed #bae6fd;border-radius:6px;cursor:pointer;font-size:13px;text-align:center;">+ 添加关注点</button>';
+          editHtml += '</div>';
+        } else if (sectionName === 'topic_summary') {
+          // 每个话题一个输入框
+          editHtml = '<div style="display:flex;flex-direction:column;gap:8px;">';
+          value.forEach(function(item, idx) {
+            editHtml += '<div style="display:flex;gap:8px;align-items:center;"><input type="text" class="topic-input" data-index="' + idx + '" value="' + item.title.replace(/"/g, '&quot;') + '" style="flex:1;padding:6px 10px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;" placeholder="请输入话题总结">' + '<button class="topic-del-btn" data-index="' + idx + '" style="padding:4px 8px;background:#fee2e2;color:#b91c1c;border:none;border-radius:4px;cursor:pointer;font-size:12px;">删除</button></div>';
+          });
+          editHtml += '<button id="add-topic-btn" style="padding:6px 12px;background:#f0f9ff;color:#0369a1;border:1px dashed #bae6fd;border-radius:6px;cursor:pointer;font-size:13px;text-align:center;">+ 添加话题</button>';
+          editHtml += '</div>';
+        } else if (sectionName === 'expired_summary') {
+          // 每条变化一个输入框
+          editHtml = '<div style="display:flex;flex-direction:column;gap:8px;">';
+          value.forEach(function(item, idx) {
+            editHtml += '<div style="display:flex;gap:8px;align-items:center;"><input type="text" class="expired-input" data-index="' + idx + '" value="' + item.replace(/"/g, '&quot;') + '" style="flex:1;padding:6px 10px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;" placeholder="请输入变化内容">' + '<button class="expired-del-btn" data-index="' + idx + '" style="padding:4px 8px;background:#fee2e2;color:#b91c1c;border:none;border-radius:4px;cursor:pointer;font-size:12px;">删除</button></div>';
+          });
+          editHtml += '<button id="add-expired-btn" style="padding:6px 12px;background:#f0f9ff;color:#0369a1;border:1px dashed #bae6fd;border-radius:6px;cursor:pointer;font-size:13px;text-align:center;">+ 添加变化</button>';
+          editHtml += '</div>';
+        } else if (sectionName === 'label_summary') {
+          // 分类汇总：固定7个分类，每个有不可变的分类名和可编辑的文本框
+          const allCategories = ['家庭', '睡眠', '疾病', '情绪与压力', '营养与饮食', '运动情况', '女性健康（其他）'];
+          const existingMap = {};
+          value.forEach(function(item) {
+            existingMap[item.category] = item.title;
+          });
+          let rows = '';
+          allCategories.forEach(function(cat) {
+            const val = existingMap[cat] || '';
+            rows += '<div style="display:flex;gap:8px;align-items:flex-start;"><span style="flex:0 0 90px;font-size:13px;color:#475569;line-height:32px;">' + cat + '</span><textarea class="label-summary-textarea" data-category="' + cat + '" style="flex:1;padding:6px 10px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;resize:vertical;min-height:36px;line-height:1.5;">' + val.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</textarea></div>';
+          });
+          editHtml = '<div style="display:flex;flex-direction:column;gap:10px;">' + rows + '</div>';
+        } else if (sectionName === 'chat_guidance') {
+          // 聊天指导编辑：每条有固定类型标签 + 可编辑内容
+          let rows = '';
+          value.forEach(function(item, idx) {
+            rows += '<div class="chat-guidance-row" data-index="' + idx + '" style="display:flex;gap:8px;align-items:flex-start;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #f0f0f0;">' +
+              '<span class="chat-type-label" style="flex:0 0 70px;font-size:13px;font-weight:500;color:#64748b;line-height:36px;">' + item.type + '</span>' +
+              '<textarea class="chat-guidance-content" data-index="' + idx + '" style="flex:1;padding:6px 10px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;resize:vertical;min-height:36px;line-height:1.5;">' + item.content.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</textarea>' +
+              '</div>';
+          });
+          editHtml = '<div style="display:flex;flex-direction:column;">' + rows + '</div>';
+        } else if (sectionName === 'product_interest') {
+          // 可能感兴趣的产品编辑
+          let rows = '';
+          value.forEach(function(item, idx) {
+            rows += '<div class="product-interest-row" data-index="' + idx + '" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px 14px;margin-bottom:8px;">' +
+              '<div style="font-size:13px;color:#64748b;margin-bottom:6px;">' + (idx + 1) + '. <select class="product-cat-select" data-index="' + idx + '" style="font-size:12px;padding:2px 4px;border:1px solid #e2e8f0;border-radius:4px;color:#2563eb;font-weight:500;background:#f0f9ff;"><option value="设备类"' + (item.category === '设备类' ? ' selected' : '') + '>设备类</option><option value="口服产品类"' + (item.category === '口服产品类' ? ' selected' : '') + '>口服产品类</option><option value="其他产品类"' + (item.category === '其他产品类' ? ' selected' : '') + '>其他产品类</option></select></div>' +
+              '<div style="display:flex;gap:8px;margin-bottom:6px;">' +
+              '<span style="flex:0 0 50px;font-size:12px;color:#94a3b8;line-height:32px;">产品名：</span>' +
+              '<input type="text" class="product-interest-name" data-index="' + idx + '" value="' + item.product.replace(/"/g, '&quot;') + '" style="flex:1;padding:6px 10px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;">' +
+              '</div>' +
+              '<div style="display:flex;gap:8px;">' +
+              '<span style="flex:0 0 50px;font-size:12px;color:#94a3b8;line-height:28px;">理由：</span>' +
+              '<input type="text" class="product-interest-reason" data-index="' + idx + '" value="' + item.reason.replace(/"/g, '&quot;') + '" style="flex:1;padding:6px 10px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;">' +
+              '<button class="product-interest-del-btn" data-index="' + idx + '" style="flex:0 0 36px;padding:4px;background:#fee2e2;color:#b91c1c;border:none;border-radius:4px;cursor:pointer;font-size:12px;">删除</button>' +
+              '</div>' +
+              '</div>';
+          });
+          editHtml = '<div style="display:flex;flex-direction:column;">' + rows + '<button id="add-product-interest-btn" style="padding:6px 12px;background:#f0f9ff;color:#0369a1;border:1px dashed #bae6fd;border-radius:6px;cursor:pointer;font-size:13px;text-align:center;">+ 添加产品推荐</button></div>';
+        } else if (sectionName === 'purchase_summary_info') {
+          // 购买行为汇总
+          editHtml = '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">' +
+            '<div><label style="font-size:12px;color:#64748b;">订单数</label><input type="number" class="edit-input" data-key="order_count" value="' + value.order_count + '" style="width:100%;padding:6px;border:1px solid #e2e8f0;border-radius:4px;font-size:13px;"></div>' +
+            '<div><label style="font-size:12px;color:#64748b;">累计消费</label><input type="number" class="edit-input" data-key="total_spend_amount" value="' + value.total_spend_amount + '" style="width:100%;padding:6px;border:1px solid #e2e8f0;border-radius:4px;font-size:13px;"></div>' +
+            '<div><label style="font-size:12px;color:#64748b;">客单价</label><input type="number" class="edit-input" data-key="average_order_value" value="' + value.average_order_value + '" style="width:100%;padding:6px;border:1px solid #e2e8f0;border-radius:4px;font-size:13px;"></div>' +
+            '<div><label style="font-size:12px;color:#64748b;">是否购买</label><select class="edit-input" data-key="has_purchase" style="width:100%;padding:6px;border:1px solid #e2e8f0;border-radius:4px;font-size:13px;"><option value="true"' + (value.has_purchase ? ' selected' : '') + '>是</option><option value="false"' + (!value.has_purchase ? ' selected' : '') + '>否</option></select></div>' +
+            '<div style="grid-column:1/-1;"><label style="font-size:12px;color:#64748b;">购买记录（每行一条）</label><textarea class="edit-input" data-key="purchase_points" style="width:100%;min-height:80px;padding:6px;border:1px solid #e2e8f0;border-radius:4px;font-size:13px;resize:vertical;">' + value.purchase_points.join('\n') + '</textarea></div>' +
+            '</div>';
+        }
+
+        // 替换内容区域
+        contentEl.outerHTML = '<div class="profile-edit-area">' + editHtml + '</div>';
+        const editArea = section.querySelector('.profile-edit-area');
+
+        // 添加关注点按钮
+        const addBtn = editArea.querySelector('#add-core-focus-btn');
+        if (addBtn) {
+          addBtn.onclick = function() {
+            var container = this.parentElement;
+            var idx = container.querySelectorAll('.core-focus-input').length;
+            var row = document.createElement('div');
+            row.style.cssText = 'display:flex;gap:8px;align-items:center;';
+            row.innerHTML = '<input type="text" class="core-focus-input" data-index="' + idx + '" style="flex:1;padding:6px 10px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;" placeholder="请输入关注点">' +
+                            '<button class="core-focus-del-btn" data-index="' + idx + '" style="padding:4px 8px;background:#fee2e2;color:#b91c1c;border:none;border-radius:4px;cursor:pointer;font-size:12px;">删除</button>';
+            container.appendChild(row);
+            row.querySelector('input').focus();
+          };
+        }
+
+        // 删除关注点按钮
+        editArea.querySelectorAll('.core-focus-del-btn').forEach(function(btn) {
+          btn.onclick = function() {
+            this.closest('div').remove();
+          };
+        });
+
+        // 添加话题按钮
+        var addTopicBtn = editArea.querySelector('#add-topic-btn');
+        if (addTopicBtn) {
+          addTopicBtn.onclick = function() {
+            var container = this.parentElement;
+            var idx = container.querySelectorAll('.topic-input').length;
+            var row = document.createElement('div');
+            row.style.cssText = 'display:flex;gap:8px;align-items:center;';
+            row.innerHTML = '<input type="text" class="topic-input" data-index="' + idx + '" style="flex:1;padding:6px 10px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;" placeholder="请输入话题总结">' +
+                            '<button class="topic-del-btn" data-index="' + idx + '" style="padding:4px 8px;background:#fee2e2;color:#b91c1c;border:none;border-radius:4px;cursor:pointer;font-size:12px;">删除</button>';
+            container.appendChild(row);
+            row.querySelector('input').focus();
+          };
+        }
+
+        // 删除话题按钮
+        editArea.querySelectorAll('.topic-del-btn').forEach(function(btn) {
+          btn.onclick = function() {
+            this.closest('div').remove();
+          };
+        });
+
+        // 添加近期变化按钮
+        var addExpiredBtn = editArea.querySelector('#add-expired-btn');
+        if (addExpiredBtn) {
+          addExpiredBtn.onclick = function() {
+            var container = this.parentElement;
+            var idx = container.querySelectorAll('.expired-input').length;
+            var row = document.createElement('div');
+            row.style.cssText = 'display:flex;gap:8px;align-items:center;';
+            row.innerHTML = '<input type="text" class="expired-input" data-index="' + idx + '" style="flex:1;padding:6px 10px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;" placeholder="请输入变化内容">' +
+                            '<button class="expired-del-btn" data-index="' + idx + '" style="padding:4px 8px;background:#fee2e2;color:#b91c1c;border:none;border-radius:4px;cursor:pointer;font-size:12px;">删除</button>';
+            container.appendChild(row);
+            row.querySelector('input').focus();
+          };
+        }
+
+        // 删除近期变化按钮
+        editArea.querySelectorAll('.expired-del-btn').forEach(function(btn) {
+          btn.onclick = function() {
+            this.closest('div').remove();
+          };
+        });
+
+        // 添加产品兴趣按钮
+        var addProductBtn = editArea.querySelector('#add-product-interest-btn');
+        if (addProductBtn) {
+          addProductBtn.onclick = function() {
+            var container = this.parentElement;
+            var existingRows = container.querySelectorAll('.product-interest-row').length;
+            var idx = existingRows;
+            var row = document.createElement('div');
+            row.className = 'product-interest-row';
+            row.dataset.index = idx;
+            row.style.cssText = 'background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px 14px;margin-bottom:8px;';
+            row.innerHTML = '<div style="font-size:13px;color:#64748b;margin-bottom:6px;">' + (idx+1) + '. <select class="product-cat-select" data-index="' + idx + '" style="font-size:12px;padding:2px 4px;border:1px solid #e2e8f0;border-radius:4px;color:#2563eb;font-weight:500;background:#f0f9ff;"><option value="设备类">设备类</option><option value="口服产品类" selected>口服产品类</option><option value="其他产品类">其他产品类</option></select></div>' +
+              '<div style="display:flex;gap:8px;margin-bottom:6px;">' +
+              '<span style="flex:0 0 50px;font-size:12px;color:#94a3b8;line-height:32px;">产品名：</span>' +
+              '<input type="text" class="product-interest-name" data-index="' + idx + '" style="flex:1;padding:6px 10px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;" placeholder="请输入产品名称">' +
+              '</div>' +
+              '<div style="display:flex;gap:8px;">' +
+              '<span style="flex:0 0 50px;font-size:12px;color:#94a3b8;line-height:28px;">理由：</span>' +
+              '<input type="text" class="product-interest-reason" data-index="' + idx + '" style="flex:1;padding:6px 10px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;" placeholder="请输入推荐理由">' +
+              '<button class="product-interest-del-btn" data-index="' + idx + '" style="flex:0 0 36px;padding:4px;background:#fee2e2;color:#b91c1c;border:none;border-radius:4px;cursor:pointer;font-size:12px;">删除</button>' +
+              '</div>';
+            container.appendChild(row);
+            row.querySelector('input').focus();
+          };
+        }
+
+        // 删除产品兴趣按钮
+        editArea.querySelectorAll('.product-interest-del-btn').forEach(function(btn) {
+          btn.onclick = function() {
+            this.closest('.product-interest-row').remove();
+          };
+        });
+      }
+
+      function saveEdit(sectionName, tabType, section) {
+        const data = profileDataByProduct[currentProductVersion][tabType];
+        const editArea = section.querySelector('.profile-edit-area');
+        if (!editArea) return;
+
+        // 保存修改后的数据
+        if (sectionName === 'core_focus') {
+          const inputs = editArea.querySelectorAll('.core-focus-input');
+          data[sectionName] = [];
+          inputs.forEach(function(input) {
+            var val = input.value.trim();
+            if (val) {
+              data[sectionName].push(val);
+            }
+          });
+        } else if (sectionName === 'topic_summary') {
+          const inputs = editArea.querySelectorAll('.topic-input');
+          data[sectionName] = [];
+          inputs.forEach(function(input) {
+            var val = input.value.trim();
+            if (val) {
+              data[sectionName].push({ title: val });
+            }
+          });
+        } else if (sectionName === 'expired_summary') {
+          const inputs = editArea.querySelectorAll('.expired-input');
+          data[sectionName] = [];
+          inputs.forEach(function(input) {
+            var val = input.value.trim();
+            if (val) {
+              data[sectionName].push(val);
+            }
+          });
+        } else if (sectionName === 'label_summary') {
+          const textareas = editArea.querySelectorAll('.label-summary-textarea');
+          data[sectionName] = [];
+          textareas.forEach(function(ta) {
+            var val = ta.value.trim();
+            if (val) {
+              data[sectionName].push({ category: ta.dataset.category, title: val });
+            }
+          });
+        } else if (sectionName === 'chat_guidance') {
+          const rows = editArea.querySelectorAll('.chat-guidance-row');
+          data[sectionName] = [];
+          rows.forEach(function(row) {
+            var idx = parseInt(row.dataset.index);
+            var content = row.querySelector('.chat-guidance-content');
+            if (content && content.value.trim()) {
+              data[sectionName].push({ type: row.querySelector('.chat-type-label').textContent, content: content.value.trim() });
+            }
+          });
+        } else if (sectionName === 'product_interest') {
+          const rows = editArea.querySelectorAll('.product-interest-row');
+          data[sectionName] = [];
+          rows.forEach(function(row) {
+            var name = row.querySelector('.product-interest-name');
+            var reason = row.querySelector('.product-interest-reason');
+            if (name && reason && name.value.trim() && reason.value.trim()) {
+              data[sectionName].push({ category: row.querySelector('.product-cat-select').value, product: name.value.trim(), reason: reason.value.trim() });
+            }
+          });
+        } else if (sectionName === 'purchase_summary_info') {
+          const inputs = editArea.querySelectorAll('.edit-input');
+          inputs.forEach(function(input) {
+            const key = input.dataset.key;
+            if (input.tagName === 'SELECT') {
+              data[sectionName][key] = input.value === 'true';
+            } else if (key === 'purchase_points') {
+              data[sectionName][key] = input.value.split(/\n/).map(function(s) { return s.trim(); }).filter(Boolean);
+            } else {
+              data[sectionName][key] = parseFloat(input.value) || 0;
+            }
+          });
+        }
+
+        // 重新渲染
+        closeEdit();
+        if (tabType === 'health') {
+          userProfileContent.innerHTML = renderHealthProfileContent(data);
+          setupCareerEdit();
+        } else {
+          salesProfileContent.innerHTML = renderSalesProfileContent(data, profileDataByProduct[currentProductVersion].health);
+        }
+      }
+
+      // 监听编辑按钮点击
+      document.addEventListener('click', function(e) {
+        const btn = e.target.closest('[data-section]');
+        if (!btn) return;
+        if (btn.textContent === '✏️') {
+          openEdit(btn.dataset.section, btn.dataset.tab);
+        }
+      });
+
+      function baseField(label, value, full) {
+        if (full) {
+          return '<div style="grid-column:1/-1;font-size:12px;color:#64748b;">' + label + '<span style="font-size:13px;color:#1e293b;margin-left:4px;">' + (value || '-') + '</span></div>';
+        }
         return '<div style="font-size:12px;color:#64748b;">' + label + '<span style="font-size:13px;color:#1e293b;margin-left:4px;">' + (value || '-') + '</span></div>';
       }
 
       function purchaseStat(label, value) {
         return '<div><div class="profile-purchase-stat-label">' + label + '</div><div class="profile-purchase-stat-value">' + value + '</div></div>';
+      }
+
+
+
+      // ====== 客服补充功能 ======
+
+      function renderSupplementSection(tabType, data) {
+        const key = getSupplementKey(tabType);
+        const currentText = data.supplement || '';
+        const history = data.supplement_history || [];
+        let html = '<div class="profile-supplement-area" id="supplement-area-' + key + '">';
+        html += '<div class="profile-supplement-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">';
+        html += '<div style="font-size:14px;font-weight:600;color:#1e293b;">客服补充</div>';
+        html += '<button class="profile-supplement-history-btn" id="supplement-history-btn-' + key + '" style="font-size:12px;cursor:pointer;padding:4px 14px;border-radius:4px;border:1px solid #e2e8f0;background:#fff;color:#64748b;line-height:1;">📋 历史</button>';
+        html += '</div>';
+        html += '<div class="profile-supplement-preview" id="supplement-preview-' + key + '" style="min-height:60px;padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;color:#475569;line-height:1.7;white-space:pre-wrap;word-break:break-all;margin-bottom:10px;">' + (currentText ? currentText.replace(/</g, '&lt;').replace(/>/g, '&gt;') : '<span style="color:#94a3b8;">暂无补充信息</span>') + '</div>';
+        html += '<div class="profile-supplement-editor" id="supplement-editor-' + key + '" style="display:none;margin-bottom:10px;">';
+        html += '<textarea class="profile-supplement-textarea" id="supplement-textarea-' + key + '" style="width:100%;min-height:80px;padding:8px 10px;border:1px solid #e2e8f0;border-radius:6px;font-size:13px;resize:vertical;line-height:1.6;box-sizing:border-box;">' + currentText.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</textarea>';
+        html += '</div>';
+        html += '<div class="profile-supplement-actions" id="supplement-actions-' + key + '" style="text-align:right;">';
+        html += '<button class="profile-supplement-edit-btn" id="supplement-edit-btn-' + key + '" style="font-size:12px;cursor:pointer;padding:4px 12px;border-radius:4px;border:1px solid #e2e8f0;background:#fff;color:#64748b;line-height:1;">✏️ 编辑</button>';
+        html += '<button class="profile-supplement-save-btn" id="supplement-save-btn-' + key + '" style="display:none;font-size:12px;cursor:pointer;padding:4px 10px;border-radius:4px;border:none;background:#2563eb;color:#fff;line-height:1;margin-right:4px;">💾 保存</button>';
+        html += '<button class="profile-supplement-cancel-btn" id="supplement-cancel-btn-' + key + '" style="display:none;font-size:12px;cursor:pointer;padding:4px 10px;border-radius:4px;border:1px solid #e2e8f0;background:#fff;color:#64748b;line-height:1;">✖ 取消</button>';
+        html += '</div>';
+        html += '<div class="profile-supplement-selection-hint supplement-selection-hint" id="supplement-hint-' + key + '" style="display:none;"></div>';
+        return html;
+      }
+
+      function getSupplementKey(tabType) {
+        return currentProductVersion + '_' + tabType;
+      }
+
+      let supplementEditing = {};
+
+      function openSupplementEdit(tabType) {
+        const key = getSupplementKey(tabType);
+        if (supplementEditing[key]) return;
+        supplementEditing[key] = true;
+        const data = profileDataByProduct[currentProductVersion][tabType];
+        const preview = document.getElementById('supplement-preview-' + key);
+        const editor = document.getElementById('supplement-editor-' + key);
+        const editBtn = document.getElementById('supplement-edit-btn-' + key);
+        const saveBtn = document.getElementById('supplement-save-btn-' + key);
+        const cancelBtn = document.getElementById('supplement-cancel-btn-' + key);
+        const textarea = document.getElementById('supplement-textarea-' + key);
+        if (!preview) return;
+        preview.dataset.originalText = data.supplement || '';
+        preview.style.display = 'none';
+        editor.style.display = 'block';
+        editBtn.style.display = 'none';
+        saveBtn.style.display = 'inline-block';
+        cancelBtn.style.display = 'inline-block';
+        textarea.value = data.supplement || '';
+        textarea.focus();
+        saveBtn.onclick = function(e) { e.stopPropagation(); closeSupplementEdit(tabType, true); };
+        cancelBtn.onclick = function(e) { e.stopPropagation(); closeSupplementEdit(tabType, false); };
+      }
+
+      function closeSupplementEdit(tabType, save) {
+        const key = getSupplementKey(tabType);
+        supplementEditing[key] = false;
+        const data = profileDataByProduct[currentProductVersion][tabType];
+        const preview = document.getElementById('supplement-preview-' + key);
+        const editor = document.getElementById('supplement-editor-' + key);
+        const editBtn = document.getElementById('supplement-edit-btn-' + key);
+        const saveBtn = document.getElementById('supplement-save-btn-' + key);
+        const cancelBtn = document.getElementById('supplement-cancel-btn-' + key);
+        const textarea = document.getElementById('supplement-textarea-' + key);
+        if (save) {
+          const newValue = textarea.value.trim();
+          data.supplement = newValue;
+          preview.innerHTML = newValue ? newValue.replace(/</g, '&lt;').replace(/>/g, '&gt;') : '<span style="color:#94a3b8;">暂无补充信息</span>';
+        } else {
+          preview.innerHTML = (preview.dataset.originalText || '').replace(/</g, '&lt;').replace(/>/g, '&gt;') || '<span style="color:#94a3b8;">暂无补充信息</span>';
+        }
+        preview.style.display = 'block';
+        editor.style.display = 'none';
+        editBtn.style.display = 'inline-block';
+        saveBtn.style.display = 'none';
+        cancelBtn.style.display = 'none';
+      }
+
+      function showToast(msg) {
+        let toast = document.getElementById('supplement-toast');
+        if (!toast) {
+          toast = document.createElement('div');
+          toast.id = 'supplement-toast';
+          toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;z-index:9999;opacity:0;transition:opacity 0.3s;pointer-events:none;';
+          document.body.appendChild(toast);
+        }
+        toast.textContent = msg;
+        toast.style.opacity = '1';
+        clearTimeout(toast._timer);
+        toast._timer = setTimeout(function() { toast.style.opacity = '0'; }, 2000);
+      }
+
+      function openSupplementHistoryModal(tabType) {
+        const data = profileDataByProduct[currentProductVersion][tabType];
+        const history = data.supplement_history || [];
+        if (history.length === 0) {
+          showToast('当前没有历史补充记录');
+          return;
+        }
+        let modal = document.getElementById('supplement-history-modal');
+        if (!modal) {
+          modal = document.createElement('div');
+          modal.id = 'supplement-history-modal';
+          modal.className = 'modal';
+          modal.innerHTML = '<div class="modal-content confirm-modal-content" style="width:600px;max-height:70vh;display:flex;flex-direction:column;">' +
+            '<div class="modal-header"><span class="modal-title">历史补充记录</span><span class="modal-close" id="supplement-history-modal-close">&times;</span></div>' +
+            '<div class="modal-body" id="supplement-history-modal-body" style="overflow-y:auto;max-height:500px;display:flex;flex-direction:column;"></div>' +
+            '</div>';
+          document.body.appendChild(modal);
+          modal.querySelector('#supplement-history-modal-close').addEventListener('click', function() {
+            modal.classList.remove('show');
+          });
+          modal.addEventListener('click', function(e) {
+            if (e.target === modal) modal.classList.remove('show');
+          });
+        }
+        var body = modal.querySelector('#supplement-history-modal-body');
+        var reversed = history.slice().reverse();
+        // 渲染每个历史条目
+        var itemsHtml = reversed.map(function(item, idx) {
+          var realIdx = history.length - 1 - idx;
+          var checked = item.selected !== false ? 'checked' : '';
+          return '<div class="supplement-history-item-row">' +
+            '<input type="checkbox" class="supplement-history-checkbox" data-idx="' + realIdx + '" ' + checked + '>' +
+            '<div class="supplement-history-item-body">' +
+              '<div style="font-size:11px;color:#94a3b8;margin-bottom:4px;">' +
+                '<span class="supplement-history-role-badge">' + (item.role || '客服') + '</span>' +
+                item.time +
+              '</div>' +
+              '<div style="font-size:13px;color:#374151;line-height:1.7;white-space:pre-wrap;word-break:break-all;">' + (item.content || '').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</div>' +
+            '</div>' +
+          '</div>';
+        }).join('');
+        var selectedCount = history.filter(function(h) { return h.selected !== false; }).length;
+        var footerHtml = '<div class="supplement-history-footer" id="supplement-history-footer">' +
+          '<span>已勾选 <strong id="supplement-history-count">' + selectedCount + '</strong> / ' + history.length + ' 条，将传入画像生成接口</span>' +
+          '<button class="supplement-history-footer-btn" id="supplement-history-toggle-all">' + (selectedCount === history.length ? '取消全选' : '全选') + '</button>' +
+        '</div>';
+        body.innerHTML = itemsHtml + footerHtml;
+        // 绑定 checkbox 事件
+        var checkboxes = body.querySelectorAll('.supplement-history-checkbox');
+        checkboxes.forEach(function(cb) {
+          cb.addEventListener('change', function() {
+            var i = parseInt(cb.getAttribute('data-idx'));
+            history[i].selected = cb.checked;
+            updateSupplementHistoryFooter(history);
+            updateSupplementHint(tabType);
+          });
+        });
+        // 全选/取消全选
+        var toggleBtn = body.querySelector('#supplement-history-toggle-all');
+        if (toggleBtn) {
+          toggleBtn.addEventListener('click', function() {
+            var allSelected = history.filter(function(h) { return h.selected !== false; }).length === history.length;
+            var newVal = !allSelected;
+            history.forEach(function(h) { h.selected = newVal; });
+            body.querySelectorAll('.supplement-history-checkbox').forEach(function(cb) { cb.checked = newVal; });
+            updateSupplementHistoryFooter(history);
+            updateSupplementHint(tabType);
+          });
+        }
+        modal.classList.add('show');
+      }
+
+      function updateSupplementHistoryFooter(history) {
+        var footer = document.getElementById('supplement-history-footer');
+        var countEl = document.getElementById('supplement-history-count');
+        var toggleBtn = document.getElementById('supplement-history-toggle-all');
+        if (!footer) return;
+        var selectedCount = history.filter(function(h) { return h.selected !== false; }).length;
+        if (countEl) countEl.textContent = selectedCount;
+        if (toggleBtn) toggleBtn.textContent = selectedCount === history.length ? '取消全选' : '全选';
+      }
+
+      function updateSupplementHint(tabType) {
+        var key = getSupplementKey(tabType);
+        var hint = document.getElementById('supplement-hint-' + key);
+        if (!hint) return;
+        var data = profileDataByProduct[currentProductVersion][tabType];
+        var history = data.supplement_history || [];
+        var selectedCount = history.filter(function(h) { return h.selected !== false; }).length;
+        hint.textContent = '已勾选 ' + selectedCount + ' / ' + history.length + ' 条历史补充将传入画像生成接口';
+        hint.style.display = history.length > 0 ? 'block' : 'none';
+      }
+
+      function toggleSupplementHistory(tabType) {
+        openSupplementHistoryModal(tabType);
+      }
+
+      function bindSupplementEvents(tabType) {
+        const key = getSupplementKey(tabType);
+        const editBtn = document.getElementById('supplement-edit-btn-' + key);
+        if (editBtn) {
+          editBtn.onclick = function(e) { e.stopPropagation(); openSupplementEdit(tabType); };
+        }
+        const histBtn = document.getElementById('supplement-history-btn-' + key);
+        if (histBtn) {
+          histBtn.onclick = function(e) { e.stopPropagation(); toggleSupplementHistory(tabType); };
+        }
+        updateSupplementHint(tabType);
+      }
+
+      function submitSupplementToHistory(tabType) {
+        const data = profileDataByProduct[currentProductVersion][tabType];
+        const value = (data.supplement || '').trim();
+        if (!value) return;
+        const now = new Date();
+        const timeStr = now.getFullYear() + '-';
+        const pad = function(n) { return String(n).padStart(2, '0'); };
+        const datePart = now.getFullYear() + '-' + pad(now.getMonth()+1) + '-' + pad(now.getDate());
+        const timePart = pad(now.getHours()) + ':' + pad(now.getMinutes());
+        if (!data.supplement_history) data.supplement_history = [];
+        data.supplement_history.push({ content: value, time: datePart + ' ' + timePart, role: '客服', selected: true });
+        data.supplement = '';
+      }
+      // 命名函数引用，用于在更新中移除事件监听
+      let _careerClickHandler = null;
+
+      function setupCareerEdit() {
+        const btn = document.getElementById('career-edit-btn');
+        if (!btn) return;
+        // 更新中：移除监听 + 置灰
+        if (isRefreshing) {
+          if (_careerClickHandler) {
+            btn.removeEventListener('click', _careerClickHandler);
+            _careerClickHandler = null;
+          }
+          btn.dataset.bound = '';
+          btn.textContent = '✏️';
+          btn.style.cssText = 'font-size:13px;color:#94a3b8;cursor:not-allowed;padding:2px 6px;border-radius:4px;border:none;background:none;line-height:1;transition:all 0.2s;';
+          return;
+        }
+        if (btn.dataset.bound === 'true') return;
+        btn.dataset.bound = 'true';
+        let careerEditing = false;
+        _careerClickHandler = function() {
+          if (careerEditing) return;
+          careerEditing = true;
+          const careerDisplay = document.getElementById('career-value-display');
+          const originalValue = profileDataByProduct[currentProductVersion].health.base.career || '-';
+          // 隐藏原文字，显示编辑UI
+          careerDisplay.style.display = 'none';
+          btn.style.color = '';
+          btn.style.cursor = '';
+          btn.textContent = '';
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.id = 'career-edit-input';
+          input.value = originalValue;
+          input.style.cssText = 'font-size:13px;color:#1e293b;padding:2px 8px;border:1px solid #3b82f6;border-radius:4px;outline:none;width:50px;margin-right:4px;';
+          const saveBtn = document.createElement('button');
+          saveBtn.textContent = '💾';
+          saveBtn.title = '保存';
+          saveBtn.style.cssText = 'font-size:13px;cursor:pointer;padding:2px 6px;border-radius:4px;border:none;background:#2563eb;color:#fff;line-height:1;';
+          const cancelBtn = document.createElement('button');
+          cancelBtn.textContent = '✖';
+          cancelBtn.title = '取消';
+          cancelBtn.style.cssText = 'font-size:13px;cursor:pointer;padding:2px 6px;border-radius:4px;border:1px solid #e2e8f0;background:#fff;color:#64748b;line-height:1;';
+          btn.appendChild(input);
+          btn.appendChild(saveBtn);
+          btn.appendChild(cancelBtn);
+          btn.style.padding = '0';
+          btn.style.display = 'inline-flex';
+          btn.style.alignItems = 'center';
+          input.focus();
+          input.select();
+          function doSave() {
+            careerEditing = false;
+            const newValue = input.value.trim();
+            if (!newValue || newValue === originalValue) {
+              careerDisplay.style.display = '';
+              btn.textContent = '✏️';
+              btn.style.cssText = 'font-size:13px;color:#94a3b8;cursor:pointer;padding:2px 6px;border-radius:4px;border:none;background:none;line-height:1;transition:all 0.2s;';
+              return;
+            }
+            profileDataByProduct[currentProductVersion].health.base.career = newValue;
+            profileDataByProduct[currentProductVersion].sales.base.career = newValue;
+            careerDisplay.textContent = newValue;
+            careerDisplay.style.display = '';
+            btn.textContent = '✏️';
+            btn.style.cssText = 'font-size:13px;color:#94a3b8;cursor:pointer;padding:2px 6px;border-radius:4px;border:none;background:none;line-height:1;transition:all 0.2s;';
+            if (currentProfileTab === 'health') {
+              userProfileContent.innerHTML = renderHealthProfileContent(profileDataByProduct[currentProductVersion].health);
+            } else {
+              salesProfileContent.innerHTML = renderSalesProfileContent(profileDataByProduct[currentProductVersion].sales, profileDataByProduct[currentProductVersion].health);
+            }
+            setupCareerEdit();
+          }
+          function doCancel() {
+            careerEditing = false;
+            careerDisplay.style.display = '';
+            btn.textContent = '✏️';
+            btn.style.cssText = 'font-size:13px;color:#94a3b8;cursor:pointer;padding:2px 6px;border-radius:4px;border:none;background:none;line-height:1;transition:all 0.2s;';
+          }
+          saveBtn.addEventListener('click', function(e) { e.stopPropagation(); doSave(); });
+          cancelBtn.addEventListener('click', function(e) { e.stopPropagation(); doCancel(); });
+          input.addEventListener('blur', function() {
+            if (!careerEditing) return;
+            doSave();
+          });
+          input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault(); doSave(); }
+            else if (e.key === 'Escape') { e.preventDefault(); doCancel(); }
+          });
+        };
+        btn.addEventListener('click', _careerClickHandler);
       }
 
       function openProfileModal(product) {
@@ -1772,8 +2533,17 @@
         salesProfileContent.style.display = 'none';
         // 更新时间
         userProfileUpdateTime.textContent = '更新时间：' + profileDataByProduct[currentProductVersion].health.updateTime;
+        // 渲染后再绑定职业编辑按钮
+        setupCareerEdit();
+        bindSupplementEvents('health');
         userProfileModal.classList.add('show');
       }
+
+      // 弹窗关闭按钮
+      document.getElementById('profileModalCloseBtn').addEventListener('click', function() {
+        if (editingSection) closeEdit();
+        document.getElementById('userProfileModal').classList.remove('show');
+      });
 
       userAnalysisBtn.addEventListener('click', function() {
         openProfileModal('mirrova');
@@ -1784,19 +2554,25 @@
         document.getElementById('profileTabSales').classList.remove('active');
         currentProfileTab = 'health';
         userProfileContent.innerHTML = renderHealthProfileContent(profileDataByProduct[currentProductVersion].health);
+        setupCareerEdit();
+        bindSupplementEvents('health');
         userProfileContent.style.display = 'block';
         salesProfileContent.style.display = 'none';
         userProfileUpdateTime.textContent = '更新时间：' + profileDataByProduct[currentProductVersion].health.updateTime;
+        resetRefreshState();
       });
 
       profileTabSales.addEventListener('click', function() {
         document.getElementById('profileTabSales').classList.add('active');
         document.getElementById('profileTabHealth').classList.remove('active');
         currentProfileTab = 'sales';
-        salesProfileContent.innerHTML = renderSalesProfileContent(profileDataByProduct[currentProductVersion].sales);
+        salesProfileContent.innerHTML = renderSalesProfileContent(profileDataByProduct[currentProductVersion].sales, profileDataByProduct[currentProductVersion].health);
+        if (isRefreshing) document.querySelector('.profile-content-wrap').classList.add('profile-content-updating');
+        bindSupplementEvents('sales');
         salesProfileContent.style.display = 'block';
         userProfileContent.style.display = 'none';
         userProfileUpdateTime.textContent = '更新时间：' + profileDataByProduct[currentProductVersion].sales.updateTime;
+        resetRefreshState();
       });
 
       document.querySelectorAll('#userProfileModal .segment-btn').forEach(function(btn) {
@@ -1809,10 +2585,11 @@
           currentProductVersion = product;
           if (currentProfileTab === 'health') {
             userProfileContent.innerHTML = renderHealthProfileContent(profileDataByProduct[currentProductVersion].health);
+            setupCareerEdit();
             userProfileContent.style.display = 'block';
             salesProfileContent.style.display = 'none';
           } else {
-            salesProfileContent.innerHTML = renderSalesProfileContent(profileDataByProduct[currentProductVersion].sales);
+            salesProfileContent.innerHTML = renderSalesProfileContent(profileDataByProduct[currentProductVersion].sales, profileDataByProduct[currentProductVersion].health);
             salesProfileContent.style.display = 'block';
             userProfileContent.style.display = 'none';
           }
@@ -1821,14 +2598,60 @@
       });
 
       const refreshProfileBtn = document.getElementById('refreshProfileBtn');
-      refreshProfileBtn.addEventListener('click', function() {
-        const now = new Date();
-        const timeStr = now.getFullYear() + '-' +
+      const PROFILE_REFRESH_COOLDOWN = 10 * 60 * 1000;  // 10分钟
+      const PROFILE_REFRESH_DURATION = 30 * 1000;       // 模拟30秒更新
+
+      function showRefreshToast(msg) {
+        var t = document.getElementById('refreshToast');
+        if (!t) return;
+        t.textContent = msg;
+        t.style.display = 'block';
+        clearTimeout(t._timer);
+        t._timer = setTimeout(function() { t.style.display = 'none'; }, 3500);
+      }
+
+      function getRefreshRemainingMs(product, tab) {
+        var key = product + '_' + tab;
+        var last = lastRefreshTimes[key];
+        if (!last) return 0;
+        var elapsed = Date.now() - last;
+        return Math.max(0, PROFILE_REFRESH_COOLDOWN - elapsed);
+      }
+
+      function startRefreshCountdown() {
+        if (refreshCountdownId) clearInterval(refreshCountdownId);
+        refreshCountdownId = setInterval(function() {
+          var remaining = getRefreshRemainingMs(currentProductVersion, currentProfileTab);
+          if (remaining <= 0) {
+            clearInterval(refreshCountdownId);
+            refreshCountdownId = null;
+          }
+        }, 1000);
+      }
+
+      function resetRefreshState() {
+        // 只清倒计时，更新中的 UI 状态（banner、按钮、编辑锁定）保持不变
+        if (refreshCountdownId) { clearInterval(refreshCountdownId); refreshCountdownId = null; }
+      }
+
+      // 切换产品/标签页时重置刷新状态
+      document.querySelectorAll('#userProfileModal .segment-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() { resetRefreshState(); });
+      });
+
+      function doRefreshProfile() {
+        // 重置所有编辑状态
+        supplementEditing = {};
+        var now = new Date();
+        var timeStr = now.getFullYear() + '-' +
           String(now.getMonth() + 1).padStart(2, '0') + '-' +
           String(now.getDate()).padStart(2, '0') + ' ' +
           String(now.getHours()).padStart(2, '0') + ':' +
           String(now.getMinutes()).padStart(2, '0') + ':' +
           String(now.getSeconds()).padStart(2, '0');
+        ['health', 'sales'].forEach(function(tab) {
+          submitSupplementToHistory(tab);
+        });
         Object.keys(profileDataByProduct).forEach(function(product) {
           ['health', 'sales'].forEach(function(tab) {
             if (profileDataByProduct[product][tab]) {
@@ -1837,55 +2660,56 @@
           });
         });
         userProfileUpdateTime.textContent = '更新时间：' + timeStr;
-      });
+        if (currentProfileTab === 'health') {
+          userProfileContent.innerHTML = renderHealthProfileContent(profileDataByProduct[currentProductVersion].health);
+          setupCareerEdit();
+          bindSupplementEvents('health');
+        } else {
+          salesProfileContent.innerHTML = renderSalesProfileContent(profileDataByProduct[currentProductVersion].sales, profileDataByProduct[currentProductVersion].health);
+          bindSupplementEvents('sales');
+        }
+      }
 
-      // 修改职业 — 客户资料页（三产品版本各一套）
-      document.querySelectorAll('.edit-career-btn').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          var product = this.dataset.product;
-          var actions = this.nextElementSibling;
-          var input = actions.querySelector('.career-edit-input');
-          var display = document.querySelector('.customer-career-display[data-product="' + product + '"]');
-          var currentCareer = profileDataByProduct[product].health.base.career;
-          input.value = currentCareer;
-          display.style.display = 'none';
-          this.style.display = 'none';
-          actions.style.display = 'inline-flex';
-          input.focus();
-          input.select();
-        });
-      });
+      function handleRefreshClick() {
+        var key = currentProductVersion + '_' + currentProfileTab;
+        var remaining = getRefreshRemainingMs(currentProductVersion, currentProfileTab);
 
-      document.querySelectorAll('.career-save-btn').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          var product = this.dataset.product;
-          var actions = this.closest('.career-edit-actions');
-          var input = actions.querySelector('.career-edit-input');
-          var display = document.querySelector('.customer-career-display[data-product="' + product + '"]');
-          var prevBtn = actions.previousElementSibling;
-          var newCareer = input.value.trim();
-          if (newCareer) {
-            profileDataByProduct[product].health.base.career = newCareer;
-            profileDataByProduct[product].sales.base.career = newCareer;
-            display.textContent = newCareer;
-          }
-          display.style.display = 'inline';
-          prevBtn.style.display = 'inline-block';
-          actions.style.display = 'none';
-        });
-      });
+        if (remaining > 0) {
+          var secsLeft = Math.ceil(remaining / 1000);
+          var waitMsg = secsLeft >= 60 ? '请' + Math.ceil(secsLeft / 60) + '分钟后再试' : '请' + secsLeft + '秒后再试';
+          showRefreshToast('画像正在更新或刚刚更新完成，' + waitMsg);
+          return;
+        }
 
-      document.querySelectorAll('.career-cancel-btn').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          var product = this.dataset.product;
-          var actions = this.closest('.career-edit-actions');
-          var display = document.querySelector('.customer-career-display[data-product="' + product + '"]');
-          var prevBtn = actions.previousElementSibling;
-          display.style.display = 'inline';
-          prevBtn.style.display = 'inline-block';
-          actions.style.display = 'none';
-        });
-      });
+        // 开始更新
+        lastRefreshTimes[key] = Date.now();
+        isRefreshing = true;
+        var loadingEl = document.getElementById('profileRefreshLoading');
+        var contentWrap = document.querySelector('.profile-content-wrap');
+
+        refreshProfileBtn.classList.add('updating');
+        refreshProfileBtn.disabled = true;
+        loadingEl.classList.add('show');
+        if (contentWrap) contentWrap.classList.add('profile-content-updating');
+        setupCareerEdit();  // 立即清除职业编辑绑定
+        refreshProfileBtn.textContent = '更新中…';
+
+        // 模拟30秒更新
+        setTimeout(function() {
+          doRefreshProfile();
+          loadingEl.classList.remove('show');
+          if (contentWrap) contentWrap.classList.remove('profile-content-updating');
+          refreshProfileBtn.classList.remove('updating');
+          refreshProfileBtn.disabled = false;
+          refreshProfileBtn.textContent = '更新画像';
+          isRefreshing = false;
+          setupCareerEdit();
+          startRefreshCountdown();
+        }, PROFILE_REFRESH_DURATION);
+      }
+
+      refreshProfileBtn.addEventListener('click', handleRefreshClick);
+
 
       const topicTableBody = document.querySelector('#topic-tags .tag-table tbody');
 
@@ -2929,7 +3753,7 @@
     <div class="modal-content profile-modal">
       <div class="modal-header">
         <h3 style="margin:0;font-size:16px;font-weight:600;">用户画像</h3>
-        <button class="modal-close" onclick="document.getElementById('userProfileModal').classList.remove('show')">&times;</button>
+        <button class="modal-close" id="profileModalCloseBtn">&times;</button>
       </div>
       <!-- 工具栏 -->
       <div class="profile-header-bar">
@@ -2951,10 +3775,20 @@
       </div>
       <!-- 内容区域 -->
       <div class="profile-content-wrap">
+        <div id="profileRefreshLoading" class="profile-refresh-loading">
+          <span class="profile-refresh-loading-icon">⏳</span>
+          <span>用户画像更新中，稍后再来看。</span>
+        </div>
+        <div id="profileEditTip" class="profile-edit-tip">
+          <span class="profile-edit-tip-icon">💡</span>
+          <span>修改当前画像仅同步给对话 AI 使用，重新生成画像时不会保留本次改动。如需更新画像生成要点，请在弹窗底部的「客服补充」区域填写。</span>
+          <button class="profile-edit-tip-close" onclick="document.getElementById('profileEditTip').classList.remove('show')">✕</button>
+        </div>
         <div id="userProfileContent"></div>
         <div id="salesProfileContent" style="display:none;"></div>
       </div>
     </div>
   </div>
+  <div id="refreshToast" style="display:none;position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:#fef3c7;border:1px solid #fde68a;color:#92400e;padding:10px 20px;border-radius:8px;font-size:13px;z-index:9999;white-space:nowrap;"></div>
 </body>
 </html>
