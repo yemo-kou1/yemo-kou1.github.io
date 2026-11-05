@@ -169,7 +169,7 @@ main{max-width:1680px;margin:0 auto;padding:18px 28px 60px;}
   padding:8px 12px;border-radius:10px;box-shadow:0 8px 20px rgba(45,42,74,.3);opacity:0;transition:opacity .15s;
   transform:translate(-50%,-120%);white-space:nowrap;}
 .chart-tip b{color:#C9B8F5;}
-.legend-row{display:flex;gap:16px;margin-bottom:8px;font-size:12px;color:var(--ink-2);}
+.legend-row{display:flex;align-items:center;gap:16px;margin-bottom:8px;font-size:12px;color:var(--ink-2);}
 .legend-row i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px;}
 .chart-block{margin-bottom:22px;}
 .chart-block:last-child{margin-bottom:0;}
@@ -562,16 +562,16 @@ main{max-width:1680px;margin:0 auto;padding:18px 28px 60px;}
     </div>
 
     <div class="card age-card">
-      <div class="card-h"><span class="bar"></span><h3>生理年龄</h3>
-        <div class="range-sw" data-chart="ageP"><button class="rs-btn active" data-n="14">近两周</button><button class="rs-btn" data-n="30">近30天</button></div></div>
+      <div class="card-h"><span class="bar"></span><h3>生理年龄</h3></div>
       <div class="metric3" style="margin-bottom:12px">
         <div class="m grad"><b id="max-age">-5.5</b><span>最高减龄（岁）</span></div>
         <div class="m"><b id="rate-age">90%</b><span>减龄天数占比</span></div>
         <div class="m"><b id="cur-age">30.6</b><span>今日生理年龄（岁）</span></div>
       </div>
-      <div class="legend-row"><span><i style="background:#4A8FE8"></i>今日生理年龄</span><span><i style="background:#10B981"></i>基准生理年龄</span></div>
+      <div class="legend-row"><span><i style="background:#4A8FE8"></i>今日生理年龄</span><span><i style="background:#10B981"></i>基准生理年龄</span>
+        <div class="range-sw" data-chart="ageP"><button class="rs-btn active" data-n="14">近两周</button><button class="rs-btn" data-n="30">近30天</button></div></div>
       <div class="chart" id="chart-age-p"></div>
-      <div class="card-h" style="margin-top:14px"><span class="bar"></span><h3>报告活跃</h3><span class="sub">近 84 天</span></div>
+      <div class="card-h" style="margin-top:14px"><span class="bar"></span><h3>报告活跃</h3></div>
       <div class="report-kpis">
         <div class="rk"><b id="act-days">99</b><span>报告活跃天数（天）</span></div>
         <div class="rk"><b id="view-days">80</b><span>报告查看天数（天）</span></div>
@@ -636,7 +636,7 @@ var DATA = {
   life: [{n:'饮食调整',v:92},{n:'运动调整',v:90},{n:'定制化保健',v:88},{n:'改变睡眠',v:63},{n:'情绪调整',v:52}],
   ltv: [
     {label:'累计LTV', value:'635,412', unit:'元'},
-    {label:'人均LTV', value:'23,521', unit:'元'},
+    {label:'成交者ARPPU', value:'23,521', unit:'元'},
     {label:'客单数', value:'680', unit:'单'},
     {label:'客单价', value:'1,580', unit:'元'},
     {label:'复购率', value:'80%', unit:''}
@@ -968,7 +968,7 @@ function dualChart(el, labels, barData, lineData, opt){
   yT.forEach(function(t){
     var y=P.t+ih-(t/maxB)*ih;
     html+='<line x1="'+P.l+'" y1="'+y+'" x2="'+(W-P.r)+'" y2="'+y+'" stroke="#EDE9FB" stroke-width="1"/>';
-    html+='<text x="'+(P.l-8)+'" y="'+(y+4)+'" text-anchor="end" font-size="11" fill="#A5A0C0">'+numFmt(t)+'</text>';
+    html+='<text x="'+(P.l-8)+'" y="'+(y+4)+'" text-anchor="end" font-size="11" fill="#A5A0C0">'+(opt.yFmt?opt.yFmt(t):numFmt(t))+'</text>';
   });
   if(maxL!==maxB){
     var yT2=ticks(maxL,5);
@@ -979,14 +979,14 @@ function dualChart(el, labels, barData, lineData, opt){
   }
   barData.forEach(function(v,i){
     var x=P.l+iw*i/n+iw/n/2-bw/2, y=P.t+ih-(v/maxB)*ih, h=ih*(v/maxB);
-    html+='<rect class="pt" data-tip="'+labels[i]+'：'+v+'" x="'+x+'" y="'+y+'" width="'+bw+'" height="'+Math.max(h,2)+'" rx="4" fill="url(#'+gradId+')" opacity=".92"><title>'+labels[i]+' '+v+'</title></rect>';
+    html+='<rect class="pt" data-tip="'+labels[i]+'：'+v+'" x="'+x+'" y="'+y+'" width="'+bw+'" height="'+Math.max(h,2)+'" rx="4" fill="url(#'+gradId+')" opacity=".92"></rect>';
   });
   /* 折线点与柱子、横轴标签统一取每个分类格的中心，避免横向错位 */
   var pts=lineData.map(function(v,i){return (P.l+iw*i/n+iw/n/2)+','+(P.t+ih-(v/maxL)*ih);});
   html+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="#4A8FE8" stroke-width="2.5" stroke-linejoin="round"/>';
   pts.forEach(function(p,i){
     var xy=p.split(','); var v=lineData[i];
-    html+='<circle class="pt" data-tip="'+labels[i]+'：'+v+'" cx="'+xy[0]+'" cy="'+xy[1]+'" r="4" fill="#fff" stroke="#4A8FE8" stroke-width="2"><title>'+labels[i]+' '+v+'</title></circle>';
+    html+='<circle class="pt" data-tip="'+labels[i]+'：'+v+'" cx="'+xy[0]+'" cy="'+xy[1]+'" r="4" fill="#fff" stroke="#4A8FE8" stroke-width="2"></circle>';
   });
   labels.forEach(function(l,i){
     var x=P.l+iw*i/n+iw/n/2, y=H-16;
@@ -1012,11 +1012,11 @@ function vBar(el, labels, values, opt){
   yT.forEach(function(t){
     var y=P.t+ih-(t/maxV)*ih;
     html+='<line x1="'+P.l+'" y1="'+y+'" x2="'+(W-P.r)+'" y2="'+y+'" stroke="#EDE9FB" stroke-width="1"/>';
-    html+='<text x="'+(P.l-8)+'" y="'+(y+4)+'" text-anchor="end" font-size="11" fill="#A5A0C0">'+numFmt(t)+'</text>';
+    html+='<text x="'+(P.l-8)+'" y="'+(y+4)+'" text-anchor="end" font-size="11" fill="#A5A0C0">'+(opt.yFmt?opt.yFmt(t):numFmt(t))+'</text>';
   });
   values.forEach(function(v,i){
     var x=P.l+iw*i/n+iw/n/2-bw/2, y=P.t+ih-(v/maxV)*ih, h=ih*(v/maxV);
-    html+='<rect class="pt" data-tip="'+labels[i]+'：'+v+'" x="'+x+'" y="'+y+'" width="'+bw+'" height="'+Math.max(h,2)+'" rx="4" fill="url(#'+gradId+')" opacity=".92"><title>'+labels[i]+' '+v+'</title></rect>';
+    html+='<rect class="pt" data-tip="'+labels[i]+'：'+v+'" x="'+x+'" y="'+y+'" width="'+bw+'" height="'+Math.max(h,2)+'" rx="4" fill="url(#'+gradId+')" opacity=".92"></rect>';
   });
   labels.forEach(function(l,i){
     var x=P.l+iw*i/n+iw/n/2, y=H-16;
@@ -1043,15 +1043,15 @@ function lineChart(el, labels, series, opt){
     var y=P.t+ih-(t-minV)/(maxV-minV)*ih;
     html+='<line x1="'+P.l+'" y1="'+y+'" x2="'+(W-P.r)+'" y2="'+y+'" stroke="#EDE9FB" stroke-width="1"/>';
     html+='<line x1="'+P.l+'" y1="'+y+'" x2="'+(P.l+4)+'" y2="'+y+'" stroke="#8B7CF6" stroke-width="1.4"/>';
-    html+='<text x="'+(P.l-8)+'" y="'+(y+4)+'" text-anchor="end" font-size="11" fill="#A5A0C0">'+numFmt(t)+'</text>';
+    html+='<text x="'+(P.l-8)+'" y="'+(y+4)+'" text-anchor="end" font-size="11" fill="#A5A0C0">'+(opt.yFmt?opt.yFmt(t):numFmt(t))+'</text>';
   });
   series.forEach(function(s, si){
     var color=s.color||(si===0?'#6B5CE7':'#4A8FE8');
     var pts=s.data.map(function(v,i){return (P.l+iw*i/(s.data.length-1))+','+(P.t+ih-(v-minV)/(maxV-minV)*ih);});
     html+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+color+'" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>';
     pts.forEach(function(p,i){
-      var xy=p.split(','), v=s.data[i];
-      html+='<circle class="pt" data-tip="'+labels[i]+' '+s.name+'：'+v+'" cx="'+xy[0]+'" cy="'+xy[1]+'" r="3.5" fill="#fff" stroke="'+color+'" stroke-width="2"><title>'+labels[i]+' '+s.name+' '+v+'</title></circle>';
+      var xy=p.split(','), v=s.data[i], tv=opt.tipFmt?opt.tipFmt(v):v;
+      html+='<circle class="pt" data-tip="'+labels[i]+' '+s.name+'：'+tv+'" cx="'+xy[0]+'" cy="'+xy[1]+'" r="3.5" fill="#fff" stroke="'+color+'" stroke-width="2"></circle>';
     });
   });
   var step=Math.ceil(labels.length/8);
@@ -1267,7 +1267,7 @@ function selectUser(i){
   document.getElementById('rate-age').textContent = u.rate+'%';
   document.getElementById('cur-age').textContent = u.curAge;
   var d3 = '';
-  [['成交金额', u.dealAmt+'万元'],['成交单数', u.dealCnt+' 单'],['客单价', u.dealAvg+'元']].forEach(function(m){
+  [['成交金额', (parseFloat(u.dealAmt)*10000).toLocaleString('en-US')+'元'],['成交单数', u.dealCnt+' 单'],['客单价', u.dealAvg+'元']].forEach(function(m){
     d3 += '<div class="m"><b>'+m[1]+'</b><span>'+m[0]+'</span></div>';
   });
   document.getElementById('deal3').innerHTML = d3;
@@ -1390,11 +1390,16 @@ function rangeOf(key){
 }
 function trendLabels(key, base){ return rangeOf(key)===30 ? DATES30 : base; }
 function trendData(key, arr, dec){ return rangeOf(key)===30 ? expandTo30(arr, dec) : arr; }
+/* token 基础数据映射到 100 万 ~ 200 万，纵轴以 W（万）为单位 */
+function tokenScale(v){ return Math.round(1e6 + (v-40)*5000); }
+function tokenWFmt(v){ return Math.round(v/10000)+'W'; }
+function fullNum(v){ return v.toLocaleString('en-US'); }
 
 /* 个人页图表 */
 function renderPersonalCharts(u){
   lineChart(document.getElementById('chart-token-p'), trendLabels('tokenP', DATA.dates),
-    [{name:'消耗', data:trendData('tokenP', u.token), color:'#4A8FE8', area:true}], {h:150});
+    [{name:'消耗', data:trendData('tokenP', u.token).map(tokenScale), color:'#4A8FE8', area:true}],
+    {h:150, yFmt:tokenWFmt, tipFmt:fullNum});
   lineChart(document.getElementById('chart-age-p'), trendLabels('ageP', DATA.ageDates),
     [{name:'今日', data:trendData('ageP', u.ageToday, 1), color:'#4A8FE8'},
      {name:'基准', data:trendData('ageP', u.ageBase, 1), color:'#10B981'}], {h:300, min:20, max:50});
@@ -1438,7 +1443,8 @@ function renderCharts(){
     vBar(document.getElementById('chart-attention'), DATA.attention, DATA.attentionV, {h:300});
     dualChart(document.getElementById('chart-retention'), DATA.retentionD, DATA.retentionLoss, DATA.retentionRate, {h:280, leftMax:30, rightMax:100});
     lineChart(document.getElementById('chart-token'), trendLabels('token', DATA.dates),
-      [{name:'消耗',data:trendData('token', DATA.tokenTrend),color:'#4A8FE8',area:true}], {h:280, min:50});
+      [{name:'消耗',data:trendData('token', DATA.tokenTrend).map(tokenScale),color:'#4A8FE8',area:true}],
+      {h:280, min:0, yFmt:tokenWFmt, tipFmt:fullNum});
   }else{
     renderPersonalCharts(USERS[currentU]);
   }
@@ -1478,6 +1484,8 @@ document.querySelectorAll('.range-sw').forEach(function(sw){
     else renderCharts();
   });
 });
+/* 地图同样去掉原生 title，避免与自定义 tooltip 重复 */
+document.querySelectorAll('.cnmap title').forEach(function(t){ t.remove(); });
 /* 用户列表折叠 / 展开：折叠成左侧窄条，宽度变化后重绘个人页图表 */
 (function(){
   var grid = document.querySelector('.p-grid');
